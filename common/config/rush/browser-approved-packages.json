@@ -1,0 +1,82 @@
+// DO NOT ADD COMMENTS IN THIS FILE.  They will be lost when the Rush tool resaves it.
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
+  "packages": [
+    {
+      "name": "@types/assert",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/mocha",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/vscode",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/webpack-env",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@vscode/test-web",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "assert",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "mocha",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "process",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "ts-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "typescript",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "uuid",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-languageclient",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-languageserver",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-languageserver-textdocument",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "webpack",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "webpack-cli",
+      "allowedCategories": [ "library" ]
+    }
+  ]
+}

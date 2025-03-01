@@ -1,0 +1,115 @@
+{
+  "name": "ballerina",
+  "displayName": "ballerina-extension",
+  "description": "Vs code web extension for ballerina",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "browser": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ballerina.hello",
+        "title": "Hello World"
+      },
+      {
+        "command": "ballerina.openGithubRepository",
+        "title": "Open GitHub Repository"
+      }
+    ],
+    "languages": [
+      {
+				"id": "ballerina",
+				"aliases": [
+					"Ballerina",
+					"ballerina"
+				],
+				"extensions": [
+					".bal"
+				],
+				"configuration": "./ballerina.configuration.json",
+				"icon": {
+					"light": "./resources/images/icons/ballerina.svg",
+					"dark": "./resources/images/icons/ballerina-inverse.svg"
+				}
+			},
+      {
+				"id": "toml",
+				"aliases": [
+					"Toml",
+					"toml"
+				],
+				"extensions": [
+					".toml"
+				]
+			}
+    ],
+    "grammars": [
+			{
+				"language": "ballerina",
+				"scopeName": "source.ballerina",
+				"path": "./grammar/ballerina-grammar/syntaxes/ballerina.tmLanguage"
+			}
+		],
+    "configuration": [
+			{
+				"order": 22,
+				"id": "ballerina",
+				"title": "ballerina",
+				"properties": {
+					"ballerina.trace.server": {
+						"type": "string",
+						"scope": "window",
+						"enum": [
+							"off",
+							"messages",
+							"verbose"
+						],
+						"default": "verbose",
+						"description": "Traces the communication between VS Code and the lsp-web-extension-sample language server."
+					}
+				}
+			}
+		]
+  },
+  "scripts": {
+    "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+    "pretest": "npm run build",
+    "vscode:prepublish": "npm run package-web",
+    "build": "webpack",
+    "watch-web": "webpack --watch",
+    "package-web": "webpack --mode production --devtool hidden-source-map",
+    "lint": "eslint src",
+    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+  },
+  "dependencies": {
+		"vscode-languageclient": "^9.0.1",
+    "uuid": "^11.1.0",
+		"vscode-languageserver": "^9.0.1",
+		"vscode-languageserver-textdocument": "^1.0.12"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.97.0",
+    "@types/mocha": "^10.0.10",
+    "@types/assert": "^1.5.11",
+    "eslint": "^9.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "mocha": "^11.0.1",
+    "typescript": "^5.7.2",
+    "@vscode/test-web": "^0.0.65",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "@types/webpack-env": "^1.18.5",
+    "assert": "^2.1.0",
+    "process": "^0.11.10"
+  }
+}

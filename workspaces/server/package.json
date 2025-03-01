@@ -1,0 +1,21 @@
+{
+  "name": "@dharshi/vscode-web-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "compile-test": "npm run --prefix=test compile-web",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vscode/test-web": "^0.0.65"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
+}
+  
