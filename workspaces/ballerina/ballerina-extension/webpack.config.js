@@ -71,7 +71,7 @@ const browserServerConfig = {
 	mode: 'none',
 	target: 'webworker', // web extensions run in a webworker context
 	entry: {
-		browserServerMain: './src/browserServerMain.ts',
+		browserServerMain: './src/activators/ls/browserServerMain.ts',
 	},
 	output: {
 		filename: '[name].js',

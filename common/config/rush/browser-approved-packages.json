@@ -3,6 +3,14 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
   "packages": [
     {
+      "name": "@dharshi/ballerina-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/syntax-tree",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/assert",
       "allowedCategories": [ "library" ]
     },
@@ -11,11 +19,31 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/mousetrap",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/node",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/vscode",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/vscode-webview",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/webpack-env",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/ws",
       "allowedCategories": [ "library" ]
     },
     {
@@ -35,7 +63,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "copyfiles",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "eslint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "handlebars",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "isomorphic-ws",
       "allowedCategories": [ "library" ]
     },
     {
@@ -43,7 +83,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "mousetrap",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "process",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tree-kill",
       "allowedCategories": [ "library" ]
     },
     {
@@ -59,6 +111,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "vscode-jsonrpc",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "vscode-languageclient",
       "allowedCategories": [ "library" ]
     },
@@ -67,7 +123,31 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "vscode-languageserver-protocol",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "vscode-languageserver-textdocument",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-languageserver-types",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger-common",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-uri",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-ws-jsonrpc",
       "allowedCategories": [ "library" ]
     },
     {
@@ -76,6 +156,10 @@
     },
     {
       "name": "webpack-cli",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "xstate",
       "allowedCategories": [ "library" ]
     }
   ]

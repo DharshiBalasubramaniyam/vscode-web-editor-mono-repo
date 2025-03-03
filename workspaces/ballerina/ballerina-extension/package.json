@@ -16,68 +16,58 @@
   "contributes": {
     "commands": [
       {
-        "command": "ballerina.hello",
-        "title": "Hello World"
-      },
-      {
         "command": "ballerina.openGithubRepository",
         "title": "Open GitHub Repository"
+      },
+      {
+        "command": "ballerina.showVisualizer",
+        "title": "Show Visualizer",
+        "icon": "$(eye)"
       }
     ],
     "languages": [
       {
-				"id": "ballerina",
-				"aliases": [
-					"Ballerina",
-					"ballerina"
-				],
-				"extensions": [
-					".bal"
-				],
-				"configuration": "./ballerina.configuration.json",
-				"icon": {
-					"light": "./resources/images/icons/ballerina.svg",
-					"dark": "./resources/images/icons/ballerina-inverse.svg"
-				}
-			},
+        "id": "ballerina",
+        "aliases": [
+          "Ballerina",
+          "ballerina"
+        ],
+        "extensions": [
+          ".bal"
+        ],
+        "configuration": "./ballerina.configuration.json",
+        "icon": {
+          "light": "./resources/images/icons/ballerina.svg",
+          "dark": "./resources/images/icons/ballerina-inverse.svg"
+        }
+      },
       {
-				"id": "toml",
-				"aliases": [
-					"Toml",
-					"toml"
-				],
-				"extensions": [
-					".toml"
-				]
-			}
+        "id": "toml",
+        "aliases": [
+          "Toml",
+          "toml"
+        ],
+        "extensions": [
+          ".toml"
+        ]
+      }
     ],
     "grammars": [
-			{
-				"language": "ballerina",
-				"scopeName": "source.ballerina",
-				"path": "./grammar/ballerina-grammar/syntaxes/ballerina.tmLanguage"
-			}
-		],
-    "configuration": [
-			{
-				"order": 22,
-				"id": "ballerina",
-				"title": "ballerina",
-				"properties": {
-					"ballerina.trace.server": {
-						"type": "string",
-						"scope": "window",
-						"enum": [
-							"off",
-							"messages",
-							"verbose"
-						],
-						"default": "verbose",
-						"description": "Traces the communication between VS Code and the lsp-web-extension-sample language server."
-					}
-				}
-			}
-		]
+      {
+        "language": "ballerina",
+        "scopeName": "source.ballerina",
+        "path": "./grammar/ballerina-grammar/syntaxes/ballerina.tmLanguage"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == ballerina",
+          "command": "ballerina.showVisualizer",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
@@ -90,10 +80,14 @@
     "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
   },
   "dependencies": {
-		"vscode-languageclient": "^9.0.1",
+    "@dharshi/ballerina-core": "workspace:*",
+    "vscode-languageclient": "^9.0.1",
     "uuid": "^11.1.0",
-		"vscode-languageserver": "^9.0.1",
-		"vscode-languageserver-textdocument": "^1.0.12"
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "vscode-messenger": "^0.4.5",
+    "vscode-messenger-common": "^0.4.5",
+    "xstate": "^4.38.3"
   },
   "devDependencies": {
     "@types/vscode": "^1.97.0",
