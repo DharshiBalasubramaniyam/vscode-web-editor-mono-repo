@@ -19,6 +19,70 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@emotion/css",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@emotion/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@emotion/styled",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@headlessui/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@monaco-editor/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/geometry",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-canvas-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-actions",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-essentials",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-links",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/builder-webpack5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/manager-webpack5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/theming",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/assert",
       "allowedCategories": [ "library" ]
     },
@@ -39,7 +103,15 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/prismjs",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react-dom",
       "allowedCategories": [ "library" ]
     },
     {
@@ -75,7 +147,15 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@vscode/webview-ui-toolkit",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "assert",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "classnames",
       "allowedCategories": [ "library" ]
     },
     {
@@ -87,11 +167,31 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "eslint-plugin-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint-plugin-react-hooks",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "fantasticon",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "gh-pages",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "glob",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "handlebars",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "http-server",
       "allowedCategories": [ "library" ]
     },
     {
@@ -115,7 +215,15 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "monaco-editor",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "mousetrap",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "prismjs",
       "allowedCategories": [ "library" ]
     },
     {
@@ -124,6 +232,18 @@
     },
     {
       "name": "react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-dom",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-error-boundary",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-hook-form",
       "allowedCategories": [ "library" ]
     },
     {
