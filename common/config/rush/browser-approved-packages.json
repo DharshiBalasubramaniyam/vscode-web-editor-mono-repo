@@ -175,6 +175,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "eslint-plugin-react-refresh",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "fantasticon",
       "allowedCategories": [ "library" ]
     },
@@ -292,6 +296,10 @@
     },
     {
       "name": "vscode-messenger-common",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger-webview",
       "allowedCategories": [ "library" ]
     },
     {

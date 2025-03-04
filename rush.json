@@ -330,6 +330,11 @@
       "reviewCategory": "library"
     },
     {
+      "packageName": "@dharshi/ballerina-rpc-client",
+      "projectFolder": "workspaces/ballerina/ballerina-rpc-client",
+      "reviewCategory": "library"
+    },
+    {
       "packageName": "@dharshi/ballerina-core",
       "projectFolder": "workspaces/ballerina/ballerina-core",
       "reviewCategory": "library"
