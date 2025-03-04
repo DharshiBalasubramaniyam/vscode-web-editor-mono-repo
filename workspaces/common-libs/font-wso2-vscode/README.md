@@ -1,4 +1,4 @@
-# @wso2-enterprise/font-wso2-vscode
+# @dharshi/font-wso2-vscode
 
 ## Getting Started
 
@@ -14,7 +14,7 @@
 - To view the generated icons, use the following command:
   ```bash
   npm run start
-- To use the generated font add `@wso2-enterprise/font-wso2-vscode` as a dependency to your package.
+- To use the generated font add `@dharshi/font-wso2-vscode` as a dependency to your package.
 
 ### How use the Font
 

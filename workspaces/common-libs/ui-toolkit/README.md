@@ -1,11 +1,11 @@
-# @wso2-enterprise/ui-toolkit
+# @dharshi/ui-toolkit
 
 ## Getting Started
 
 ### Developer Guide
 
 - Run `rush install ` to install all the dependencies including this module.
-- To build this module, please run `rush build -o "@wso2-enterprise/ui-toolkit"` from the root directory.
+- To build this module, please run `rush build -o "@dharshi/ui-toolkit"` from the root directory.
 
 ### Directory Structure
 
@@ -36,4 +36,3 @@ ui-toolkit/
 It will open the storybook in `http://localhost:6006/`
 - If you get the error '0308010C:digital envelope routines::unsupported' add the following line 
 'export NODE_OPTIONS=--openssl-legacy-provider'
-

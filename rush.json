@@ -345,6 +345,11 @@
       "reviewCategory": "library"
     },
     {
+      "packageName": "@dharshi/ballerina-visualizer",
+      "projectFolder": "workspaces/ballerina/ballerina-visualizer",
+      "reviewCategory": "library"
+    },
+    {
       "packageName": "@dharshi/ballerina-side-panel",
       "projectFolder": "workspaces/ballerina/ballerina-side-panel",
       "reviewCategory": "library"

@@ -1,5 +1,5 @@
 import React from "react";
-import "@wso2-enterprise/font-wso2-vscode/dist/wso2-vscode.css";
+import "@dharshi/font-wso2-vscode/dist/wso2-vscode.css";
 
 import styled from "@emotion/styled";
 
