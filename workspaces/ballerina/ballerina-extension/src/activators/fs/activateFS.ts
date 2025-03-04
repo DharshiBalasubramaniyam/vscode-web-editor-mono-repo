@@ -1,18 +1,18 @@
 import * as vscode from "vscode";
-import { BallerinaExtension, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
+import { balExtInstance, BallerinaExtension, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
 import { BalFileSystemProvider } from "./BalFileSystemProvider";
 
 const fsProvider = new BalFileSystemProvider();
 
-export function activateFileSystemProvider(ext: BallerinaExtension) {
-    ext.fsProvider = fsProvider;
-    ext.context.subscriptions.push(
+export function activateFileSystemProvider() {
+    balExtInstance.fsProvider = fsProvider;
+    balExtInstance.context.subscriptions.push(
         vscode.workspace.registerFileSystemProvider(WEB_IDE_SCHEME, fsProvider, { isReadonly: false }),
         vscode.workspace.registerFileSystemProvider(STD_LIB_SCHEME, fsProvider, { isReadonly: true })
     );
 
     // Register the command to open a github repository
-    ext.context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
+    balExtInstance.context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
         const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
         if (!repoUrl) {
             return;

@@ -1,18 +1,19 @@
 import * as vscode from "vscode";
 import { ExtendedLanguageClient } from "../../extended-language-client";
 import { LanguageClientOptions } from "vscode-languageclient";
-import { BallerinaExtension, WEB_IDE_SCHEME } from "../../extension";
+import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 
-export function activateLanguageServer(ext: BallerinaExtension) {
-    const langClient = createExtendedLanguageClient(ext.context);
+export function activateLanguageServer(): ExtendedLanguageClient {
+    const langClient = createExtendedLanguageClient(balExtInstance.context);
 	langClient.start().then(async () => {
         console.log('Language client started successfully. Registering extended capabilities...');
 		await langClient?.registerExtendedAPICapabilities();
     }).catch((error: any) => {
         console.error('Failed to start language client:', error);
     });
-    ext.langClient = langClient;
-	ext.context?.subscriptions.push(langClient);
+    balExtInstance.langClient = langClient;
+	balExtInstance.context?.subscriptions.push(langClient);
+    return langClient;
 }
 
 function createExtendedLanguageClient(context: vscode.ExtensionContext): ExtendedLanguageClient {

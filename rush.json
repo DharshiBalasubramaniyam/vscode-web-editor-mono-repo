@@ -310,6 +310,16 @@
   "projectFolderMaxDepth": 3,
   "projects": [
     {
+      "packageName": "@dharshi/font-wso2-vscode",
+      "projectFolder": "workspaces/common-libs/font-wso2-vscode",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/ui-toolkit",
+      "projectFolder": "workspaces/common-libs/ui-toolkit",
+      "reviewCategory": "library"
+    },
+    {
       "packageName": "@dharshi/vscode-web-server",
       "projectFolder": "workspaces/server",
       "reviewCategory": "library"

@@ -29,7 +29,7 @@ export * from "./interfaces/service";
 export * from "./interfaces/inline-data-mapper";
 
 // ------ LS Utils -------->
-export * from "./ls-utils/WSConnection";
+// export * from "./ls-utils/WSConnection";
 export * from "./ls-utils/BallerinaLanguageClient";
 
 // ------ RPC interfaces -------->

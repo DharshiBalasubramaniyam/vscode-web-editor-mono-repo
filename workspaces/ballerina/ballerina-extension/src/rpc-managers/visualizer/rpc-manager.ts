@@ -8,23 +8,23 @@ import {
     VisualizerLocation,
     EVENT_TYPE
 } from "@dharshi/ballerina-core";
-// import { openPopupView } from "../../stateMachinePopup";
-import { openView, history, updateView, undoRedoManager } from "../../activators/visualizer/activateVisualizer";
+import { history, openView, updateView, undoRedoManager } from "../../state-machine";
+import { openPopupView } from "../../state-machine-popup";
 
 export class VisualizerRpcManager implements VisualizerAPI {
 
     openView(params: OpenViewRequest): Promise<void> {
         return new Promise(async (resolve) => {
-            // if (params.isPopup) {
-            //     const view = params.location.view;
-            //     if (view && view === MACHINE_VIEW.Overview) {
-            //         openPopupView(EVENT_TYPE.CLOSE_VIEW, params.location as PopupVisualizerLocation);
-            //     } else {
-            //         openPopupView(params.type, params.location as PopupVisualizerLocation);
-            //     }
-            // } else {
-                openView(params.location as VisualizerLocation);
-            // }
+            if (params.isPopup) {
+                const view = params.location.view;
+                if (view && view === MACHINE_VIEW.Overview) {
+                    openPopupView(EVENT_TYPE.CLOSE_VIEW, params.location as PopupVisualizerLocation);
+                } else {
+                    openPopupView(params.type, params.location as PopupVisualizerLocation);
+                }
+            } else {
+                openView(params.type, params.location as VisualizerLocation);
+            }
         });
     }
 

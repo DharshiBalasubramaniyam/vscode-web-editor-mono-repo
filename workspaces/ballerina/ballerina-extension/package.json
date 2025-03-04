@@ -10,7 +10,7 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "*"
+    "onLanguage:ballerina"
   ],
   "browser": "./dist/extension.js",
   "contributes": {
@@ -80,7 +80,10 @@
     "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
   },
   "dependencies": {
+    "@types/lodash": "^4.14.200",
     "@dharshi/ballerina-core": "workspace:*",
+    "@dharshi/syntax-tree": "workspace:*",
+    "lodash": "^4.17.21",
     "vscode-languageclient": "^9.0.1",
     "uuid": "^11.1.0",
     "vscode-languageserver": "^9.0.1",
@@ -94,6 +97,7 @@
     "@types/mocha": "^10.0.10",
     "@types/assert": "^1.5.11",
     "eslint": "^9.16.0",
+    "copyfiles": "^2.4.1",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
     "mocha": "^11.0.1",

@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { LanguageClientOptions } from 'vscode-languageclient/browser';
 import { ExtendedLanguageClient } from './extended-language-client';
-import { activateLanguageServer } from './activators/ls/activateLS';
 import { BalFileSystemProvider } from './activators/fs/BalFileSystemProvider';
-import { activateFileSystemProvider } from './activators/fs/activateFS';
 import { activateVisualizer } from './activators/visualizer/activateVisualizer';
+import { RPCLayer } from './RPCLayer';
+import { StateMachine } from './state-machine';
 
 export const WEB_IDE_SCHEME = 'web-bala';
 export const STD_LIB_SCHEME = 'bala';
@@ -20,11 +19,10 @@ export const balExtInstance: BallerinaExtension = new BallerinaExtension();
 export async function activate(context: vscode.ExtensionContext) {
 	balExtInstance.context = context;
 
-	// Start language client
-	activateLanguageServer(balExtInstance);
-
-	// register file system provider
-	activateFileSystemProvider(balExtInstance);
+	// Init RPC Layer methods
+    RPCLayer.init();
+    // Wait for the ballerina extension to be ready
+    await StateMachine.initialize();
 
 	// activate visualizer
 	activateVisualizer(balExtInstance);

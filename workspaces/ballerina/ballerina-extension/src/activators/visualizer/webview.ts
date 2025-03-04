@@ -1,10 +1,9 @@
 import * as vscode from "vscode";
-// import { debounce } from "lodash";
-// import { extension } from "../../BalExtensionContext";
-// import { StateMachine, updateView } from "../../stateMachine";
-// import { LANGUAGE } from "../../core";
+import { debounce } from "lodash";
 import { balExtInstance } from "../../extension";
 import { getComposerWebViewOptions, getLibraryWebViewContent, WebViewOptions } from "../../utils/webview-utils";
+import { RPCLayer } from "../../RPCLayer";
+import { updateView } from "../../state-machine";
 
 export class VisualizerWebview {
     public static currentPanel: VisualizerWebview | undefined;
@@ -17,33 +16,33 @@ export class VisualizerWebview {
         this._panel = VisualizerWebview.createWebview();
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
         this._panel.webview.html = this.getWebviewContent(this._panel.webview);
-        // RPCLayer.create(this._panel);
+        RPCLayer.create(this._panel);
 
         // Handle the text change and diagram update with rpc notification
-        // const sendUpdateNotificationToWebview = debounce(() => {
-        //     if (this._panel) {
-        //         updateView();
-        //     }
-        // }, 500);
+        const sendUpdateNotificationToWebview = debounce(() => {
+            if (this._panel) {
+                updateView();
+            }
+        }, 500);
 
-        // vscode.workspace.onDidChangeTextDocument(async function (document) {
-        //     if (document && document.document.languageId === LANGUAGE.BALLERINA) {
-        //         await document.document.save();
-        //         sendUpdateNotificationToWebview();
-        //     }
-        // }, extension.context);
+        vscode.workspace.onDidChangeTextDocument(async function (document) {
+            if (document && document.document.languageId === "ballerina") {
+                await document.document.save();
+                sendUpdateNotificationToWebview();
+            }
+        }, balExtInstance.context);
 
-        // vscode.workspace.onDidDeleteFiles(() => {
-        //     sendUpdateNotificationToWebview();
-        // });
+        vscode.workspace.onDidDeleteFiles(() => {
+            sendUpdateNotificationToWebview();
+        });
 
-        // this._panel.onDidChangeViewState(() => {
-        //     vscode.commands.executeCommand('setContext', 'isBalVisualizerActive', this._panel?.active);
-        //     // Refresh the webview when becomes active
-        //     if (this._panel?.active) {
-        //         sendUpdateNotificationToWebview();
-        //     }
-        // });
+        this._panel.onDidChangeViewState(() => {
+            vscode.commands.executeCommand('setContext', 'isBalVisualizerActive', this._panel?.active);
+            // Refresh the webview when becomes active
+            if (this._panel?.active) {
+                sendUpdateNotificationToWebview();
+            }
+        });
     }
 
     private static createWebview(): vscode.WebviewPanel {
@@ -58,8 +57,8 @@ export class VisualizerWebview {
             }
         );
         panel.iconPath = {
-            light: vscode.Uri.file(vscode.Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'dark-preview.svg').toString()),
-            dark: vscode.Uri.file(vscode.Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'light-preview.svg').toString())
+            light: vscode.Uri.parse(vscode.Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'dark-preview.svg').toString()),
+            dark: vscode.Uri.parse(vscode.Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'light-preview.svg').toString())
         };
         return panel;
     }

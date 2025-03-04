@@ -7,11 +7,23 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@dharshi/ballerina-visualizer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/font-wso2-vscode",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/syntax-tree",
       "allowedCategories": [ "library" ]
     },
     {
       "name": "@types/assert",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash",
       "allowedCategories": [ "library" ]
     },
     {
@@ -76,6 +88,10 @@
     },
     {
       "name": "isomorphic-ws",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash",
       "allowedCategories": [ "library" ]
     },
     {

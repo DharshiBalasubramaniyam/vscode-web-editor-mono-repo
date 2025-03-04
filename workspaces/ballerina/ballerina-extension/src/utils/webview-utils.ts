@@ -20,28 +20,28 @@ export function getComposerWebViewOptions(componentName: string, webView: Webvie
 function getComposerCSSFiles(webView: Webview): string[] {
     const filePath = Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'jslibs', 'themes', 'ballerina-default.min.css');
     return [
-        webView.asWebviewUri(Uri.file(filePath.toString())).toString()
+        webView.asWebviewUri(filePath).path
     ];
 }
 
 function getComposerJSFiles(componentName: string, webView: Webview): string[] {
-    const filePath = Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'jslibs').toString() + "/" + componentName + '.js'; 
+    const filePath = Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'jslibs').path + "/" + componentName + '.js'; 
     return [
-            webView.asWebviewUri(Uri.file(filePath)).toString()
+            webView.asWebviewUri(Uri.parse(filePath)).path
     ];
 }
 
 function getComposerURI(webView: Webview): string {
     return getVSCodeResourceURI(Uri.joinPath(balExtInstance.context.extensionUri, 'resources',
-        'jslibs').toString(), webView);
+        'jslibs').path, webView);
 }
 
 function getVSCodeResourceURI(filePath: string, webView: Webview): string {
-    return webView.asWebviewUri(Uri.file(filePath)).toString();
+    return webView.asWebviewUri(Uri.parse(filePath)).path;
 }
 
 function getWebViewResourceRoot(): string {
-    return Uri.joinPath(balExtInstance.context.extensionUri, 'resources').toString();
+    return Uri.joinPath(balExtInstance.context.extensionUri, 'resources').path;
 }
 
 export function getLibraryWebViewContent(options: WebViewOptions, webView: Webview, background: string ="#fff", padding: string="0px"): string {
@@ -61,7 +61,7 @@ export function getLibraryWebViewContent(options: WebViewOptions, webView: Webvi
         ? cssFiles.map(cssFile =>
             '<link rel="stylesheet" type="text/css" href="' + cssFile + '" />').join('\n')
         : '';
-    const fontDir = Uri.joinPath(Uri.file(getComposerURI(webView)), 'font').toString();
+    const fontDir = Uri.joinPath(Uri.parse(getComposerURI(webView)), 'font');
 
     // in windows fontdir path contains \ as separator. css does not like this.
     // const fontDirWithSeparatorReplaced = fontDir.split(sep).join("/");
@@ -69,8 +69,8 @@ export function getLibraryWebViewContent(options: WebViewOptions, webView: Webvi
     // const isCodeServer = ballerinaExtInstance.getCodeServerContext().codeServerEnv;
     const resourceRoot = getVSCodeResourceURI(getWebViewResourceRoot(), webView);
 
-    const codiconUri = webView.asWebviewUri(Uri.joinPath(balExtInstance.context.extensionUri, "resources", "codicons", "codicon.css"));
-    const fontsUri = webView.asWebviewUri(Uri.joinPath(balExtInstance.context.extensionUri, "node_modules", "@wso2-enterprise", "font-wso2-vscode", "dist", "wso2-vscode.css"));
+    const codiconUri = webView.asWebviewUri(Uri.joinPath((balExtInstance.context).extensionUri, "resources", "codicons", "codicon.css")).path;
+    const fontsUri = webView.asWebviewUri(Uri.joinPath((balExtInstance.context).extensionUri, "node_modules", "@dharshi", "font-wso2-vscode", "dist", "wso2-vscode.css")).path;
 
     return `
             <!DOCTYPE html>
@@ -79,6 +79,9 @@ export function getLibraryWebViewContent(options: WebViewOptions, webView: Webvi
                 <meta charset="utf-8">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="${codiconUri}">
+                <link rel="stylesheet" href="${fontsUri}">
+                ${externalStyles}
                 <style>
                     /* use this class for loader that are shown until the module js is loaded */
                     @font-face {
@@ -100,6 +103,8 @@ export function getLibraryWebViewContent(options: WebViewOptions, webView: Webvi
                 <script>
                     ${scripts}
                 </script>
+                <script charset="UTF-8" src="${resourceRoot}/jslibs/webviewCommons.js"></script>
+                ${externalScripts}
             </body>
             </html>
         `;
