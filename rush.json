@@ -345,6 +345,11 @@
       "reviewCategory": "library"
     },
     {
+      "packageName": "@dharshi/ballerina-side-panel",
+      "projectFolder": "workspaces/ballerina/ballerina-side-panel",
+      "reviewCategory": "library"
+    },
+    {
       "packageName": "@dharshi/syntax-tree",
       "projectFolder": "workspaces/ballerina/syntax-tree",
       "reviewCategory": "library"
