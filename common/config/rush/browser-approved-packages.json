@@ -67,6 +67,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@vscode/codicons",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@vscode/test-web",
       "allowedCategories": [ "library" ]
     },
@@ -83,11 +87,23 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "fantasticon",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "handlebars",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "icon-font-generator",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "isomorphic-ws",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "jsonc-parser",
       "allowedCategories": [ "library" ]
     },
     {
