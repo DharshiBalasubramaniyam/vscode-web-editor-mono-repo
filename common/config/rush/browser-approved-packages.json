@@ -7,6 +7,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@dharshi/ballerina-rpc-client",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/ballerina-visualizer",
       "allowedCategories": [ "library" ]
     },
@@ -16,6 +20,10 @@
     },
     {
       "name": "@dharshi/syntax-tree",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ui-toolkit",
       "allowedCategories": [ "library" ]
     },
     {

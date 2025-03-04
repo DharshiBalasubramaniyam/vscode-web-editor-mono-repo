@@ -335,6 +335,11 @@
       "reviewCategory": "library"
     },
     {
+      "packageName": "@dharshi/overview-view",
+      "projectFolder": "workspaces/ballerina/overview-view",
+      "reviewCategory": "library"
+    },
+    {
       "packageName": "@dharshi/ballerina-core",
       "projectFolder": "workspaces/ballerina/ballerina-core",
       "reviewCategory": "library"
