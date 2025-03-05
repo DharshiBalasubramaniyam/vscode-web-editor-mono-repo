@@ -358,6 +358,41 @@
       "packageName": "@dharshi/syntax-tree",
       "projectFolder": "workspaces/ballerina/syntax-tree",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/persist-layer-diagram",
+      "projectFolder": "workspaces/ballerina/persist-layer-diagram",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/type-diagram",
+      "projectFolder": "workspaces/ballerina/type-diagram",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/type-editor",
+      "projectFolder": "workspaces/ballerina/type-editor",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/ballerina-statement-editor",
+      "projectFolder": "workspaces/ballerina/statement-editor",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/sequence-diagram",
+      "projectFolder": "workspaces/ballerina/sequence-diagram",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/record-creator",
+      "projectFolder": "workspaces/ballerina/record-creator",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/component-diagram",
+      "projectFolder": "workspaces/ballerina/component-diagram",
+      "reviewCategory": "library"
     }
   ]
 }

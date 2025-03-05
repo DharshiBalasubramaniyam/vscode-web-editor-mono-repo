@@ -3,6 +3,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
   "packages": [
     {
+      "name": "@babel/core",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/ballerina-core",
       "allowedCategories": [ "library" ]
     },
@@ -12,6 +16,10 @@
     },
     {
       "name": "@dharshi/ballerina-side-panel",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-statement-editor",
       "allowedCategories": [ "library" ]
     },
     {
@@ -75,6 +83,14 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@projectstorm/react-diagrams-defaults",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams-routing",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@storybook/addon-actions",
       "allowedCategories": [ "library" ]
     },
@@ -115,7 +131,27 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/blueimp-md5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/classnames",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/dagre",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/lodash",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash.camelcase",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash.clonedeep",
       "allowedCategories": [ "library" ]
     },
     {
@@ -156,6 +192,10 @@
     },
     {
       "name": "@types/react-syntax-highlighter",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/uuid",
       "allowedCategories": [ "library" ]
     },
     {
@@ -203,6 +243,14 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "babel-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "blueimp-md5",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "buffer",
       "allowedCategories": [ "library" ]
     },
@@ -211,11 +259,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "closest",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "copyfiles",
       "allowedCategories": [ "library" ]
     },
     {
       "name": "css-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "dagre",
       "allowedCategories": [ "library" ]
     },
     {
@@ -235,7 +291,15 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "eslint-plugin-unused-imports",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "fantasticon",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "file-loader",
       "allowedCategories": [ "library" ]
     },
     {
@@ -248,6 +312,10 @@
     },
     {
       "name": "handlebars",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "html-to-image",
       "allowedCategories": [ "library" ]
     },
     {
@@ -287,6 +355,18 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "pathfinding",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "paths-js",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "prettier",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "prismjs",
       "allowedCategories": [ "library" ]
     },
@@ -315,6 +395,14 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "react-icons",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-intl",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "react-lottie",
       "allowedCategories": [ "library" ]
     },
@@ -323,7 +411,15 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "react-scripts-ts",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "react-syntax-highlighter",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "resize-observer-polyfill",
       "allowedCategories": [ "library" ]
     },
     {
@@ -332,6 +428,10 @@
     },
     {
       "name": "source-map-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "storybook",
       "allowedCategories": [ "library" ]
     },
     {
@@ -344,6 +444,22 @@
     },
     {
       "name": "ts-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslib",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint-react-hooks",
       "allowedCategories": [ "library" ]
     },
     {
@@ -416,6 +532,10 @@
     },
     {
       "name": "yup",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "zustand",
       "allowedCategories": [ "library" ]
     }
   ]
