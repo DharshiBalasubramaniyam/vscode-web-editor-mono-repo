@@ -393,6 +393,16 @@
       "packageName": "@dharshi/component-diagram",
       "projectFolder": "workspaces/ballerina/component-diagram",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/data-mapper-view",
+      "projectFolder": "workspaces/ballerina/data-mapper-view",
+      "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/ballerina-low-code-diagram",
+      "projectFolder": "workspaces/ballerina/ballerina-low-code-diagram",
+      "reviewCategory": "library"
     }
   ]
 }

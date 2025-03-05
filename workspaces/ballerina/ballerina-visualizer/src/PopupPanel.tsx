@@ -12,9 +12,9 @@ import React, { useEffect, useState } from "react";
 import { URI, Utils } from "vscode-uri";
 import { MACHINE_VIEW, PopupMachineStateValue, PopupVisualizerLocation } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
-import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
+// import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
 import { ThemeColors, Overlay } from "@dharshi/ui-toolkit";
-import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
+// import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
 
 const ViewContainer = styled.div`
     position: fixed;
@@ -57,29 +57,31 @@ const PopupPanel = (props: PopupPanelProps) => {
         rpcClient.getPopupVisualizerState().then((machineState: PopupVisualizerLocation) => {
             switch (machineState?.view) {
                 case MACHINE_VIEW.AddConnectionWizard:
-                    rpcClient.getVisualizerLocation().then((location) => {
-                        setViewComponent(
-                            <AddConnectionWizard
-                                fileName={Utils.joinPath(URI.file(location.projectUri), "connections.bal").fsPath}
-                                target={machineState.metadata?.target || undefined}
-                                onClose={onClose}
-                            />
-                        );
-                    });
+                    console.log("in pop up panel");
+                    // rpcClient.getVisualizerLocation().then((location) => {
+                    //     setViewComponent(
+                    //         <AddConnectionWizard
+                    //             fileName={Utils.joinPath(URI.file(location.projectUri), "connections.bal").fsPath}
+                    //             target={machineState.metadata?.target || undefined}
+                    //             onClose={onClose}
+                    //         />
+                    //     );
+                    // });
                     break;
                 case MACHINE_VIEW.EditConnectionWizard:
-                    rpcClient.getVisualizerLocation().then((location) => {
-                        setViewComponent(
-                            <>
-                                <EditConnectionWizard
-                                    fileName={Utils.joinPath(URI.file(location.projectUri), "connections.bal").fsPath}
-                                    connectionName={machineState?.identifier}
-                                    onClose={onClose}
-                                />
-                                <Overlay sx={{ background: `${ThemeColors.SURFACE_CONTAINER}`, opacity: `0.3`, zIndex: 1000 }} />
-                            </>
-                        );
-                    });
+                    console.log("in pop up panel")
+                    // rpcClient.getVisualizerLocation().then((location) => {
+                    //     setViewComponent(
+                    //         <>
+                    //             <EditConnectionWizard
+                    //                 fileName={Utils.joinPath(URI.file(location.projectUri), "connections.bal").fsPath}
+                    //                 connectionName={machineState?.identifier}
+                    //                 onClose={onClose}
+                    //             />
+                    //             <Overlay sx={{ background: `${ThemeColors.SURFACE_CONTAINER}`, opacity: `0.3`, zIndex: 1000 }} />
+                    //         </>
+                    //     );
+                    // });
                     break;
                 default:
                     setViewComponent(null);

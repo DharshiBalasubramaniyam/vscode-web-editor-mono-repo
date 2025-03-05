@@ -21,11 +21,6 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { NavigationBar } from "./components/NavigationBar";
 import { LoadingRing } from "./components/Loader";
-// import { DataMapper } from "./views/DataMapper";
-// import { ERDiagram } from "./views/ERDiagram";
-// import { GraphQLDiagram } from "./views/GraphQLDiagram";
-// import { SequenceDiagram } from "./views/SequenceDiagram";
-import { Overview } from "./views/Overview";
 // import { ServiceDesigner } from "./views/BI/ServiceDesigner";
 // import {
 //     WelcomeView,
@@ -43,15 +38,12 @@ import { URI, Utils } from "vscode-uri";
 import { Typography } from "@dharshi/ui-toolkit";
 import { PanelType, useVisualizerContext } from "./Context";
 // import { ConstructPanel } from "./views/ConstructPanel";
-// import { EditPanel } from "./views/EditPanel";
-// import { RecordEditor } from "./views/RecordEditor/RecordEditor";
 import PopupPanel from "./PopupPanel";
 // import { ConnectorList } from "../../ballerina-visualizer/src/views/Connectors/ConnectorWizard";
 // import { EndpointList } from "./views/Connectors/EndpointList";
 // import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import DiagramWrapper from "./views/BI/DiagramWrapper";
 // import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
-// import { TypeDiagram } from "./views/TypeDiagram";
 // import { Overview as OverviewBI } from "./views/BI/Overview/index";
 // import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
 // import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
@@ -60,6 +52,14 @@ import PopupPanel from "./PopupPanel";
 // import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
 // import { ServiceClassDesigner } from "./views/BI/ServiceClassEditor/ServiceClassDesigner";
 // import { ServiceClassConfig } from "./views/BI/ServiceClassEditor/ServiceClassConfig";
+// import { GraphQLDiagram } from "./views/GraphQLDiagram";
+import { TypeDiagram } from "./views/TypeDiagram";
+// import { EditPanel } from "./views/EditPanel";
+import { RecordEditor } from "./views/RecordEditor/RecordEditor";
+import { DataMapper } from "./views/DataMapper";
+import { ERDiagram } from "./views/ERDiagram";
+import { SequenceDiagram } from "./views/SequenceDiagram";
+import { Overview } from "./views/Overview";
 
 const globalStyles = css`
     *,
@@ -167,6 +167,7 @@ const MainPanel = () => {
                         setViewComponent(<Overview visualizerLocation={value} />);
                         break;
                     case MACHINE_VIEW.ServiceDesigner:
+                        console.log("has to display service designer. coming from bi")
                         // setViewComponent(
                         //     <ServiceDesigner
                         //         filePath={value.documentUri}
@@ -175,27 +176,32 @@ const MainPanel = () => {
                         // );
                         break;
                     case MACHINE_VIEW.BIDiagram:
+                        console.log("has to display bi diagram")
                         // setViewComponent(
                         //     <DiagramWrapper syntaxTree={value?.syntaxTree} projectPath={value.projectUri} />
                         // );
                         break;
                     case MACHINE_VIEW.ERDiagram:
-                        // setViewComponent(<ERDiagram />);
+                        console.log("has to display er diagram")
+                        setViewComponent(<ERDiagram />);
                         break;
                     case MACHINE_VIEW.TypeDiagram:
-                        // setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
+                        console.log("has to display type diagram")
+                        setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.DataMapper:
-                        // setViewComponent(
-                        //     <DataMapper
-                        //         filePath={value.documentUri}
-                        //         model={value?.syntaxTree as FunctionDefinition}
-                        //         isBI={value.isBI}
-                        //         applyModifications={applyModifications}
-                        //     />
-                        // );
+                        console.log("has to display data mapper")
+                        setViewComponent(
+                            <DataMapper
+                                filePath={value.documentUri}
+                                model={value?.syntaxTree as FunctionDefinition}
+                                isBI={value.isBI}
+                                applyModifications={applyModifications}
+                            />
+                        );
                         break;
                     case MACHINE_VIEW.BIDataMapperForm:
+                        console.log("has to display data mapper form")
                         rpcClient.getVisualizerLocation().then((location) => {
                             // setViewComponent(
                             //     <FunctionForm
@@ -208,14 +214,17 @@ const MainPanel = () => {
                         });
                         break;
                     case MACHINE_VIEW.GraphQLDiagram:
+                        console.log("has to display graphql diagram")
                         // setViewComponent(<GraphQLDiagram filePath={value?.documentUri} position={value?.position} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.SequenceDiagram:
-                        // setViewComponent(
-                        //     <SequenceDiagram syntaxTree={value?.syntaxTree} applyModifications={applyModifications} />
-                        // );
+                        console.log("has to display sequence diagram")
+                        setViewComponent(
+                            <SequenceDiagram syntaxTree={value?.syntaxTree} applyModifications={applyModifications} />
+                        );
                         break;
                     case MACHINE_VIEW.BIWelcome:
+                        console.log("has to display bi welcome")
                         setNavActive(false);
                         // setViewComponent(<WelcomeView />);
                         break;
@@ -363,13 +372,13 @@ const MainPanel = () => {
                 {viewComponent && <ComponentViewWrapper>{viewComponent}</ComponentViewWrapper>}
                 {/* {sidePanel !== "EMPTY" && sidePanel === "ADD_CONNECTION" && (
                     <ConnectorList applyModifications={applyModifications} />
-                )}
+                )} */}
 
-                {popupMessage && (
+                {/* {popupMessage && (
                     <PopupMessage onClose={handleOnCloseMessage}>
                         <Typography variant="h3">This feature is coming soon!</Typography>
                     </PopupMessage>
-                )}
+                )} */}
                 {sidePanel === "RECORD_EDITOR" && (
                     <RecordEditor
                         isRecordEditorOpen={sidePanel === "RECORD_EDITOR"}
@@ -377,18 +386,18 @@ const MainPanel = () => {
                         rpcClient={rpcClient}
                     />
                 )}
-                {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
+                {/* {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
                     <ConstructPanel applyModifications={applyModifications} />
-                )}
-                {activePanel?.isActive && activePanel.name === PanelType.STATEMENTEDITOR && (
+                )} */}
+                {/* {activePanel?.isActive && activePanel.name === PanelType.STATEMENTEDITOR && (
                     <EditPanel applyModifications={applyModifications} />
-                )}
+                )} */}
                 {typeof popupState === "object" && "open" in popupState && (
                     <PopUpContainer>
                         <PopupPanel onClose={handleOnClose} formState={popupState} />
                     </PopUpContainer>
                 )}
-                {sidePanel !== "EMPTY" && sidePanel === "ADD_ACTION" && (
+                {/* {sidePanel !== "EMPTY" && sidePanel === "ADD_ACTION" && (
                     <EndpointList stSymbolInfo={getSymbolInfo()} applyModifications={applyModifications} />
                 )} */}
             </VisualizerContainer>

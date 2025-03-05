@@ -7,7 +7,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@babel/preset-env",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@date-io/date-fns",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/ballerina-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-low-code-diagram",
       "allowedCategories": [ "library" ]
     },
     {
@@ -27,6 +39,14 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@dharshi/component-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/data-mapper-view",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/font-wso2-vscode",
       "allowedCategories": [ "library" ]
     },
@@ -35,7 +55,27 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@dharshi/persist-layer-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/record-creator",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/sequence-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/syntax-tree",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/type-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/type-editor",
       "allowedCategories": [ "library" ]
     },
     {
@@ -91,6 +131,18 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@rollup/plugin-commonjs",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@rollup/plugin-json",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@rollup/plugin-node-resolve",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@storybook/addon-actions",
       "allowedCategories": [ "library" ]
     },
@@ -140,6 +192,10 @@
     },
     {
       "name": "@types/dagre",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/handlebars",
       "allowedCategories": [ "library" ]
     },
     {
@@ -227,6 +283,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@vitejs/plugin-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@vscode/codicons",
       "allowedCategories": [ "library" ]
     },
@@ -247,6 +307,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "babel-plugin-transform-typescript-metadata",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "blueimp-md5",
       "allowedCategories": [ "library" ]
     },
@@ -259,11 +323,27 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "clipboard-copy",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "closest",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "clsx",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "copy-webpack-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "copyfiles",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "cron-validator",
       "allowedCategories": [ "library" ]
     },
     {
@@ -272,6 +352,18 @@
     },
     {
       "name": "dagre",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "date-fns",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "date-fns-tz",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "dexie",
       "allowedCategories": [ "library" ]
     },
     {
@@ -295,6 +387,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "express",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "fantasticon",
       "allowedCategories": [ "library" ]
     },
@@ -303,11 +399,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "fork-ts-checker-webpack-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "gh-pages",
       "allowedCategories": [ "library" ]
     },
     {
       "name": "glob",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "graphql",
       "allowedCategories": [ "library" ]
     },
     {
@@ -331,11 +435,27 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "jest",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "joi",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "jsonc-parser",
       "allowedCategories": [ "library" ]
     },
     {
       "name": "lodash",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash.camelcase",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash.clonedeep",
       "allowedCategories": [ "library" ]
     },
     {
@@ -348,6 +468,10 @@
     },
     {
       "name": "monaco-editor",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "monaco-editor-webpack-plugin",
       "allowedCategories": [ "library" ]
     },
     {
@@ -419,7 +543,55 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "react-test-renderer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-zoom-pan-pinch",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "reflect-metadata",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "resize-observer-polyfill",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rimraf",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-import-css",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-peer-deps-external",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-postcss",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-scss",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-svg",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-typescript2",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "sass",
       "allowedCategories": [ "library" ]
     },
     {
@@ -436,6 +608,18 @@
     },
     {
       "name": "style-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "stylelint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "stylelint-config-standard",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "svg-url-loader",
       "allowedCategories": [ "library" ]
     },
     {
@@ -463,11 +647,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "tsyringe",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "typescript",
       "allowedCategories": [ "library" ]
     },
     {
       "name": "uuid",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vite",
       "allowedCategories": [ "library" ]
     },
     {
