@@ -1,9 +1,9 @@
 const { open } = require('@vscode/test-web');
 
 open({
-    quality: "stable",
+    quality: "insiders",
     browserType: "none",
-    extensionPaths: ["workspaces/ballerina/ballerina-extension"],
+    extensionDevelopmentPath: "workspaces/ballerina/ballerina-extension",
     port: 3001,
 }).then(() => {
     console.log("done!")

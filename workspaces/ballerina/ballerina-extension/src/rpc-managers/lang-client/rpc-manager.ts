@@ -73,6 +73,7 @@ export class LangClientRpcManager implements LangClientAPI {
             if (workspace.workspaceFolders?.length) {
                 const workspaceUri: {uri: string}[] = [];
                 workspace.workspaceFolders.forEach(folder => {
+                    console.log("folder: ", folder);
                     workspaceUri.push(
                         {
                             uri: folder.uri.toString(),

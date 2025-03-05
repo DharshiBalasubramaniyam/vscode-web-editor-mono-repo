@@ -128,7 +128,7 @@ const stateMachine = createMachine<MachineContext>(
                                     identifier: (context, event) => event.data.identifier,
                                     position: (context, event) => event.data.position,
                                     syntaxTree: (context, event) => event.data.syntaxTree,
-                                    
+
                                 })
                             }
                         }
@@ -246,6 +246,7 @@ const stateMachine = createMachine<MachineContext>(
             return new Promise(async (resolve, reject) => {
                 if (!context.view && context.langClient) {
                     if (!context.position || ("groupId" in context.position)) {
+                        console.log("found group id in position");
                         if (context.isBI) {
                             // const entryPoints = (await new BiDiagramRpcManager().getProjectStructure()).directoryMap[DIRECTORY_MAP.SERVICES].length;
                             // if (entryPoints === 0) {
@@ -255,11 +256,14 @@ const stateMachine = createMachine<MachineContext>(
                         }
                         history.push({ location: { view: MACHINE_VIEW.Overview, documentUri: context.documentUri } });
                         return resolve();
+                    } else {
+                        console.log("Not group id found position...");
+                        // const view = await getView(context.documentUri ? context.documentUri : "", context.position, context?.projectUri);
+                        // history.push(view);
+                        return resolve();
                     }
-                    // const view = await getView(context.documentUri ? context.documentUri : "", context.position, context?.projectUri);
-                    // history.push(view);
-                    return resolve();
                 } else {
+                    console.log("i am in out side else");
                     history.push({
                         location: {
                             view: context.view,
@@ -275,6 +279,7 @@ const stateMachine = createMachine<MachineContext>(
             });
         },
         showView(context, event): Promise<VisualizerLocation> {
+            console.log("showing view");
             return new Promise(async (resolve, reject) => {
                 StateMachinePopup.resetState();
                 const historyStack = history.get();
@@ -307,16 +312,12 @@ const stateMachine = createMachine<MachineContext>(
                         uri: Uri.parse(documentUri).toString()
                     }
                 }) as SyntaxTree;
+                console.log("node: ", node.parseSuccess);
 
                 if (!selectedEntry?.location.view) {
                     return resolve({ view: MACHINE_VIEW.Overview, documentUri: context.documentUri });
                 }
-
                 let selectedST;
-
-                if (node === "") {
-                    return;
-                }
 
                 if (node?.parseSuccess) {
                     const fullST = node.syntaxTree;
@@ -396,7 +397,7 @@ const stateMachine = createMachine<MachineContext>(
 
 // Create a service to interpret the machine
 const stateService = interpret(stateMachine).onTransition(state => {
-    console.log("state change to: ", state)
+    console.log("state change to: ", state);
 });
 
 function startMachine(): Promise<void> {
@@ -427,7 +428,7 @@ export function openView(type: EVENT_TYPE, viewLocation: VisualizerLocation, res
         history.clear();
     }
     // type: OPEN_VIEW, viewLocation: { documenturi, position }
-    stateService.send({ type: type, viewLocation: viewLocation}); 
+    stateService.send({ type: type, viewLocation: viewLocation });
 }
 
 export function updateView() {
@@ -456,7 +457,7 @@ async function checkForProjects() {
             const contentAsString = new TextDecoder('utf-8').decode(tomlFileContent);
             isBI = contentAsString.includes("bi = true");
         }
-        projectUri = rootFolder.uri.path;
+        projectUri = `${rootFolder.uri.scheme}:${rootFolder.uri.path}`;
     } catch (err) {
         console.error(err);
     }

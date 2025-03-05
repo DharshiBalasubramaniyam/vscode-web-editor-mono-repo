@@ -238,11 +238,11 @@ export class ExtendedLanguageClient extends LanguageClient {
     }
 
     async isExtendedServiceSupported(serviceName: string): Promise<boolean> {
-        if (!this.isDynamicRegistrationSupported) {
+        // if (!this.isDynamicRegistrationSupported) {
             return Promise.resolve(true);
-        }
+        // }
 
-        return Promise.resolve((await this.registerExtendedAPICapabilities()).has(serviceName));
+        // return Promise.resolve((await this.registerExtendedAPICapabilities()).has(serviceName));
     }
 
     // <------------ EXTENDED APIS START --------------->
@@ -433,6 +433,8 @@ export class ExtendedLanguageClient extends LanguageClient {
     }
 
     async getBallerinaProjectComponents(params: BallerinaPackagesParams): Promise<BallerinaProjectComponents | NOT_SUPPORTED_TYPE> {
+        console.log("isDynamicRegistrationSupported: ", this.isDynamicRegistrationSupported);
+        console.log("getBallerinaProjectComponents:", params);
         const isSupported = await this.isExtendedServiceSupported(EXTENDED_APIS.PACKAGE_COMPONENTS);
         if (!isSupported) {
             return Promise.resolve(NOT_SUPPORTED);

@@ -7,8 +7,6 @@ import styled from "@emotion/styled";
 import { EVENT_TYPE, VisualizerLocation } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 
-
-
 export interface ComponentViewInfo {
     filePath: string;
     position: any;

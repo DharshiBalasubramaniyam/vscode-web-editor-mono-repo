@@ -55,12 +55,16 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
 
     const handleFileChange = async (value: string) => {
         setSelectedFile(value);
+        console.log("value: ", value);
         const componentResponse = (value === SELECT_ALL_FILES) ?
             await rpcClient.getLangClientRpcClient().getBallerinaProjectComponents(undefined) :
             await rpcClient.getLangClientRpcClient().getBallerinaProjectComponents({
-                documentIdentifiers: [{ uri: URI.file(value).toString() }]
+                documentIdentifiers: [{ uri: URI.parse(value).toString() }]
             });
         setComponents(componentResponse as Data);
+        console.log("componentResponse: ", componentResponse);
+        console.log("selectedFile: ", selectedFile);
+        console.log("workspaceInfo.workspaceRoot: ", workspaceInfo.workspaceRoot)
     };
 
     const fetchData = async () => {
@@ -157,6 +161,8 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
             modules,
         };
     });
+
+    console.log("filtered components: ", filteredComponents)
 
     return (
         <>

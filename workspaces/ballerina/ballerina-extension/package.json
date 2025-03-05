@@ -6,6 +6,7 @@
     "engines": {
         "vscode": "^1.97.0"
     },
+    "enabledApiProposals": ["extensionRuntime"],
     "categories": [
         "Programming Languages"
     ],
@@ -131,7 +132,11 @@
         "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
         "pretest": "npm run build",
         "vscode:prepublish": "npm run package-web",
-        "build": "webpack",
+        "compile": "webpack",
+        "copyFonts": "copyfiles -f ./node_modules/@dharshi/font-wso2-vscode/dist/* ./resources/font-wso2-vscode/dist/",
+        "copyJSLibs": "copyfiles -f ../ballerina-visualizer/build/*.js resources/jslibs",
+        "build": "pnpm run compile && pnpm run postbuild",
+        "postbuild": "pnpm run copyFonts && pnpm run copyJSLibs",
         "watch-web": "webpack --watch",
         "package-web": "webpack --mode production --devtool hidden-source-map",
         "lint": "eslint src",
@@ -141,6 +146,8 @@
         "@types/lodash": "^4.14.200",
         "@dharshi/ballerina-core": "workspace:*",
         "@dharshi/syntax-tree": "workspace:*",
+        "@dharshi/ballerina-visualizer": "workspace:*",
+        "@dharshi/font-wso2-vscode": "workspace:*",
         "lodash": "^4.17.21",
         "vscode-languageclient": "^9.0.1",
         "uuid": "^11.1.0",

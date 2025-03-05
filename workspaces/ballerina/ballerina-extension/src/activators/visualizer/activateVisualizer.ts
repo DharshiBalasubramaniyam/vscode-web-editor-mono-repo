@@ -5,8 +5,8 @@ import { BI_COMMANDS, EVENT_TYPE, MACHINE_VIEW, SHARED_COMMANDS } from '@dharshi
 
 export function activateVisualizer(ext: BallerinaExtension) {
 	ext.context.subscriptions.push(
-		vscode.commands.registerCommand('ballerina.showVisualizer', (path: vscode.Uri, position, resetHistory = false) => {
-			openView(EVENT_TYPE.OPEN_VIEW, { documentUri: path?.path || vscode.window.activeTextEditor?.document.uri.path, position: position }, resetHistory);
+		vscode.commands.registerCommand('ballerina.showVisualizer', async (path: vscode.Uri, position, resetHistory = false) => {
+			openView(EVENT_TYPE.OPEN_VIEW, { documentUri: `${path?.scheme}:${path?.path}`, position: position }, resetHistory);
 		}
 	));
 

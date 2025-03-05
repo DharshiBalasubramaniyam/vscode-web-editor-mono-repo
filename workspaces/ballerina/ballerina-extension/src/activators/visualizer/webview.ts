@@ -49,7 +49,7 @@ export class VisualizerWebview {
         const panel = vscode.window.createWebviewPanel(
             VisualizerWebview.viewType,
             VisualizerWebview.panelTitle,
-            { viewColumn: vscode.ViewColumn.Active, preserveFocus: true },
+            vscode.ViewColumn.Beside,
             {
                 enableScripts: true,
                 localResourceRoots: [vscode.Uri.file(vscode.Uri.joinPath(balExtInstance.context.extensionUri, "resources").toString())],

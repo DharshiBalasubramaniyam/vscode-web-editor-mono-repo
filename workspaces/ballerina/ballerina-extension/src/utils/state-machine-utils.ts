@@ -16,25 +16,11 @@ import { FindNodeByUidVisitor } from "./history/find-node-by-uid";
 import { FindConstructByNameVisitor } from "./history/find-construct-by-name-visitor";
 import { FindConstructByIndexVisitor } from "./history/find-construct-by-index-visitor";
 import { getConstructBodyString } from "./history/util";
-// import { ballerinaExtInstance } from "../core";
 
 export async function getView(documentUri: string, position: NodePosition, projectUri?: string): Promise<HistoryEntry> {
 
     const req = getSTByRangeReq(documentUri, position);
-    // export interface SyntaxTreeResponse {
-    //     syntaxTree: STNode;
-    //     parseSuccess?: boolean;
-    //     source?: string;
-    //     defFilePath?: string;
-    // }
-    // export interface STNode {kind: string;value?: any;parent?: STNode;viewState?: any;
-    // dataMapperViewState?: any;dataMapperTypeDescNode?: STNode;position?: any;
-    //  typeData?: any;VisibleEndpoints?: VisibleEndpoint[];source: string;
-    //     configurablePosition?: NodePosition;controlFlow?: ControlFlow;
-    //     syntaxDiagnostics: SyntaxDiagnostics[];diagnostics?: Diagnostic[];
-    //     performance?: PerfData;leadingMinutiae: Minutiae[];trailingMinutiae: Minutiae[];
-    //     isInSelectedPath?: boolean;qualifiers?: STNode[];typedBindingPattern?: TypedBindingPattern;
-    //   }
+
     const node = await StateMachine.langClient()?.getSTByRange(req as BallerinaSTParams) as SyntaxTreeResponse;
     if (node.parseSuccess) {
         if (STKindChecker.isTypeDefinition(node.syntaxTree)) {
@@ -186,6 +172,7 @@ export async function getView(documentUri: string, position: NodePosition, proje
                     dataMapperDepth: 0
                 };
             }
+            console.log("the view is a sequence diagram...");
             return {
                 location: {
                     view: MACHINE_VIEW.SequenceDiagram,
