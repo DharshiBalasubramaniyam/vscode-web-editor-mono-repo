@@ -258,8 +258,8 @@ const stateMachine = createMachine<MachineContext>(
                         return resolve();
                     } else {
                         console.log("Not group id found position...");
-                        // const view = await getView(context.documentUri ? context.documentUri : "", context.position, context?.projectUri);
-                        // history.push(view);
+                        const view = await getView(context.documentUri ? context.documentUri : "", context.position, context?.projectUri);
+                        history.push(view);
                         return resolve();
                     }
                 } else {
