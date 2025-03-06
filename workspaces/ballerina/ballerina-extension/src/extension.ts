@@ -7,11 +7,26 @@ import { StateMachine } from './state-machine';
 
 export const WEB_IDE_SCHEME = 'web-bala';
 export const STD_LIB_SCHEME = 'bala';
+export const ENABLE_EXPERIMENTAL_FEATURES = "kolab.experimental";
+export const ENABLE_SEQUENCE_DIAGRAM_VIEW = "kolab.enableSequenceDiagramView";
+export const ENABLE_AI_SUGGESTIONS = "kolab.enableAiSuggestions";
 
 export class BallerinaExtension {
 	public context!: vscode.ExtensionContext;
 	public langClient?: ExtendedLanguageClient;
 	public fsProvider?: BalFileSystemProvider;
+
+	public enabledExperimentalFeatures(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);
+    }
+
+	public enableSequenceDiagramView(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_SEQUENCE_DIAGRAM_VIEW);
+    }
+
+    public enableAiSuggestions(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_AI_SUGGESTIONS);
+    }
 }
 
 export const balExtInstance: BallerinaExtension = new BallerinaExtension();

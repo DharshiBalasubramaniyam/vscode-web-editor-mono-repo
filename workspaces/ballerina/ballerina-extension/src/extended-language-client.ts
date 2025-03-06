@@ -214,6 +214,9 @@ export class ExtendedLanguageClient extends LanguageClient {
                 {
                     name: EXTENDED_APIS_ORG.NOTEBOOK_SUPPORT, getResult: true, getShellFileSource: true,
                     getVariableValues: true, deleteDeclarations: true, restartNotebook: true
+                },
+                {
+                    name: EXTENDED_APIS_ORG.TYPES_MANAGER, getTypes: true, getType: true, updateType: true
                 }
             ]
         }).then(response => {
@@ -928,7 +931,8 @@ enum EXTENDED_APIS_ORG {
     NOTEBOOK_SUPPORT = "balShell",
     GRAPHQL_DESIGN = "graphqlDesignService",
     SEQUENCE_DIAGRAM = "sequenceModelGeneratorService",
-    RUNNER = "ballerinaRunner"
+    RUNNER = "ballerinaRunner",
+    TYPES_MANAGER = "typesManager"
 }
 
 export enum DIAGNOSTIC_SEVERITY {

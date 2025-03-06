@@ -3,7 +3,7 @@ import { debounce } from "lodash";
 import { balExtInstance } from "../../extension";
 import { getComposerWebViewOptions, getLibraryWebViewContent, WebViewOptions } from "../../utils/webview-utils";
 import { RPCLayer } from "../../RPCLayer";
-import { updateView } from "../../state-machine";
+import { StateMachine, updateView } from "../../state-machine";
 
 export class VisualizerWebview {
     public static currentPanel: VisualizerWebview | undefined;
@@ -145,5 +145,6 @@ export class VisualizerWebview {
         }
 
         this._panel = undefined;
+        StateMachine.resetToExtensionReady();
     }
 }

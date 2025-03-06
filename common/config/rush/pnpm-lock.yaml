@@ -701,6 +701,76 @@ importers:
         specifier: ^4.11.1
         version: 4.15.2(webpack-cli@4.10.0)(webpack@5.98.0)
 
+  ../../workspaces/ballerina/bi-diagram:
+    dependencies:
+      '@dharshi/ballerina-core':
+        specifier: workspace:*
+        version: link:../ballerina-core
+      '@dharshi/ballerina-rpc-client':
+        specifier: workspace:*
+        version: link:../ballerina-rpc-client
+      '@dharshi/ui-toolkit':
+        specifier: workspace:*
+        version: link:../../common-libs/ui-toolkit
+      '@emotion/react':
+        specifier: ^11.9.3
+        version: 11.11.4(@types/react@17.0.83)(react@18.2.0)
+      '@emotion/styled':
+        specifier: ^11.10.5
+        version: 11.11.5(@emotion/react@11.11.4)(@types/react@17.0.83)(react@18.2.0)
+      '@projectstorm/geometry':
+        specifier: ^6.7.4
+        version: 6.7.4
+      '@projectstorm/react-canvas-core':
+        specifier: ^6.7.4
+        version: 6.7.4(lodash@4.17.21)(react@18.2.0)
+      '@projectstorm/react-diagrams':
+        specifier: ^6.7.4
+        version: 6.7.4(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(dagre@0.8.5)(lodash@4.17.21)(react@18.2.0)
+      '@projectstorm/react-diagrams-core':
+        specifier: ^6.7.4
+        version: 6.7.4(lodash@4.17.21)(react@18.2.0)
+      '@projectstorm/react-diagrams-defaults':
+        specifier: ^6.7.4
+        version: 6.7.4(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(lodash@4.17.21)(react@18.2.0)
+      '@projectstorm/react-diagrams-routing':
+        specifier: ^6.7.4
+        version: 6.7.4(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(dagre@0.8.5)(lodash@4.17.21)(react@18.2.0)
+      dagre:
+        specifier: ~0.8.5
+        version: 0.8.5
+      lodash:
+        specifier: ~4.17.21
+        version: 4.17.21
+      react:
+        specifier: ~18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ~18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@storybook/react':
+        specifier: ^6.3.7
+        version: 6.5.16(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)
+      '@types/dagre':
+        specifier: ~0.7.52
+        version: 0.7.52
+      '@types/lodash':
+        specifier: ~4.14.202
+        version: 4.14.202
+      '@types/react':
+        specifier: ^17.0.14
+        version: 17.0.83
+      '@types/react-dom':
+        specifier: ^17.0.9
+        version: 17.0.14
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
+      typescript:
+        specifier: ^4.3.5
+        version: 4.9.5
+
   ../../workspaces/ballerina/component-diagram:
     dependencies:
       '@dharshi/ballerina-core':

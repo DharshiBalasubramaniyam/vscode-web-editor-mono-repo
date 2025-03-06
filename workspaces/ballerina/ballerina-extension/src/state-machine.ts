@@ -150,7 +150,7 @@ const stateMachine = createMachine<MachineContext>(
                             VIEW_UPDATE: {
                                 target: "webViewLoaded",
                                 actions: assign({
-                                    documentUri: (context, event) => event.viewLocation.documentUri,
+                                    documentUri: (context, event) => event.viewLocation.documentUri ? event.viewLocation.documentUri : context.documentUri,
                                     position: (context, event) => event.viewLocation.position,
                                     view: (context, event) => event.viewLocation.view,
                                     identifier: (context, event) => event.viewLocation.identifier,
@@ -197,7 +197,7 @@ const stateMachine = createMachine<MachineContext>(
                     const langClient = await activateLanguageServer();
                     // fetchAndCacheLibraryData();
                     // StateMachineAI.initialize();
-                    // StateMachinePopup.initialize();
+                    StateMachinePopup.initialize();
                     resolve(langClient);
                 } catch (error) {
                     throw new Error("LS Activation failed.");
@@ -208,9 +208,6 @@ const stateMachine = createMachine<MachineContext>(
             return new Promise(async (resolve, reject) => {
                 try {
                     await activateFileSystemProvider();
-                    // fetchAndCacheLibraryData();
-                    // StateMachineAI.initialize();
-                    // StateMachinePopup.initialize();
                     resolve(true);
                 } catch (error) {
                     throw new Error("LS Activation failed.");
@@ -259,6 +256,7 @@ const stateMachine = createMachine<MachineContext>(
                     } else {
                         console.log("Not group id found position...");
                         const view = await getView(context.documentUri ? context.documentUri : "", context.position, context?.projectUri);
+                        console.log("current view: ", view);
                         history.push(view);
                         return resolve();
                     }
@@ -279,13 +277,15 @@ const stateMachine = createMachine<MachineContext>(
             });
         },
         showView(context, event): Promise<VisualizerLocation> {
-            console.log("showing view");
+            console.log("showing view.");
+            StateMachinePopup.resetState();
             return new Promise(async (resolve, reject) => {
                 StateMachinePopup.resetState();
                 const historyStack = history.get();
                 const selectedEntry = historyStack[historyStack.length - 1];
 
                 if (!context.langClient) {
+                    console.log("No lang client.....");
                     if (!selectedEntry) {
                         return resolve({ view: MACHINE_VIEW.Overview, documentUri: context.documentUri });
                     }
@@ -306,7 +306,7 @@ const stateMachine = createMachine<MachineContext>(
                 } = selectedEntry ?? {};
 
                 const { documentUri, position } = location;
-
+                console.log("documentUri: ", documentUri);
                 const node = documentUri && await StateMachine.langClient()?.getSyntaxTree({
                     documentIdentifier: {
                         uri: Uri.parse(documentUri).toString()
@@ -389,6 +389,7 @@ const stateMachine = createMachine<MachineContext>(
                     undoRedoManager.updateContent(documentUri ? documentUri : "", node?.syntaxTree?.source);
                 }
                 const updatedHistory = history.get();
+                console.log("updatedHistory: ", updatedHistory);
                 return resolve(updatedHistory[updatedHistory.length - 1].location);
             });
         }
@@ -433,12 +434,11 @@ export function openView(type: EVENT_TYPE, viewLocation: VisualizerLocation, res
 
 export function updateView() {
     const historyStack = history.get();
-    const lastView = historyStack[historyStack.length - 1];
-    stateService.send({ type: "VIEW_UPDATE", viewLocation: lastView ? lastView.location : { view: "Overview" } });
+    stateService.send({ type: "VIEW_UPDATE", viewLocation: historyStack.length > 0 ? historyStack[historyStack.length - 1].location : { view: MACHINE_VIEW.Overview } });
     if (StateMachine.context().isBI) {
         commands.executeCommand("BI.project-explorer.refresh");
     }
-    notifyCurrentWebview();
+    // notifyCurrentWebview();
 }
 
 async function checkForProjects() {

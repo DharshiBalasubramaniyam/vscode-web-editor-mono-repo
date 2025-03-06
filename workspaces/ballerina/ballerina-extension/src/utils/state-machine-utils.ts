@@ -186,16 +186,17 @@ export async function getView(documentUri: string, position: NodePosition, proje
 
         // config variables
 
-        // if (node.syntaxTree.qualifiers && node.syntaxTree.qualifiersSTKindChecker.isConfigurableKeyword(node.syntaxTree.qualifiers[0]) &&
-        //     STKindChecker.isCaptureBindingPattern(node.syntaxTree.typedBindingPattern?.bindingPattern as STNode)) {
-        //     return {
-        //         location: {
-        //             view: MACHINE_VIEW.EditConfigVariables,
-        //             documentUri: documentUri,
-        //             position: position
-        //         },
-        //     };
-        // }
+        if (node.syntaxTree.qualifiers && STKindChecker.isConfigurableKeyword(node.syntaxTree.qualifiers[0]) &&
+            STKindChecker.isCaptureBindingPattern(node.syntaxTree.typedBindingPattern?.bindingPattern as STNode)) {
+                console.log("is a configurable variable...");
+            return {
+                location: {
+                    view: MACHINE_VIEW.EditConfigVariables,
+                    documentUri: documentUri,
+                    position: position
+                },
+            };
+        }
     }
 
     return { location: { view: MACHINE_VIEW.Overview, documentUri: documentUri } };
@@ -236,7 +237,7 @@ export function getNodeByIndex(uid: string, fullST: STNode): [STNode, string] {
 
 function getSTByRangeReq(documentUri: string, position: NodePosition) {
     return {
-        documentIdentifier: { uri: Uri.file(documentUri).toString() },
+        documentIdentifier: { uri: Uri.parse(documentUri).toString() },
         lineRange: {
             start: {
                 line: position.startLine,

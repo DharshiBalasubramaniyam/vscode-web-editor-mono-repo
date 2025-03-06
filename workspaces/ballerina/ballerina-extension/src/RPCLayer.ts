@@ -10,14 +10,15 @@ import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
 // import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
 // import { registerGraphqlDesignerRpcHandlers } from './rpc-managers/graphql-designer/rpc-handler';
 // import { registerRecordCreatorRpcHandlers } from './rpc-managers/record-creator/rpc-handler';
-// import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-handler';
+import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-handler';
 // import { registerAiPanelRpcHandlers } from './rpc-managers/ai-panel/rpc-handler';
 // import { AiPanelWebview } from './views/ai-panel/webview';
 // import { StateMachineAI } from './views/ai-panel/aiMachine';
 import { StateMachinePopup } from './state-machine-popup';
 import { VisualizerWebview } from './activators/visualizer/webview';
+import { balExtInstance } from './extension';
 // import { registerConnectorWizardRpcHandlers } from './rpc-managers/connector-wizard/rpc-handler';
-// import { registerSequenceDiagramRpcHandlers } from './rpc-managers/sequence-diagram/rpc-handler';
+import { registerSequenceDiagramRpcHandlers } from './rpc-managers/sequence-diagram/rpc-handler';
 // import { registerInlineDataMapperRpcHandlers } from './rpc-managers/inline-data-mapper/rpc-handler';
 // import { registerTestManagerRpcHandlers } from './rpc-managers/test-manager/rpc-handler';
 // import { registerIcpServiceRpcHandlers } from './rpc-managers/icp-service/rpc-handler';
@@ -58,8 +59,8 @@ export class RPCLayer {
         // registerPersistDiagramRpcHandlers(RPCLayer._messenger);
         // registerGraphqlDesignerRpcHandlers(RPCLayer._messenger);
         // registerRecordCreatorRpcHandlers(RPCLayer._messenger);
-        // registerBiDiagramRpcHandlers(RPCLayer._messenger);
-        // registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
+        registerBiDiagramRpcHandlers(RPCLayer._messenger);
+        registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
         // registerConnectorWizardRpcHandlers(RPCLayer._messenger);
         // registerTestManagerRpcHandlers(RPCLayer._messenger);
         // registerIcpServiceRpcHandlers(RPCLayer._messenger);
@@ -94,7 +95,7 @@ async function getContext(): Promise<VisualizerLocation> {
             metadata: {
                 haveLS: StateMachine.langClient() !== null,
                 // recordFilePath: Uri.joinPath(context.projectUri, "types.bal").toString(),
-                // enableSequenceDiagram: ballerinaExtInstance.enableSequenceDiagramView(),
+                enableSequenceDiagram: balExtInstance.enableSequenceDiagramView(),
             },
         });
     });

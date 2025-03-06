@@ -1,7 +1,6 @@
 import { createMachine, assign, interpret } from 'xstate';
 import * as vscode from 'vscode';
 import { EVENT_TYPE, PopupVisualizerLocation, webviewReady, PopupMachineStateValue, onParentPopupSubmitted } from '@dharshi/ballerina-core';
-// import { VisualizerWebview } from './views/visualizer/webview';
 import { RPCLayer } from './RPCLayer';
 import { StateMachine } from './state-machine';
 import { VisualizerWebview } from './activators/visualizer/webview';

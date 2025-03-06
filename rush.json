@@ -403,6 +403,11 @@
       "packageName": "@dharshi/ballerina-low-code-diagram",
       "projectFolder": "workspaces/ballerina/ballerina-low-code-diagram",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/bi-diagram",
+      "projectFolder": "workspaces/ballerina/bi-diagram",
+      "reviewCategory": "library"
     }
   ]
 }

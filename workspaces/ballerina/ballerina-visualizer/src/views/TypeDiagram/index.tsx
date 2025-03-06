@@ -54,14 +54,18 @@ export function TypeDiagram(props: TypeDiagramProps) {
     const [editingType, setEditingType] = React.useState<Type>();
 
     useEffect(() => {
+        console.log("rpc client update.....")
         if (rpcClient) {
+            console.log("rpc client update 2.....")
             rpcClient.getVisualizerLocation().then((value) => {
+            console.log("rpc client update 3: ", value);
                 setVisualizerLocation(value);
             });
         }
     }, [rpcClient]);
 
     useEffect(() => {
+        console.log("v location update.....")
         getComponentModel();
     }, [visualizerLocation]);
 
@@ -76,14 +80,16 @@ export function TypeDiagram(props: TypeDiagramProps) {
     }, [selectedTypeId]);
 
     const getComponentModel = async () => {
-        if (!rpcClient || !visualizerLocation?.metadata?.recordFilePath) {
+        console.log("get c model update1.....")
+        if (!rpcClient || !visualizerLocation?.documentUri) {
             return;
         }
+        console.log("get c model update2.....")
         const response = await rpcClient
             .getBIDiagramRpcClient()
-            .getTypes({ filePath: visualizerLocation?.metadata?.recordFilePath });
+            .getTypes({ filePath: visualizerLocation?.documentUri });
         setTypesModel(response.types);
-        console.log(response);
+        console.log("type models: ", response);
     };
 
     const showProblemPanel = async () => {
