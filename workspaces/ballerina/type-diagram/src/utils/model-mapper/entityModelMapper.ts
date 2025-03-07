@@ -103,11 +103,16 @@ export function entityModeller(components: Type[], selectedEntityId?: string): D
 
     // If selectedEntityId is provided, filter for related entities
     if (selectedEntityId) {
+        console.log("selected entity id: ", selectedEntityId);
         const relatedEntities = new Set<string>();
         relatedEntities.add(selectedEntityId);
         findRelatedEntities(selectedEntityId, components, relatedEntities);
+        console.log(components);
+        console.log("related: ", relatedEntities)
         filteredComponents = components.filter(comp => relatedEntities.has(comp.name));
     }
+    console.log(selectedEntityId);
+    console.log(filteredComponents);
 
     // Create nodes and links
     const entityNodes = createEntityNodes(filteredComponents, selectedEntityId);

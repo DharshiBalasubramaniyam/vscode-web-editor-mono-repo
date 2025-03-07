@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { File } from "@dharshi/ballerina-core";
 
 const FS_BASE_URL = "http://localhost:9091/fs";
 
@@ -51,6 +52,21 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 		});
 
 		return children;
+	}
+
+	async readWorkspaceFiles(uri: vscode.Uri): Promise<File[]> {
+		console.log("read workspace files: ", uri.path);
+
+		const directoryInfo = await fetch(`${FS_BASE_URL}/readbal?url=${uri.path}&scheme=${uri.scheme}`);
+		console.log("sending request to: ", `${FS_BASE_URL}/readbal?url=${uri.path}&scheme=${uri.scheme}`);
+		if (!directoryInfo.ok) {
+			console.log(`Failed to fetch work files: ${directoryInfo.statusText}`);
+			return [];
+		}
+
+		const files = await directoryInfo.json();
+		console.log("Workspace files:", files);
+		return files;
 	}
 
 	async readFile(uri: vscode.Uri): Promise<Uint8Array> {

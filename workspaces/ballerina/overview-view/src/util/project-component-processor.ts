@@ -10,7 +10,6 @@ export class ProjectComponentProcessor {
     private currentModule: ModuleSummary;
     private components: ComponentCollection;
 
-
     constructor(projectComponents: BallerinaProjectComponents) {
         this.projectComponents = projectComponents;
         this.fileMap = new Map<string, FileListEntry>();
@@ -24,7 +23,9 @@ export class ProjectComponentProcessor {
             constants: [],
             enums: [],
             listeners: [],
-            moduleVariables: []
+            moduleVariables: [],
+            configurableVariables: [],
+            automations: []
         };
     }
 
@@ -53,9 +54,9 @@ export class ProjectComponentProcessor {
         }
     }
 
-    private processComponents(type: string, components: ComponentInfo[]) {
+    private processComponents(type: string, components: ComponentInfo[]) { // fn, [array of fn]
         components.forEach(component => {
-            this.components[type].push({
+            this.components[type]?.push({
                 filePath: genFilePath(this.currentPackage, this.currentModule, component),
                 position: {
                     startLine: component.startLine,
@@ -95,7 +96,8 @@ export class ProjectComponentProcessor {
             constants: [],
             enums: [],
             listeners: [],
-            moduleVariables: []
+            moduleVariables: [],
+            configurableVariables: []
         }
 
         for (const [type, collection] of Object.entries(this.components)) {

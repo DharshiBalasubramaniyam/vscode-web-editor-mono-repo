@@ -21,7 +21,7 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { NavigationBar } from "./components/NavigationBar";
 import { LoadingRing } from "./components/Loader";
-// import { ServiceDesigner } from "./views/BI/ServiceDesigner";
+import { ServiceDesigner } from "./views/BI/ServiceDesigner";
 // import {
 //     WelcomeView,
 //     ProjectForm,
@@ -71,7 +71,8 @@ const globalStyles = css`
 
 const VisualizerContainer = styled.div`
     width: 100%;
-    /* height: 100%; */
+    height: 100%;
+    overflow: auto;
 `;
 
 const ComponentViewWrapper = styled.div`
@@ -168,12 +169,12 @@ const MainPanel = () => {
                         break;
                     case MACHINE_VIEW.ServiceDesigner:
                         console.log("has to display service designer. coming from bi")
-                        // setViewComponent(
-                        //     <ServiceDesigner
-                        //         filePath={value.documentUri}
-                        //         position={value?.position}
-                        //     />
-                        // );
+                        setViewComponent(
+                            <ServiceDesigner
+                                filePath={value.documentUri}
+                                position={value?.position}
+                            />
+                        );
                         break;
                     case MACHINE_VIEW.BIDiagram:
                         console.log("has to display bi diagram")

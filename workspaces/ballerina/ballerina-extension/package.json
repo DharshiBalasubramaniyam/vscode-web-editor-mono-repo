@@ -6,7 +6,9 @@
     "engines": {
         "vscode": "^1.97.0"
     },
-    "enabledApiProposals": ["extensionRuntime"],
+    "enabledApiProposals": [
+        "extensionRuntime"
+    ],
     "categories": [
         "Programming Languages"
     ],

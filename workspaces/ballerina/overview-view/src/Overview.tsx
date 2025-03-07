@@ -30,6 +30,8 @@ interface Module {
     enums: any[];
     listeners: any[];
     moduleVariables: any[];
+    name: string;
+    configurableVariables: any[]
 }
 
 export const SELECT_ALL_FILES = 'All';
@@ -89,59 +91,78 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
         return <div>Loading...</div>;
     }
 
+    const checkSelectedFile = (fileName: string, moduleName: string) => {
+        console.log(fileName, " ", moduleName)
+        const relativePath = selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1);
+        console.log("r: ", relativePath)
+        if (relativePath === fileName) return true;
+        const splitPaths = relativePath.split("/");
+        if (splitPaths.length === 1) return false;
+        console.log("m: ", moduleName, " ", splitPaths);
+        return splitPaths[1] === moduleName;
+    }
+
     // Filter the components based on the search query
     const filteredComponents = components?.packages.map((pkg) => {
         const modules = pkg.modules.map((module) => {
             const services = module.services.filter((service) => {
-                if (selectedFile === SELECT_ALL_FILES || service.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(service.filePath, module.name)  ) {
                     return service.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const types = module.types.filter((type) => {
-                if (selectedFile === SELECT_ALL_FILES || type.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(type.filePath, module.name) ) {
                     return type.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const functions = module.functions.filter((func) => {
-                if (selectedFile === SELECT_ALL_FILES || func.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(func.filePath, module.name) ) {
                     return func.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const records = module.records.filter((record) => {
-                if (selectedFile === SELECT_ALL_FILES || record.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(record.filePath, module.name)  ) {
                     return record.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const objects = module.objects.filter((object) => {
-                if (selectedFile === SELECT_ALL_FILES || object.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(object.filePath, module.name) ) {
                     return object.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const classes = module.classes.filter((cls) => {
-                if (selectedFile === SELECT_ALL_FILES || cls.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(cls.filePath, module.name) ) {
                     return cls.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const constants = module.constants.filter((constant) => {
-                if (selectedFile === SELECT_ALL_FILES || constant.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(constant.filePath, module.name) ) {
                     return constant.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const enums = module.enums.filter((enumType) => {
-                if (selectedFile === SELECT_ALL_FILES || enumType.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(enumType.filePath, module.name) ) {
                     return enumType.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const listeners = module.listeners.filter((listener) => {
-                if (selectedFile === SELECT_ALL_FILES || listener.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(listener.filePath, module.name) ) {
                     return listener.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
             const moduleVariables = module.moduleVariables.filter((variable) => {
-                if (selectedFile === SELECT_ALL_FILES || variable.filePath === selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1)) {
+                if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(variable.filePath, module.name) ) {
                     return variable.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
+            // const configVariables = module.configurableVariables.filter((configvar) => {
+            //     console.log(">>>> config")
+            //     if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(configvar.filePath, module.name) ) {
+            //         console.log("selected.....")
+            //         return configvar.name.toLowerCase().includes(query.toLowerCase());
+            //     }
+            // });
+            // console.log(configVariables)
             return {
                 ...module,
                 services,
@@ -153,7 +174,8 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
                 constants,
                 enums,
                 listeners,
-                moduleVariables,
+                moduleVariables
+                // configVariables
             };
         });
         return {

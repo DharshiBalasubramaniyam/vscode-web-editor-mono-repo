@@ -19,6 +19,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@dharshi/ballerina-inline-data-mapper",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@dharshi/ballerina-low-code-diagram",
       "allowedCategories": [ "library" ]
     },
@@ -36,6 +40,10 @@
     },
     {
       "name": "@dharshi/ballerina-visualizer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/bi-diagram",
       "allowedCategories": [ "library" ]
     },
     {

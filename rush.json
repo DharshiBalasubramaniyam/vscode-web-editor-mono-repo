@@ -408,6 +408,11 @@
       "packageName": "@dharshi/bi-diagram",
       "projectFolder": "workspaces/ballerina/bi-diagram",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/ballerina-inline-data-mapper",
+      "projectFolder": "workspaces/ballerina/inline-data-mapper",
+      "reviewCategory": "library"
     }
   ]
 }

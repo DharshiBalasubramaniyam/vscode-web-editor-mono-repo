@@ -28,6 +28,7 @@ export type ComponentCollection = {
     enums: ComponentViewInfo[];
     listeners: ComponentViewInfo[];
     moduleVariables: ComponentViewInfo[];
+    configurableVariables: ComponentViewInfo[]
 };
 
 
