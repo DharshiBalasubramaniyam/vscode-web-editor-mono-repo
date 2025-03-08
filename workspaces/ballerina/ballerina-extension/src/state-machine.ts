@@ -12,6 +12,7 @@ import { balExtInstance } from './extension';
 // import { BiDiagramRpcManager } from './rpc-managers/bi-diagram/rpc-manager';
 // import { StateMachineAI } from './views/ai-panel/aiMachine';
 import { StateMachinePopup } from './state-machine-popup';
+import { fetchAndCacheLibraryData } from './activators/library-browser';
 
 interface MachineContext extends VisualizerLocation {
     langClient: ExtendedLanguageClient | null;
@@ -195,7 +196,7 @@ const stateMachine = createMachine<MachineContext>(
                 try {
                     commands.executeCommand('setContext', 'BI.status', 'loading');
                     const langClient = await activateLanguageServer();
-                    // fetchAndCacheLibraryData();
+                    // await fetchAndCacheLibraryData();
                     // StateMachineAI.initialize();
                     StateMachinePopup.initialize();
                     resolve(langClient);

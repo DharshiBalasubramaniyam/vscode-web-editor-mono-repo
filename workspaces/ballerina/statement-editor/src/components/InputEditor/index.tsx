@@ -105,6 +105,13 @@ export function InputEditor(props: InputEditorProps) {
         setUserInput(originalValue);
     }, [originalValue]);
 
+    console.log({
+        originalValue: originalValue,
+        userInput: userInput,
+        prevUserInput: prevUserInput,
+        placeHolder: placeHolder
+    })
+
     useEffect(() => {
         if (currentModel.model && isPositionsEquals(currentModel.model.position, model.position)){
             setIsEditing(currentModel.isEntered ? currentModel.isEntered : false);
@@ -137,6 +144,7 @@ export function InputEditor(props: InputEditorProps) {
     }, [isEditing]);
 
     const inputEnterHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(">>> input enter handler...")
         if (event.key === "Enter" || event.key === "Tab") {
             handleEditEnd();
         } else if (event.key === "Escape") {
@@ -147,6 +155,7 @@ export function InputEditor(props: InputEditorProps) {
     };
 
     const clickAwayHandler = (event: any) => {
+        console.log(">>> click away handler: ", event)
         const path = event?.path || (event?.composedPath && event?.composedPath());
         if (path && !path[0].className.includes("suggestion")){
             handleEditEnd();
@@ -173,6 +182,11 @@ export function InputEditor(props: InputEditorProps) {
         setUserInput(input);
         inputEditorCtx.onInputChange(input);
         inputEditorCtx.onSuggestionSelection('');
+        console.log("changing input: ", {
+            "new value: ": newValue,
+            "statement model": statementModel,
+            "model: ": model
+        })
         debouncedContentChange(newValue, true);
     }
 
@@ -187,17 +201,24 @@ export function InputEditor(props: InputEditorProps) {
     };
 
     const handleEditEnd = () => {
+        console.log(">>>> handing edit end...")
         setPrevUserInput(userInput);
         if (userInput !== "") {
+            console.log(1)
             // Check syntax diagnostics
             let isIncorrectSyntax = false;
             const semicolonRegex = new RegExp('(;)(?=(?:[^"]|"[^"]*")*$)');
             if (model && userInput.includes(";") && !STKindChecker.isLocalVarDecl(model) && !STKindChecker.isReturnStatement(model)) {
+                console.log(2)
                 isIncorrectSyntax = semicolonRegex.test(userInput);
             }
             if (isIncorrectSyntax) {
+            console.log(3)
+
                 updateSyntaxDiagnostics(true);
             } else {
+            console.log(4)
+
                 setUserInput(userInput);
                 const input = (userInput === FUNCTION_CALL_PLACEHOLDER && config.type === CALL_CONFIG_TYPE) ?
                     FUNCTION_CALL : userInput;
@@ -205,6 +226,14 @@ export function InputEditor(props: InputEditorProps) {
                 const codeSnippet = input.replaceAll('${}', "${" + EXPR_PLACEHOLDER + "}");
                 originalValue === DEFAULT_INTERMEDIATE_CLAUSE ? updateModel(codeSnippet, model ? model.parent.parent.position : targetPosition) :
                 updateModel(codeSnippet, model ? model.position : targetPosition);
+
+                console.log("handle edit end: ", {
+                    "user input": userInput,
+                    "input": input,
+                    "code snippet": codeSnippet,
+                    "original value": originalValue,
+                    "model": model
+                })
             }
         }
         setIsEditing(false);

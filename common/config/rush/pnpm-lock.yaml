@@ -101,6 +101,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      monaco-languageclient:
+        specifier: 0.13.1-next.9
+        version: 0.13.1-next.9
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -1217,9 +1220,6 @@ importers:
       '@types/blueimp-md5':
         specifier: ^2.18.0
         version: 2.18.2
-      '@types/classnames':
-        specifier: ^2.2.9
-        version: 2.3.4
       '@types/lodash':
         specifier: 4.14.189
         version: 4.14.189
@@ -21849,6 +21849,17 @@ packages:
     resolution: {integrity: sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==}
     dev: false
 
+  /monaco-languageclient@0.13.1-next.9:
+    resolution: {integrity: sha512-VXzrrlB7RbpvrsgDJw8jmgGqSoFnAWQTOgwwIop7D25O9GB4A0HriyiyTumeOd7JJAQRLyserzSbfrRlBDD+aQ==}
+    engines: {vscode: ^1.50.0}
+    dependencies:
+      glob-to-regexp: 0.4.1
+      vscode-jsonrpc: 6.0.0
+      vscode-languageclient: 7.0.0
+      vscode-languageserver-textdocument: 1.0.12
+      vscode-uri: 3.0.8
+    dev: false
+
   /morgan@1.10.0:
     resolution: {integrity: sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==}
     engines: {node: '>= 0.8.0'}
@@ -28799,6 +28810,15 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
+  /vscode-languageclient@7.0.0:
+    resolution: {integrity: sha512-P9AXdAPlsCgslpP9pRxYPqkNYV7Xq8300/aZDpO35j1fJm/ncize8iGswzYlcvFw5DQUx4eVk+KvfXdL0rehNg==}
+    engines: {vscode: ^1.52.0}
+    dependencies:
+      minimatch: 3.1.2
+      semver: 7.7.1
+      vscode-languageserver-protocol: 3.16.0
+    dev: false
+
   /vscode-languageclient@9.0.1:
     resolution: {integrity: sha512-JZiimVdvimEuHh5olxhxkht09m3JzUGwggb5eRUkzzJhZ2KjCN0nh55VfiED9oez9DyF8/fz1g1iBV3h+0Z2EA==}
     engines: {vscode: ^1.82.0}
@@ -28806,6 +28826,13 @@ packages:
       minimatch: 5.1.6
       semver: 7.7.1
       vscode-languageserver-protocol: 3.17.5
+    dev: false
+
+  /vscode-languageserver-protocol@3.16.0:
+    resolution: {integrity: sha512-sdeUoAawceQdgIfTI+sdcwkiK2KU+2cbEYA0agzM2uqaUy2UpnnGHtWTHVEtS0ES4zHU0eMFRGN+oQgDxlD66A==}
+    dependencies:
+      vscode-jsonrpc: 6.0.0
+      vscode-languageserver-types: 3.16.0
     dev: false
 
   /vscode-languageserver-protocol@3.17.5:
@@ -28817,6 +28844,10 @@ packages:
 
   /vscode-languageserver-textdocument@1.0.12:
     resolution: {integrity: sha512-cxWNPesCnQCcMPeenjKKsOCKQZ/L6Tv19DTRIGuLWe32lyzWhihGVJ/rcckZXJxfdKCFvRLS3fpBIsV/ZGX4zA==}
+    dev: false
+
+  /vscode-languageserver-types@3.16.0:
+    resolution: {integrity: sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==}
     dev: false
 
   /vscode-languageserver-types@3.17.5:

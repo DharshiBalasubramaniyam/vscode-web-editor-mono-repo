@@ -31,6 +31,7 @@ export function Library(props: LibraryProps) {
 
     const onClickOnLibrary = async () => {
         libraryDataFetchingHandler(true);
+        console.log("fetch library data: ", libraryInfo)
         const response = await libraryBrowserRpcClient.getLibraryData({
             orgName,
             moduleName: id,
@@ -40,6 +41,8 @@ export function Library(props: LibraryProps) {
         if (response) {
             libraryBrowsingHandler(response);
             libraryDataFetchingHandler(false);
+        } else {
+            console.log("error: ", response)
         }
     }
 

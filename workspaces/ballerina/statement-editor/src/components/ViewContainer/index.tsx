@@ -50,7 +50,7 @@ export function ViewContainer(props: ViewContainerProps) {
             activeEditorId
         }
     } = useContext(StatementEditorContext);
-    const fileSchemeURI = URI.file(currentFile.path).toString();
+    const fileSchemeURI = URI.parse(currentFile.path).toString();
 
     const onSaveClick = async () => {
         const typeName = await handleModifications();

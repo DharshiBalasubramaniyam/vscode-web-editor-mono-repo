@@ -70,7 +70,6 @@ export class CommonRpcManager implements CommonRPCAPI {
     }
 
     async getWorkspaceFiles(params: WorkspaceFileRequest): Promise<WorkspacesFileResponse> {
-        console.log("finding workpspace files....."); // nothing is happening after logging this. freezed. 
         const files = [];
         console.log(workspace.workspaceFolders);
         const workspaceRoot = workspace.workspaceFolders![0].uri;
@@ -78,20 +77,6 @@ export class CommonRpcManager implements CommonRPCAPI {
         const workspaceFiles = await balExtInstance.fsProvider.readWorkspaceFiles(workspaceRoot);
         console.log("workspaceFiles: ", workspaceFiles);
         return { files: workspaceFiles, workspaceRoot: `${workspaceRoot.scheme}:${workspaceRoot.path}` };
-
-        // console.log("finding workpspace files....."); // nothing is happening after logging this. freezed. 
-        // const files = [];
-        // console.log(workspace.workspaceFolders);
-        // const workspaceRoot = workspace.workspaceFolders![0].uri;
-        // console.log("workspace root: ", workspaceRoot);
-        // const workspaceFiles = await balExtInstance.fsProvider.readDirectory(workspaceRoot);
-        // console.log("workspaceFiles: ", workspaceFiles);
-        // const balFiles = workspaceFiles.filter((f) => f[0].endsWith(".bal") && f[1] === FileType.File);
-        // balFiles.forEach(file => {
-        //     files.push({ relativePath: file[0], path: `${workspaceRoot.scheme}:${workspaceRoot.path}/${file[0]}` });
-        // });
-        // console.log("files: ", files);
-        // return { files: files, workspaceRoot: `${workspaceRoot.scheme}:${workspaceRoot.path}` };
     }
 
     async getBallerinaDiagnostics(params: BallerinaDiagnosticsRequest): Promise<BallerinaDiagnosticsResponse> {
@@ -192,7 +177,29 @@ export class CommonRpcManager implements CommonRPCAPI {
     }
 
     async runBackgroundTerminalCommand(params: RunExternalCommandRequest): Promise<RunExternalCommandResponse> {
-        return new Promise<CommandResponse>(function (resolve) {
+        return new Promise<CommandResponse>(async function (resolve) {
+            const response = await fetch(`http://localhost:9091/bala/pull`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    command: params.command   
+                })
+            });
+            const stdout = await response.text();
+            console.log("pull response: ", stdout);
+            if (!response.ok) {
+                resolve({
+                    error: true,
+                    message: stdout
+                });
+            } else {
+                resolve({
+                    error: false,
+                    message: stdout
+                });
+            }
             // child_process.exec(`${params.command}`, async (err, stdout, stderr) => {
             //     if (err) {
             //         resolve({
@@ -206,6 +213,10 @@ export class CommonRpcManager implements CommonRPCAPI {
             //         });
             //     }
             // });
+
+
+
+            resolve({error: false, message: "pull success"});
         });
     }
 

@@ -15,6 +15,11 @@ export class BallerinaExtension {
 	public context!: vscode.ExtensionContext;
 	public langClient?: ExtendedLanguageClient;
 	public fsProvider?: BalFileSystemProvider;
+	public balServerUrl: string;
+
+	init() {
+		this.balServerUrl = "http://localhost:9091";
+	}
 
 	public enabledExperimentalFeatures(): boolean {
         return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);

@@ -273,5 +273,5 @@ export function initializeRequest(processId: number): InitializeParams {
 
 
 export function file(path: string): string {
-    return URI.file(path).toString()
+    return URI.parse(path).toString()
 }

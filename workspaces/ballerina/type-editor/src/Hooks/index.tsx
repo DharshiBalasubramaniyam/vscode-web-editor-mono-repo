@@ -54,7 +54,7 @@ export const useFullST = (
     const fetchFullST = async () => {
         try {
             const fullST = await langServerRpcClient.getST({
-                documentIdentifier: { uri: URI.file(filePath).toString() },
+                documentIdentifier: { uri: URI.parse(filePath).toString() },
             });
             return fullST;
         } catch (networkError: any) {
@@ -89,7 +89,7 @@ export const useBallerinaProjectComponent = (
         try {
             const ballerinaProjectComponents = await langServerRpcClient.getBallerinaProjectComponents({
                 documentIdentifiers: [
-                    { uri: URI.file(filePath).toString() }
+                    { uri: URI.parse(filePath).toString() }
                 ],
             });
             return ballerinaProjectComponents;

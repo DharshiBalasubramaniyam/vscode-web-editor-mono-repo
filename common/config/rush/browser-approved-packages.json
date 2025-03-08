@@ -483,6 +483,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "monaco-languageclient",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "mousetrap",
       "allowedCategories": [ "library" ]
     },

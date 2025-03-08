@@ -90,7 +90,7 @@ export async function getCompletions(
     langServerRpcClient: LangClientRpcClient,
     userInput: string = ''
 ): Promise<SuggestionItem[]> {
-
+    console.log(">>> sending completion request inside utils")
     const isTypeDescriptor = (currentModel.model.viewState as StatementEditorViewState).modelType === ModelType.TYPE_DESCRIPTOR;
     const varName = STKindChecker.isLocalVarDecl(completeModel)
         && completeModel.typedBindingPattern.bindingPattern.source.trim();
@@ -341,6 +341,7 @@ export async function updateFileContent(
     langServerRpcClient: LangClientRpcClient,
     skipForceSave?: boolean,
 ): Promise<boolean> {
+    console.log("updating files content: ", content)
     const response = await langServerRpcClient.updateFileContent({
         filePath: fileUri,
         content,

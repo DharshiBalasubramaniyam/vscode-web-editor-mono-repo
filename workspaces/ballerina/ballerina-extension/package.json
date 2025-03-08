@@ -155,6 +155,7 @@
         "uuid": "^11.1.0",
         "vscode-languageserver": "^9.0.1",
         "vscode-languageserver-textdocument": "^1.0.12",
+        "monaco-languageclient": "0.13.1-next.9",
         "vscode-messenger": "^0.4.5",
         "vscode-messenger-common": "^0.4.5",
         "xstate": "^4.38.3"

@@ -323,7 +323,7 @@ export function getUpdatedSource(
     if (trimStatement) {
         stmt = statement.trim();
     }
-    const updatedStatement = skipSemiColon ? stmt : (stmt.endsWith(';') ? stmt : stmt + ';');
+    const updatedStatement = `${skipSemiColon ? stmt : (stmt.endsWith(';') ? stmt : stmt + ';')}\n`;
     let updatedContent: string = addToTargetPosition(currentFileContent, targetPosition, updatedStatement, trimStatement);
     if (moduleList?.size > 0) {
         updatedContent = addImportStatements(updatedContent, Array.from(moduleList) as string[]);
@@ -343,6 +343,12 @@ export function addToTargetPosition(
     codeSnippet: string,
     trimSnippet = true
 ): string {
+    console.log("add to current positon, ", {
+        "currentcontent": currentContent,
+        "position": position,
+        "codesnippet": codeSnippet
+    })
+
     if (trimSnippet) {
         codeSnippet.trimEnd();
     }
@@ -526,7 +532,7 @@ export function getSelectedModelPosition(codeSnippet: string, targetedPosition: 
         ...targetedPosition,
         endColumn: targetedPosition.startColumn + codeSnippet.length
     };
-
+    
     if (codeSnippet.startsWith(',\n') || codeSnippet.startsWith('\n')) {
         selectedModelPosition = {
             startLine: targetedPosition.startLine + 1,
@@ -535,7 +541,12 @@ export function getSelectedModelPosition(codeSnippet: string, targetedPosition: 
             endColumn: targetedPosition.startColumn + codeSnippet.length
         };
     }
-
+    
+    console.log("get selected model position: ", {
+        "codesnippet": codeSnippet, 
+        'targetedposition': targetedPosition,
+        'result': selectedModelPosition
+    })
     return selectedModelPosition;
 }
 

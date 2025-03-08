@@ -39,7 +39,7 @@ import {
 } from "@dharshi/ballerina-core";
 import { workspace, Uri } from "vscode";
 import { StateMachine } from "../../state-machine";
-// import { modifyFileContent } from "../../utils/modification";
+import { modifyFileContent } from "../../utils/modification";
 export class LangClientRpcManager implements LangClientAPI {
     
     async getSyntaxTree(): Promise<SyntaxTree> {
@@ -94,8 +94,8 @@ export class LangClientRpcManager implements LangClientAPI {
 
     async getCompletion(params: CompletionRequest): Promise<CompletionResponse> {
         return new Promise(async (resolve) => {
-            // const completions = await StateMachine.langClient()?.getCompletion(params);
-            resolve({completions: []});
+            const completions = await StateMachine.langClient()?.getCompletion(params);
+            resolve({completions: completions});
         });
     }
 
@@ -108,15 +108,15 @@ export class LangClientRpcManager implements LangClientAPI {
 
     async codeAction(params: CodeActionRequest): Promise<CodeActionResponse> {
         return new Promise(async (resolve) => {
-            // const codeActions = await StateMachine.langClient()?.codeAction(params);
-            resolve({ codeActions: [] });
+            const codeActions = await StateMachine.langClient()?.codeAction(params);
+            resolve({ codeActions: codeActions });
         });
     }
 
     async rename(params: RenameRequest): Promise<RenameResponse> {
         return new Promise(async (resolve) => {
-            // const workspaceEdit = await StateMachine.langClient()?.rename(params);
-            resolve({ workspaceEdit: {} });
+            const workspaceEdit = await StateMachine.langClient()?.rename(params);
+            resolve({ workspaceEdit: workspaceEdit });
         });
     }
 
@@ -153,8 +153,8 @@ export class LangClientRpcManager implements LangClientAPI {
 
     async updateFileContent(params: UpdateFileContentRequest): Promise<UpdateFileContentResponse> {
         return new Promise(async (resolve) => {
-            // const status = await modifyFileContent(params);
-            resolve({ status: true });
+            const status = await modifyFileContent(params);
+            resolve({ status: status });
         });
     }
 
@@ -181,8 +181,8 @@ export class LangClientRpcManager implements LangClientAPI {
 
     async definition(params: DefinitionPositionRequest): Promise<DefinitionResponse> {
         return new Promise(async (resolve) => {
-            // const location = await StateMachine.langClient()?.definition(params);
-            resolve({ location: null });
+            const location = await StateMachine.langClient()?.definition(params);
+            resolve({ location: location });
         });
     }
 
@@ -243,18 +243,15 @@ export class LangClientRpcManager implements LangClientAPI {
     }
 
     didOpen(params: DidOpenRequest): void {
-        return;
-        // return StateMachine.langClient()?.didOpen(params);
+        return StateMachine.langClient()?.didOpen(params);
     }
 
     didChange(params: DidChangeRequest): void {
-        return;
-        // return StateMachine.langClient()?.didChange(params);
+        return StateMachine.langClient()?.didChange(params);
     }
 
     didClose(params: DidCloseRequest): void {
-        return;
-        // return StateMachine.langClient()?.didClose(params);
+        return StateMachine.langClient()?.didClose(params);
     }
 
     async getBallerinaVersion(): Promise<BallerinaVersionResponse> {

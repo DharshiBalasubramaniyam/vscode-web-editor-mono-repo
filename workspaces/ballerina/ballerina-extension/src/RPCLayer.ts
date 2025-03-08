@@ -4,7 +4,7 @@ import { StateMachine } from './state-machine';
 import { stateChanged, getVisualizerLocation, VisualizerLocation, projectContentUpdated, aiStateChanged, sendAIStateEvent, AI_EVENT_TYPE, popupStateChanged, getPopupVisualizerState, PopupVisualizerLocation, breakpointChanged } from '@dharshi/ballerina-core';
 import { registerVisualizerRpcHandlers } from './rpc-managers/visualizer/rpc-handler';
 import { registerLangClientRpcHandlers } from './rpc-managers/lang-client/rpc-handler';
-// import { registerLibraryBrowserRpcHandlers } from './rpc-managers/library-browser/rpc-handler';
+import { registerLibraryBrowserRpcHandlers } from './rpc-managers/library-browser/rpc-handler';
 // import { registerServiceDesignerRpcHandlers } from './rpc-managers/service-designer/rpc-handler';
 import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
 // import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
@@ -17,7 +17,7 @@ import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-hand
 import { StateMachinePopup } from './state-machine-popup';
 import { VisualizerWebview } from './activators/visualizer/webview';
 import { balExtInstance } from './extension';
-// import { registerConnectorWizardRpcHandlers } from './rpc-managers/connector-wizard/rpc-handler';
+import { registerConnectorWizardRpcHandlers } from './rpc-managers/connector-wizard/rpc-handler';
 import { registerSequenceDiagramRpcHandlers } from './rpc-managers/sequence-diagram/rpc-handler';
 // import { registerInlineDataMapperRpcHandlers } from './rpc-managers/inline-data-mapper/rpc-handler';
 // import { registerTestManagerRpcHandlers } from './rpc-managers/test-manager/rpc-handler';
@@ -53,7 +53,7 @@ export class RPCLayer {
         RPCLayer._messenger.onRequest(getVisualizerLocation, () => getContext());
         registerVisualizerRpcHandlers(RPCLayer._messenger);
         registerLangClientRpcHandlers(RPCLayer._messenger);
-        // registerLibraryBrowserRpcHandlers(RPCLayer._messenger);
+        registerLibraryBrowserRpcHandlers(RPCLayer._messenger);
         // registerServiceDesignerRpcHandlers(RPCLayer._messenger);
         registerCommonRpcHandlers(RPCLayer._messenger);
         // registerPersistDiagramRpcHandlers(RPCLayer._messenger);
@@ -61,7 +61,7 @@ export class RPCLayer {
         // registerRecordCreatorRpcHandlers(RPCLayer._messenger);
         registerBiDiagramRpcHandlers(RPCLayer._messenger);
         registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
-        // registerConnectorWizardRpcHandlers(RPCLayer._messenger);
+        registerConnectorWizardRpcHandlers(RPCLayer._messenger);
         // registerTestManagerRpcHandlers(RPCLayer._messenger);
         // registerIcpServiceRpcHandlers(RPCLayer._messenger);
 

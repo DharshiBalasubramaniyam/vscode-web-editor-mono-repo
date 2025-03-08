@@ -34,7 +34,7 @@ export async function buildProjectStructure(projectDir: string, langClient: Exte
         }
     };
     const components = await langClient.getBallerinaProjectComponents({
-        documentIdentifiers: [{ uri: URI.file(projectDir).toString() }]
+        documentIdentifiers: [{ uri: URI.parse(projectDir).toString() }]
     });
     const componentModel = await langClient.getDesignModel({
         projectPath: projectDir
@@ -125,7 +125,7 @@ async function getComponents(langClient: ExtendedLangClientInterface, components
         let stNode: SyntaxTree;
         try {
             stNode = await langClient.getSTByRange({
-                documentIdentifier: { uri: URI.file(componentFile).toString() },
+                documentIdentifier: { uri: URI.parse(componentFile).toString() },
                 lineRange: {
                     start: {
                         line: comp.startLine,

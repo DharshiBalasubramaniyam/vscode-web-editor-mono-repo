@@ -156,11 +156,17 @@ import {
     FunctionModelResponse,
     TypeDataWithReferences,
     ICPEnabledRequest,
-    ICPEnabledResponse
+    ICPEnabledResponse,
+    DidChangeParams,
+    DidOpenParams,
+    DidCloseParams,
+    CompletionParams,
+    Completion,
+    APITimeConsumption
 } from "@dharshi/ballerina-core";
+import { CodeAction, CodeActionParams, DocumentSymbol, DocumentSymbolParams, ExecuteCommandParams, RenameParams, SymbolInformation, WorkspaceEdit } from "monaco-languageclient";
 import { ExtensionContext } from "vscode";
-import { LanguageClient, LanguageClientOptions, TextDocumentPositionParams } from "vscode-languageclient/browser";
-
+import { DefinitionParams, Location, LocationLink, LanguageClientOptions, TextDocumentPositionParams, LanguageClient } from "vscode-languageclient/browser";
 export const CONNECTOR_LIST_CACHE = "CONNECTOR_LIST_CACHE";
 export const HTTP_CONNECTOR_LIST_CACHE = "HTTP_CONNECTOR_LIST_CACHE";
 export const BALLERINA_LANG_ID = "ballerina";
@@ -170,11 +176,58 @@ export class ExtendedLanguageClient extends LanguageClient {
     private ballerinaExtendedServices: Set<String> | undefined;
     private isDynamicRegistrationSupported: boolean;
     extensionContext: ExtensionContext;
+    private timeConsumption: APITimeConsumption;
 
     constructor(id: string, name: string, clientOptions: LanguageClientOptions, worker: Worker, context: ExtensionContext) {
         super(id, name, clientOptions, worker);
         this.isDynamicRegistrationSupported = true;
         this.extensionContext = context;
+        this.timeConsumption = { diagnostics: [], completion: [] };
+    }
+
+    didOpen(params: DidOpenParams): void {
+        this.sendNotification(VSCODE_APIS.DID_OPEN, params);
+    }
+
+    didClose(params: DidCloseParams): void {
+        this.sendNotification(VSCODE_APIS.DID_CLOSE, params);
+    }
+
+    didChange(params: DidChangeParams): void {
+        this.sendNotification(VSCODE_APIS.DID_CHANGE, params);
+    }
+
+    registerPublishDiagnostics(): void {
+        this.onNotification(VSCODE_APIS.PUBLISH_DIAGNOSTICS, () => {
+        });
+    }
+
+    async definition(params: DefinitionParams): Promise<Location | Location[] | LocationLink[]> {
+        return this.sendRequest<Location | Location[] | LocationLink[]>(VSCODE_APIS.DEFINITION, params);
+    }
+
+    async getCompletion(params: CompletionParams): Promise<Completion[]> {
+        const start = new Date().getTime();
+        console.log(">>> sending completion req insede elc")
+        const response: Completion[] = await this.sendRequest(VSCODE_APIS.COMPLETION, params);
+        this.timeConsumption.completion.push(new Date().getTime() - start);
+        return response;
+    }
+
+    async rename(params: RenameParams): Promise<WorkspaceEdit | NOT_SUPPORTED_TYPE> {
+        return this.sendRequest(VSCODE_APIS.RENAME, params);
+    }
+
+    async getDocumentSymbol(params: DocumentSymbolParams): Promise<DocumentSymbol[] | SymbolInformation[] | NOT_SUPPORTED_TYPE> {
+        return this.sendRequest(VSCODE_APIS.DOC_SYMBOL, params);
+    }
+
+    async codeAction(params: CodeActionParams): Promise<CodeAction[]> {
+        return this.sendRequest(VSCODE_APIS.CODE_ACTION, params);
+    }
+
+    async executeCommand(params: ExecuteCommandParams): Promise<any> {
+        return this.sendRequest(VSCODE_APIS.EXECUTE_CMD, params);
     }
 
     async initBalServices(params: BallerinaInitializeParams): Promise<BallerinaInitializeResult> {
@@ -241,11 +294,12 @@ export class ExtendedLanguageClient extends LanguageClient {
     }
 
     async isExtendedServiceSupported(serviceName: string): Promise<boolean> {
-        // if (!this.isDynamicRegistrationSupported) {
+        console.log("this.isDynamicRegistrationSupported: ", this.isDynamicRegistrationSupported)
+        if (!this.isDynamicRegistrationSupported) {
             return Promise.resolve(true);
-        // }
+        }
 
-        // return Promise.resolve((await this.registerExtendedAPICapabilities()).has(serviceName));
+        return Promise.resolve((await this.registerExtendedAPICapabilities()).has(serviceName));
     }
 
     // <------------ EXTENDED APIS START --------------->
@@ -265,6 +319,7 @@ export class ExtendedLanguageClient extends LanguageClient {
         }
         const start = new Date().getTime();
         const response = await this.sendRequest<Diagnostics[]>(EXTENDED_APIS.DOCUMENT_DIAGNOSTICS, params);
+        this.timeConsumption.diagnostics.push(new Date().getTime() - start);
         return response;
     }
 

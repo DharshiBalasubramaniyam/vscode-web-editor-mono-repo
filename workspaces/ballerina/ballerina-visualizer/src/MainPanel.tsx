@@ -37,9 +37,9 @@ import { FunctionDefinition, ServiceDeclaration } from "@dharshi/syntax-tree";
 import { URI, Utils } from "vscode-uri";
 import { Typography } from "@dharshi/ui-toolkit";
 import { PanelType, useVisualizerContext } from "./Context";
-// import { ConstructPanel } from "./views/ConstructPanel";
+import { ConstructPanel } from "./views/ConstructPanel";
 import PopupPanel from "./PopupPanel";
-// import { ConnectorList } from "../../ballerina-visualizer/src/views/Connectors/ConnectorWizard";
+import { ConnectorList } from "./views/Connectors/ConnectorWizard";
 // import { EndpointList } from "./views/Connectors/EndpointList";
 // import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import DiagramWrapper from "./views/BI/DiagramWrapper";
@@ -54,7 +54,7 @@ import PopupPanel from "./PopupPanel";
 // import { ServiceClassConfig } from "./views/BI/ServiceClassEditor/ServiceClassConfig";
 // import { GraphQLDiagram } from "./views/GraphQLDiagram";
 import { TypeDiagram } from "./views/TypeDiagram";
-// import { EditPanel } from "./views/EditPanel";
+import { EditPanel } from "./views/EditPanel";
 import { RecordEditor } from "./views/RecordEditor/RecordEditor";
 import { DataMapper } from "./views/DataMapper";
 import { ERDiagram } from "./views/ERDiagram";
@@ -141,7 +141,7 @@ const MainPanel = () => {
         } = await langServerRPCClient?.stModify({
             astModifications: m,
             documentIdentifier: {
-                uri: URI.file(filePath).toString(),
+                uri: URI.parse(filePath).toString(),
             },
         });
         if (parseSuccess) {
@@ -371,9 +371,9 @@ const MainPanel = () => {
             <VisualizerContainer>
                 {navActive && <NavigationBar showHome={showHome} />}
                 {viewComponent && <ComponentViewWrapper>{viewComponent}</ComponentViewWrapper>}
-                {/* {sidePanel !== "EMPTY" && sidePanel === "ADD_CONNECTION" && (
+                {sidePanel !== "EMPTY" && sidePanel === "ADD_CONNECTION" && (
                     <ConnectorList applyModifications={applyModifications} />
-                )} */}
+                )}
 
                 {/* {popupMessage && (
                     <PopupMessage onClose={handleOnCloseMessage}>
@@ -387,12 +387,12 @@ const MainPanel = () => {
                         rpcClient={rpcClient}
                     />
                 )}
-                {/* {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
+                {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
                     <ConstructPanel applyModifications={applyModifications} />
-                )} */}
-                {/* {activePanel?.isActive && activePanel.name === PanelType.STATEMENTEDITOR && (
+                )}
+                {activePanel?.isActive && activePanel.name === PanelType.STATEMENTEDITOR && (
                     <EditPanel applyModifications={applyModifications} />
-                )} */}
+                )}
                 {typeof popupState === "object" && "open" in popupState && (
                     <PopUpContainer>
                         <PopupPanel onClose={handleOnClose} formState={popupState} />

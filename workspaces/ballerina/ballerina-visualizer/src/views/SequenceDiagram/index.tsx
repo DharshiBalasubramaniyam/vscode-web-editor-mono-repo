@@ -67,7 +67,7 @@ export function SequenceDiagram(props: SequenceDiagramProps) {
                 const parsedModel = sizingAndPositioningST(model.syntaxTree);
                 const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
                 const fullST = await rpcClient.getLangClientRpcClient().getST({
-                    documentIdentifier: { uri: URI.file(filePath).toString() }
+                    documentIdentifier: { uri: URI.parse(filePath).toString() }
                 });
                 setActiveFileInfo({ fullST: fullST?.syntaxTree, filePath, activeSequence: parsedModel });
             });

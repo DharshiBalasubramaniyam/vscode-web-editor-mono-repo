@@ -62,7 +62,7 @@ export async function checkDiagnostics(
     updatedContent: string,
     langServerRpcClient: LangClientRpcClient
 ): Promise<DiagnosticData[]> {
-    const fileURI = monaco.Uri.file(path).toString().replace(FILE_SCHEME, EXPR_SCHEME);
+    const fileURI = monaco.Uri.parse(path).toString().replace(FILE_SCHEME, EXPR_SCHEME);
     await sendDidChange(fileURI, updatedContent, langServerRpcClient);
     return handleDiagnostics(fileURI, langServerRpcClient);
 }

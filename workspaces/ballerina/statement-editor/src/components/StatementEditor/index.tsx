@@ -120,7 +120,7 @@ export function StatementEditor(props: StatementEditorProps) {
         updateEditor
     } = editorManager;
 
-    const fileURI = URI.file(currentFile.path).toString();
+    const fileURI = URI.parse(currentFile.path).toString();
     const initSymbolInfo : DocumentationInfo = {
         modelPosition: null,
         documentation: {}
@@ -216,9 +216,11 @@ export function StatementEditor(props: StatementEditorProps) {
                         let completions: SuggestionItem[];
 
                         if (index === 0) {
+                            console.log("sending completion request 1")
                             directSuggestions = await getCompletions(fileURI, draftPosition || targetPosition,
                                 model, currentModel, langServerRpcClient);
                         } else {
+                            console.log("sending completion request 2")
                             completions = await getCompletions(fileURI, draftPosition || targetPosition,
                                 model, currentModel, langServerRpcClient, selectionWithDot);
                             secondLevelSuggestions = completions.map((suggestionItem) => ({
@@ -275,6 +277,14 @@ export function StatementEditor(props: StatementEditorProps) {
     }
 
     const handleChange = async (newValue: string) => {
+        console.log("handdling changae: ", newValue);
+        // const stmtIndex = getStatementIndex(model.source, newValue, targetPosition);
+        // const newTargetPosition = getStatementPosition(model.source, newValue, stmtIndex);
+        // setCurrentModel((prevModel) => ({
+        //     ...prevModel,
+        //     position: newTargetPosition,
+        // }));
+        // console.log(newTargetPosition)
         const updatedStatement = addToTargetPosition(model.source, currentModel.model.position, newValue);
         await updateDraftFileContent(updatedStatement, currentFile.content);
 
@@ -284,13 +294,26 @@ export function StatementEditor(props: StatementEditorProps) {
 
     const updateDraftFileContent = async (statement: string, fileContent: string) => {
         const updatedContent = getUpdatedSource(statement, fileContent, targetPosition, moduleList, skipStatementSemicolon);
+        console.log("updateDraftFileContent: ", {
+            "statement": statement
+        })
+        console.log("model: ", model);
+        console.log("currentModel: ", currentModel);
         const stmtIndex = getStatementIndex(updatedContent, statement, targetPosition);
         const newTargetPosition = getStatementPosition(updatedContent, statement, stmtIndex);
-
+        console.log("stmtindex: ", stmtIndex);
+        console.log("newtargetposition: ", newTargetPosition);
         await updateFileContent(currentFile.path, updatedContent, langServerRpcClient, true);
 
         setDraftSource(updatedContent);
         setDraftPosition(newTargetPosition);
+
+        // setModel((prevModel) => ({
+        //     ...prevModel,
+        //     source: statement,
+        // }));
+
+        // updateStatementModel(updatedContent, fileContent, targetPosition);
 
         return {
             updatedContent,
@@ -307,6 +330,11 @@ export function StatementEditor(props: StatementEditorProps) {
     }
 
     const updateModel = async (codeSnippet: string, position: NodePosition, stmtModel?: STNode) => {
+        console.log("updating model: ", {
+            codeSnippet: codeSnippet,
+            position: position,
+            stmtModel: stmtModel
+        })
         const existingModel = stmtModel || model;
         let partialST: STNode;
         if (existingModel) {
@@ -326,6 +354,8 @@ export function StatementEditor(props: StatementEditorProps) {
                 ? await getPartialSTForModuleMembers({ codeSnippet }, langServerRpcClient)
                 : await getPartialSTForStatement({ codeSnippet }, langServerRpcClient);
         }
+
+        console.log("partail ST: ", partialST)
 
         if (!partialST.syntaxDiagnostics.length || (!isExpressionMode && config.type === CUSTOM_CONFIG_TYPE)) {
             await updateDraftFileContent(partialST.source, currentFile.content);

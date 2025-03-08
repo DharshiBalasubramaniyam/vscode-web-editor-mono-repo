@@ -22,6 +22,7 @@ export const useLibrarySearchData = (libraryBrowserRpcClient: LibraryBrowserRpcC
 } => {
     const fetchLibrarySearchData = async () => {
         try {
+            console.log(">>> get libraries data")
             return await libraryBrowserRpcClient.getLibrariesData();
         } catch (networkError: any) {
             // tslint:disable-next-line:no-console
@@ -47,6 +48,7 @@ export const useLibrariesList = (libraryBrowserRpcClient: LibraryBrowserRpcClien
 } => {
     const fetchLibrariesList = async () => {
         try {
+            console.log("fetch libraries list: ", libraryType);
             let response;
             if (libraryType === LANG_LIBS_IDENTIFIER) {
                 response = await libraryBrowserRpcClient.getLibrariesList({kind: LibraryKind.langLib});
