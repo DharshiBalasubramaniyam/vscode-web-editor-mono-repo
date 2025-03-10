@@ -196,7 +196,6 @@ const stateMachine = createMachine<MachineContext>(
                 try {
                     commands.executeCommand('setContext', 'BI.status', 'loading');
                     const langClient = await activateLanguageServer();
-                    // await fetchAndCacheLibraryData();
                     // StateMachineAI.initialize();
                     StateMachinePopup.initialize();
                     resolve(langClient);

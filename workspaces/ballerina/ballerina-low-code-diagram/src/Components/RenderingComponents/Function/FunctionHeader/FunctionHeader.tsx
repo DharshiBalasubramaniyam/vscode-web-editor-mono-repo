@@ -34,8 +34,11 @@ export function FunctionHeader() {
     const titleComponents: React.ReactElement[] = [];
     const argumentComponents: React.ReactElement[] = [];
 
+    console.log(diagramContext);
     const handleConfigFormClick = async () => {
-        const signature = await diagramContext.props.getListenerSignature(functionNode);
+        const signature = diagramContext?.props?.getListenerSignature 
+                        ? await diagramContext.props.getListenerSignature(functionNode) 
+                        : null;
         if (signature && signature.includes('graphql')) {
             if (STKindChecker.isObjectMethodDefinition(functionNode)) {
                 renderEditForm(functionNode, functionNode.position, {

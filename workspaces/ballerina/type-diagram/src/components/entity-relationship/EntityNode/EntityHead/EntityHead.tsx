@@ -85,6 +85,7 @@ export function EntityHeadWidget(props: ServiceHeadProps) {
     };
 
     const onGoToSource = () => {
+        console.log("on go to source: ", node.entityObject)
         goToSource(node.entityObject);
         setAnchorEl(null);
     };

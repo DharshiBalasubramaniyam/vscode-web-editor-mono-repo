@@ -121,7 +121,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(getModuleNodes, () => rpcManger.getModuleNodes());
     // messenger.onRequest(getReadmeContent, () => rpcManger.getReadmeContent());
     // messenger.onNotification(openReadme, () => rpcManger.openReadme());
-    // messenger.onRequest(renameIdentifier, (args: RenameIdentifierRequest) => rpcManger.renameIdentifier(args));
+    messenger.onRequest(renameIdentifier, (args: RenameIdentifierRequest) => rpcManger.renameIdentifier(args));
     // messenger.onNotification(deployProject, () => rpcManger.deployProject());
     // messenger.onNotification(openAIChat, (args: AIChatRequest) => rpcManger.openAIChat(args));
     // messenger.onRequest(getSignatureHelp, (args: SignatureHelpRequest) => rpcManger.getSignatureHelp(args));
@@ -137,8 +137,8 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onNotification(formDidClose, (args: FormDidCloseParams) => rpcManger.formDidClose(args));
     // messenger.onRequest(getDesignModel, () => rpcManger.getDesignModel());
     messenger.onRequest(getTypes, (args: GetTypesRequest) => rpcManger.getTypes(args));
-    // messenger.onRequest(getType, (args: GetTypeRequest) => rpcManger.getType(args));
-    // messenger.onRequest(updateType, (args: UpdateTypeRequest) => rpcManger.updateType(args));
+    messenger.onRequest(getType, (args: GetTypeRequest) => rpcManger.getType(args));
+    messenger.onRequest(updateType, (args: UpdateTypeRequest) => rpcManger.updateType(args));
     // messenger.onRequest(getServiceClassModel, (args: ModelFromCodeRequest) => rpcManger.getServiceClassModel(args));
     // messenger.onRequest(updateClassField, (args: ClassFieldModifierRequest) => rpcManger.updateClassField(args));
     // messenger.onRequest(addClassField, (args: AddFieldRequest) => rpcManger.addClassField(args));

@@ -4,11 +4,22 @@ import { LanguageClientOptions } from "vscode-languageclient";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 
 export function activateLanguageServer(): ExtendedLanguageClient {
+    const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBar.text = "Ballerina detecting";
+    statusBar.show();
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+        if (editor.document.uri.scheme === WEB_IDE_SCHEME && editor.document.languageId === 'ballerina') {
+            statusBar.show();
+        } else {
+            statusBar.hide();
+        }
+    });
     const langClient = createExtendedLanguageClient(balExtInstance.context);
 	langClient.start().then(async () => {
         console.log('Language client started successfully. Registering extended capabilities...');
 		await langClient?.registerExtendedAPICapabilities();
     }).catch((error: any) => {
+	balExtInstance.context?.subscriptions.push(langClient);
         console.error('Failed to start language client:', error);
     });
     balExtInstance.langClient = langClient;

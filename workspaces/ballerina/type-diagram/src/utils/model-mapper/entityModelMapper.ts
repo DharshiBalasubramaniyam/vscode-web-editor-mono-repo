@@ -103,7 +103,7 @@ export function entityModeller(components: Type[], selectedEntityId?: string): D
 
     // If selectedEntityId is provided, filter for related entities
     if (selectedEntityId) {
-        console.log("selected entity id: ", selectedEntityId);
+        console.log("selected entity id: ", selectedEntityId); // Book
         const relatedEntities = new Set<string>();
         relatedEntities.add(selectedEntityId);
         findRelatedEntities(selectedEntityId, components, relatedEntities);
@@ -127,18 +127,20 @@ function findRelatedEntities(componentId: string, components: Type[], relatedEnt
     const component = components.find(comp => comp.name === componentId);
     if (!component) return;
 
-    const members = isNodeClass(component?.codedata?.node) ? component.functions : component.members;
+    component?.includes.forEach((i) => relatedEntities.add(i));
 
-    Object.values(members).forEach(member => {
-        if (member.refs) {
-            member.refs.forEach(ref => {
-                if (!relatedEntities.has(ref)) {
-                    relatedEntities.add(ref);
-                    findRelatedEntities(ref, components, relatedEntities);
-                }
-            });
-        }
-    });
+    // const members = isNodeClass(component?.codedata?.node) ? component.functions : component.members;
+
+    // Object.values(members).forEach(member => {
+    //     if (member.refs) {
+    //         member.refs.forEach(ref => {
+    //             if (!relatedEntities.has(ref)) {
+    //                 relatedEntities.add(ref);
+    //                 findRelatedEntities(ref, components, relatedEntities);
+    //             }
+    //         });
+    //     }
+    // });
 }
 
 function createLinks(sourcePort: EntityPortModel, targetPort: EntityPortModel, link: EntityLinkModel): EntityLinkModel {

@@ -52,20 +52,17 @@ export function TypeDiagram(props: TypeDiagramProps) {
     const [editingTypeId, setEditingTypeId] = React.useState<string | undefined>(undefined);
     const [focusedNodeId, setFocusedNodeId] = React.useState<string | undefined>(undefined);
     const [editingType, setEditingType] = React.useState<Type>();
+    const [refreshDiagram, setRefreshDiagram] = React.useState<boolean>(false);
 
     useEffect(() => {
-        console.log("rpc client update.....")
         if (rpcClient) {
-            console.log("rpc client update 2.....")
             rpcClient.getVisualizerLocation().then((value) => {
-            console.log("rpc client update 3: ", value);
                 setVisualizerLocation(value);
             });
         }
     }, [rpcClient]);
 
     useEffect(() => {
-        console.log("v location update.....")
         getComponentModel();
     }, [visualizerLocation]);
 
@@ -80,16 +77,13 @@ export function TypeDiagram(props: TypeDiagramProps) {
     }, [selectedTypeId]);
 
     const getComponentModel = async () => {
-        console.log("get c model update1.....")
         if (!rpcClient || !visualizerLocation?.documentUri) {
             return;
         }
-        console.log("get c model update2.....")
         const response = await rpcClient
             .getBIDiagramRpcClient()
             .getTypes({ filePath: visualizerLocation?.documentUri });
         setTypesModel(response.types);
-        console.log("type models: ", response);
     };
 
     const showProblemPanel = async () => {
@@ -104,6 +98,7 @@ export function TypeDiagram(props: TypeDiagramProps) {
     };
 
     const handleOnGoToSource = (node: Type) => {
+        console.log("handle go to source in visulaizer: ", node);
         if (!rpcClient || !node.codedata.lineRange) {
             return;
         }
@@ -113,7 +108,7 @@ export function TypeDiagram(props: TypeDiagramProps) {
             endLine: node.codedata.lineRange?.endLine?.line,
             endColumn: node.codedata.lineRange?.endLine?.offset,
         };
-        rpcClient.getCommonRpcClient().goToSource({ position: targetPosition });
+        rpcClient.getCommonRpcClient().goToSource({ position: targetPosition, filePath: visualizerLocation?.documentUri });
     };
 
     const onTypeEdit = async (typeId: string) => {
@@ -193,6 +188,7 @@ export function TypeDiagram(props: TypeDiagramProps) {
         setEditingTypeId(undefined);
         setEditingType(undefined);
         setIsTypeCreatorOpen(false);
+        getComponentModel()
     };
 
     return (
@@ -219,6 +215,8 @@ export function TypeDiagram(props: TypeDiagramProps) {
                             typeModel={typesModel}
                             selectedNodeId={selectedTypeId}
                             focusedNodeId={focusedNodeId}
+                            refreshDiagram={refreshDiagram}
+                            setRefreshDiagram={setRefreshDiagram}
                             updateFocusedNodeId={onFocusedNodeIdChange}
                             showProblemPanel={showProblemPanel}
                             goToSource={handleOnGoToSource}
@@ -238,6 +236,7 @@ export function TypeDiagram(props: TypeDiagramProps) {
                 >
                     <TypeEditor
                         type={findSelectedType(editingTypeId)}
+                        filePath={visualizerLocation?.documentUri}
                         newType={editingTypeId ? false : true}
                         rpcClient={rpcClient}
                         onTypeChange={onTypeChange}

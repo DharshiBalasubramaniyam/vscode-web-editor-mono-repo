@@ -40,12 +40,9 @@ export function ConstructPanel(props: ConstructPanelProps) {
 
     const handleOnSelectNode = (nodeId: string) => {
         // create the intial source for the statement editor
-        console.log("node id: ", nodeId)
         const stSymbolInfo = getSymbolInfo();
-        console.log("stSymbolInfo: ", stSymbolInfo)
         const allVariables = stSymbolInfo ? getAllVariables(stSymbolInfo) : [];
         if (nodeId === "If") {
-            console.log("if selected")
             const ifTemplateValues = getTemplateValues("IfStatement", allVariables);
             const initialSource = getInitialSource(ifTemplateValues);
             const elseTemplateValues = getTemplateValues("ElseStatement", allVariables);
@@ -54,19 +51,14 @@ export function ConstructPanel(props: ConstructPanelProps) {
             setSelectedNode(nodeId);
             setShowStatementEditor(true);
         } else if (nodeId === "Connector") {
-            console.log("connector selected")
             setActivePanel({ isActive: false });
             setSidePanel("ADD_CONNECTION");
         } else if (nodeId === "Action") {
-            console.log("action selected")
             setActivePanel({ isActive: false });
             setSidePanel("ADD_ACTION");
         } else {
-            console.log("other category. show statement editor")
             const templateValues = getTemplateValues(nodeId, allVariables);
-            console.log("templateValues: ", templateValues)
             const initialSource = getInitialSource(templateValues);
-            console.log("initialSource: ", initialSource)
             setInitialSource(initialSource);
             setSelectedNode(nodeId);
             setShowStatementEditor(true);

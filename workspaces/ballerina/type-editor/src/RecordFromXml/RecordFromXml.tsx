@@ -18,6 +18,7 @@ import styled from '@emotion/styled';
 
 interface RecordFromXmlProps {
     name: string;
+    filePath: string;
     onImport: (types: Type[]) => void;
     onCancel: () => void;
     rpcClient: BallerinaRpcClient;
@@ -42,7 +43,7 @@ namespace S {
 }
 
 export const RecordFromXml = (props: RecordFromXmlProps) => {
-    const { name, onImport, onCancel, rpcClient } = props;
+    const { name, onImport, onCancel, rpcClient, filePath } = props;
     const [xml, setXml] = useState<string>("");
     const [error, setError] = useState<string>("");
 
@@ -57,7 +58,8 @@ export const RecordFromXml = (props: RecordFromXmlProps) => {
     const importXmlAsRecord = async () => {
         const resp: TypeDataWithReferences = await rpcClient.getRecordCreatorRpcClient().convertXmlToRecordType({
             xmlValue: xml,
-            prefix: ""
+            prefix: "",
+            filePath: filePath
         });
         console.log(resp);
         onImport(resp.types.map((t) => t.type));

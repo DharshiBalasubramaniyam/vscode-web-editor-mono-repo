@@ -116,6 +116,7 @@ const EditableRow = styled.div`
 
 interface TypeEditorProps {
     type?: Type;
+    filePath?: string;
     rpcClient: BallerinaRpcClient;
     onTypeChange: (type: Type) => void;
     newType: boolean;
@@ -147,7 +148,7 @@ const isValidBallerinaIdentifier = (name: string): boolean => {
 
 export function TypeEditor(props: TypeEditorProps) {
     console.log("===TypeEditorProps===", props);
-    const { isGraphql } = props;
+    const { isGraphql, filePath } = props;
     const [selectedTypeKind, setSelectedTypeKind] = useState<TypeKind>(() => {
         if (props.type) {
             // Map the type's node kind to TypeKind enum
@@ -169,13 +170,14 @@ export function TypeEditor(props: TypeEditorProps) {
     });
     const [type, setType] = useState<Type>(() => {
         if (props.type) {
-            return props.type;
+            return {...props.type, filePath: filePath};
         }
         // Initialize with default type for new types
         const defaultType = {
             name: "",
             members: [] as Member[],
             editable: true,
+            filePath: filePath,
             metadata: {
                 description: "",
                 deprecated: false,
@@ -286,17 +288,16 @@ export function TypeEditor(props: TypeEditorProps) {
         if (type.codedata.node === "CLASS") {
             const response = await props.rpcClient
                 .getBIDiagramRpcClient()
-                .createGraphqlClassType({ filePath: type.codedata?.lineRange?.fileName || 'types.bal', type, description: "" });
+                .createGraphqlClassType({ filePath: filePath || 'types.bal', type, description: "" });
 
         } else {
+            console.log(">>> type editor type: ", type)
             const response = await props.rpcClient
                 .getBIDiagramRpcClient()
-                .updateType({ filePath: type.codedata?.lineRange?.fileName || 'types.bal', type, description: "" });
+                .updateType({ filePath: filePath || 'types.bal', type, description: "" });
         }
         props.onTypeChange(type);
     }
-
-    console.log("===Type Model===", type);
 
     const handleTypeImport = (types: Type[], isXml: boolean = false) => {
         const importType = types[0];
@@ -374,7 +375,7 @@ export function TypeEditor(props: TypeEditorProps) {
 
         try {
             await rpcClient.getBIDiagramRpcClient().renameIdentifier({
-                fileName: type.codedata.lineRange.fileName,
+                fileName: type?.filePath,
                 position: {
                     line: type.codedata.lineRange.startLine.line,
                     character: type.codedata.lineRange.startLine.offset
@@ -509,6 +510,7 @@ export function TypeEditor(props: TypeEditorProps) {
                         editorState === ConfigState.IMPORT_FROM_JSON &&
                         <RecordFromJson
                             rpcClient={props.rpcClient}
+                            filePathUri={filePath}
                             name={type.name}
                             onCancel={() => setEditorState(ConfigState.EDITOR_FORM)}
                             onImport={handleTypeImport}
@@ -518,6 +520,7 @@ export function TypeEditor(props: TypeEditorProps) {
                         editorState === ConfigState.IMPORT_FROM_XML &&
                         <RecordFromXml
                             rpcClient={props.rpcClient}
+                            filePath={filePath}
                             name={type.name}
                             onCancel={() => setEditorState(ConfigState.EDITOR_FORM)}
                             onImport={handleTypeImport}

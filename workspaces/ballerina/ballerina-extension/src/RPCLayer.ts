@@ -9,7 +9,7 @@ import { registerLibraryBrowserRpcHandlers } from './rpc-managers/library-browse
 import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
 // import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
 // import { registerGraphqlDesignerRpcHandlers } from './rpc-managers/graphql-designer/rpc-handler';
-// import { registerRecordCreatorRpcHandlers } from './rpc-managers/record-creator/rpc-handler';
+import { registerRecordCreatorRpcHandlers } from './rpc-managers/record-creator/rpc-handler';
 import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-handler';
 // import { registerAiPanelRpcHandlers } from './rpc-managers/ai-panel/rpc-handler';
 // import { AiPanelWebview } from './views/ai-panel/webview';
@@ -58,7 +58,7 @@ export class RPCLayer {
         registerCommonRpcHandlers(RPCLayer._messenger);
         // registerPersistDiagramRpcHandlers(RPCLayer._messenger);
         // registerGraphqlDesignerRpcHandlers(RPCLayer._messenger);
-        // registerRecordCreatorRpcHandlers(RPCLayer._messenger);
+        registerRecordCreatorRpcHandlers(RPCLayer._messenger);
         registerBiDiagramRpcHandlers(RPCLayer._messenger);
         registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
         registerConnectorWizardRpcHandlers(RPCLayer._messenger);

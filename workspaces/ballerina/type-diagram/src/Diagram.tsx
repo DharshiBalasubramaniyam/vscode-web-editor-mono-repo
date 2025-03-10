@@ -31,6 +31,8 @@ interface TypeDiagramProps {
     selectedNodeId?: string;
     focusedNodeId?: string;
     updateFocusedNodeId?: (nodeId: string) => void;
+    refreshDiagram: boolean;
+    setRefreshDiagram: (r: boolean) => void
     showProblemPanel?: () => void;
     goToSource: (node: Type) => void
     onTypeEdit: (typeId: string, isGraphqlRoot?: boolean) => void;

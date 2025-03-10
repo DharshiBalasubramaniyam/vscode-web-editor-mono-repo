@@ -32,7 +32,7 @@ import {
     WorkspacesFileResponse,
 } from "@dharshi/ballerina-core";
 // import child_process from 'child_process';
-import { FileType, Uri, commands, env, window, workspace } from "vscode";
+import { FileType, Uri, commands, env, window, workspace, ViewColumn, Range, Selection } from "vscode";
 // import { URI } from "vscode-uri";
 // import { ballerinaExtInstance } from "../../core";
 import { StateMachine } from "../../state-machine";
@@ -56,17 +56,21 @@ export class CommonRpcManager implements CommonRPCAPI {
                     line: 0
                 }
             };
-
-            // const completions: Completion[] = await StateMachine.langClient().getCompletion(completionParams);
-            // const filteredCompletions: Completion[] = completions.filter(value => value.kind === 25 || value.kind === 23 || value.kind === 22);
-            resolve({ data: [] });
+            const completions: Completion[] = await StateMachine.langClient().getCompletion(completionParams);
+            const filteredCompletions: Completion[] = completions.filter(value => value.kind === 25 || value.kind === 23 || value.kind === 22);
+            resolve({ data: filteredCompletions });
         });
     }
 
     async goToSource(params: GoToSourceRequest): Promise<void> {
-        const context = StateMachine.context();
-        const filePath = params?.filePath || context.documentUri!;
-        // goToSource(params.position, filePath);
+        const { startLine, startColumn, endLine, endColumn } = params.position;
+        const documentUri = params.filePath;
+
+        const document = await workspace.openTextDocument(Uri.parse(documentUri));
+        let editor = await window.showTextDocument(document);
+        const range = new Range(startLine, startColumn, endLine, endColumn);
+        editor.selection = new Selection(range.start, range.end);
+        editor.revealRange(range);
     }
 
     async getWorkspaceFiles(params: WorkspaceFileRequest): Promise<WorkspacesFileResponse> {
@@ -200,22 +204,6 @@ export class CommonRpcManager implements CommonRPCAPI {
                     message: stdout
                 });
             }
-            // child_process.exec(`${params.command}`, async (err, stdout, stderr) => {
-            //     if (err) {
-            //         resolve({
-            //             error: true,
-            //             message: stderr
-            //         });
-            //     } else {
-            //         resolve({
-            //             error: false,
-            //             message: stdout
-            //         });
-            //     }
-            // });
-
-
-
             resolve({error: false, message: "pull success"});
         });
     }

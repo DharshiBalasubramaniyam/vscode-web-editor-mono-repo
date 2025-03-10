@@ -31,24 +31,10 @@ const options = {
     }
 };
 
-// const balVersion = "slbeta6"; // Default version
-// const BASE_URL = "https://api.central.ballerina.io";
 const BASE_URL = "http://localhost:9091/bala";
-// const DOC_API_PATH = "/2.0/docs";
-// let LibrariesListEndpoint = `${BASE_URL}${DOC_API_PATH}/stdlib/${balVersion}`;
-// let LibrariesSearchEndpoint = `${LibrariesListEndpoint}/search`;
 
-export function activate() {
-    // const balHome = ballerinaExtInstance.getBallerinaHome();
-    // const match = BAL_VERSION_CAPTURING_REGEXP.exec(balHome);
-    // if (match) {
-    //     [, balVersion] = match;
-    //     LibrariesListEndpoint = DOC_API_PATH + '/stdlib/' + balVersion;
-    //     LibrariesSearchEndpoint = LibrariesListEndpoint + '/search';
-    // }
-
-    // LibrariesListEndpoint = DOC_API_PATH + '/stdlib/' + balVersion;
-    // LibrariesSearchEndpoint = LibrariesListEndpoint + '/search';
+export async function activate() {
+    await fetchAndCacheLibraryData();
 }
 
 export async function getLibrariesList(kind?: LibraryKind): Promise<LibrariesListResponse | undefined> {
@@ -141,32 +127,33 @@ export function getLibraryData(orgName: string, moduleName: string, version: str
 }
 
 export async function fetchAndCacheLibraryData() {
-    // Cache the lang lib list
-    getLibrariesList(LibraryKind.langLib).then((libs) => {
-        if (libs && libs.librariesList.length > 0) {
-            cachedLibrariesList.set(LANG_LIB_LIST_CACHE, libs);
+    try {
+        // Cache the lang lib list
+        const langLibs = await getLibrariesList(LibraryKind.langLib);
+        if (langLibs && langLibs.librariesList.length > 0) {
+            cachedLibrariesList.set(LANG_LIB_LIST_CACHE, langLibs);
         }
-    });
 
-    // Cache the std lib list
-    getLibrariesList(LibraryKind.stdLib).then((libs) => {
-        if (libs && libs.librariesList.length > 0) {
-            cachedLibrariesList.set(STD_LIB_LIST_CACHE, libs);
+        // Cache the std lib list
+        const stdLibs = await getLibrariesList(LibraryKind.stdLib);
+        if (stdLibs && stdLibs.librariesList.length > 0) {
+            cachedLibrariesList.set(STD_LIB_LIST_CACHE, stdLibs);
         }
-    });
 
-    // Cache the distribution lib list (lang libs + std libs)
-    getLibrariesList().then((libs) => {
-        if (libs && libs.librariesList.length > 0) {
-            cachedLibrariesList.set(DIST_LIB_LIST_CACHE, libs);
+        // Cache the distribution lib list
+        const distLibs = await getLibrariesList();
+        if (distLibs && distLibs.librariesList.length > 0) {
+            cachedLibrariesList.set(DIST_LIB_LIST_CACHE, distLibs);
         }
-    });
 
-    // Cache the library search data
-    getAllResources().then((data) => {
-        if (data && data.modules.length > 0) {
-            cachedSearchList.set(LIBRARY_SEARCH_CACHE, data);
+        // Cache the library search data
+        const searchData = await getAllResources();
+        if (searchData && searchData.modules.length > 0) {
+            cachedSearchList.set(LIBRARY_SEARCH_CACHE, searchData);
         }
-    });
 
+        console.log("Library data caching completed successfully!");
+    } catch (error) {
+        console.error("Error in fetchAndCacheLibraryData:", error);
+    }
 }

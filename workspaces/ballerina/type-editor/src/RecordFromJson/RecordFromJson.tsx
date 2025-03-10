@@ -18,6 +18,7 @@ import { NOT_SUPPORTED_TYPE } from '@dharshi/ballerina-core';
 
 interface RecordFromJsonProps {
     name: string;
+    filePathUri: string;
     onImport: (types: Type[]) => void;
     onCancel: () => void;
     rpcClient: BallerinaRpcClient;
@@ -42,7 +43,7 @@ namespace S {
 }
 
 export const RecordFromJson = (props: RecordFromJsonProps) => {
-    const { name, onImport, onCancel, rpcClient } = props;
+    const { name, onImport, onCancel, rpcClient, filePathUri } = props;
     const [json, setJson] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [isClosed, setIsClosed] = useState<boolean>(false);
@@ -73,9 +74,11 @@ export const RecordFromJson = (props: RecordFromJsonProps) => {
     }
 
     const importJsonAsRecord = async () => {
+        console.log("import json: ", props);
         const resp: TypeDataWithReferences = await rpcClient.getRecordCreatorRpcClient().convertJsonToRecordType({
             jsonString: json,
             recordName: name,
+            filePathUri: filePathUri,
             isClosed,
             isRecordTypeDesc: !isSeparateDefinitions,
             prefix: ""

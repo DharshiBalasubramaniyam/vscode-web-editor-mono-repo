@@ -127,6 +127,7 @@ export function EndpointList(props: EndpointListProps) {
 
 
     const handleEndpointSelection = async (connector: BallerinaConnectorInfo, endpointName: string, classField?: boolean) => {
+        console.log("handle endpoint selction");
         setIsLoadingActions(true);
         setSelectedEndpoint(endpointName);
         setIsClassField(classField ?? false);
@@ -137,6 +138,7 @@ export function EndpointList(props: EndpointListProps) {
     }
 
     const getListComponent = (connector: BallerinaConnectorInfo, name: string, isClassField?: boolean) => {
+        console.log("get list component");
         const handleOnSelect = () => {
             handleEndpointSelection(connector, name, (isClassField ?? false));
         };
@@ -156,8 +158,9 @@ export function EndpointList(props: EndpointListProps) {
             STKindChecker.isObjectMethodDefinition(functionNode)) &&
         STKindChecker.isFunctionBodyBlock(functionNode.functionBody)
     ) {
+        console.log(1)
         const targetBlock = getTargetBlock(targetPosition, functionNode.functionBody);
-
+        console.log(targetBlock);
         if (
             targetBlock.VisibleEndpoints &&
             targetBlock.VisibleEndpoints.length > 0 &&
@@ -178,6 +181,7 @@ export function EndpointList(props: EndpointListProps) {
 
     // INFO: this code block use to work with phase two.
     if (STKindChecker.isFunctionDefinition(functionNode) || STKindChecker.isResourceAccessorDefinition(functionNode)) {
+        console.log(2);
         functionNode.functionBody.VisibleEndpoints?.forEach((endpoint) => {
             if (endpoint.position) {
                 // INFO: This is a phase three visible endpoint. This endpoint has already rendered by above code section
@@ -199,6 +203,7 @@ export function EndpointList(props: EndpointListProps) {
 
     // INFO: this code block use to work with phase one.
     if (executePhaseOne) {
+        console.log(3)
         const getListComponentFromNode = (node: STNode, epName: string) => {
             const connector = getMatchingConnector(node);
             if (!connector) {
@@ -227,16 +232,18 @@ export function EndpointList(props: EndpointListProps) {
     }
 
     const onSelectAction = (action: any) => {
+        console.log("on selct action")
         setSelectedAction(action);
         setWizardStep(WizardStep.ACTION_FROM);
     }
 
     const onCancelActionList = () => {
+        console.log("on cancel action list")
         setSidePanel("EMPTY");
         setSelectedConnector(undefined);
     }
 
-
+    console.log(wizardStep);
     return (
         <PanelContainer title="Action" show={true} onClose={() => setSidePanel("EMPTY")}>
             <div style={{ width: '100%', flexDirection: "row", padding: '15px 20px' }}>

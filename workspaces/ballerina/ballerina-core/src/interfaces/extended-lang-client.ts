@@ -647,6 +647,7 @@ export interface BISourceCodeRequest {
 }
 
 export type BISourceCodeResponse = {
+    filePath?: string,
     textEdits: {
         [key: string]: TextEdit[];
     };
@@ -1090,6 +1091,7 @@ export interface Type {
     restMember?: Member;
     includes?: string[];
     functions?: TypeFunctionModel[];
+    filePath?: string
 }
 
 type ServiceFunctionKind = "RESOURCE" | "REMOTE" | "FUNCTION";
@@ -1188,6 +1190,7 @@ export interface TextEdit {
 
 export interface UpdateTypeResponse {
     name: string;
+    filePath?: string,
     textEdits: {
         [filePath: string]: TextEdit[];
     };

@@ -94,6 +94,7 @@ export function getSTComponents(nodeArray: any, viewState?: any, model?: Functio
 
 export function getSTComponent(node: any): React.ReactElement {
     const ChildComp = (stComponents as any)[node.kind];
+    console.log("get st component: ", ChildComp);
     if (!ChildComp) {
         return <Statement model={node} />;
     }

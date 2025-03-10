@@ -40,8 +40,8 @@ import { PanelType, useVisualizerContext } from "./Context";
 import { ConstructPanel } from "./views/ConstructPanel";
 import PopupPanel from "./PopupPanel";
 import { ConnectorList } from "./views/Connectors/ConnectorWizard";
-// import { EndpointList } from "./views/Connectors/EndpointList";
-// import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
+import { EndpointList } from "./views/Connectors/EndpointList";
+import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import DiagramWrapper from "./views/BI/DiagramWrapper";
 // import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
 // import { Overview as OverviewBI } from "./views/BI/Overview/index";
@@ -154,13 +154,14 @@ const MainPanel = () => {
     };
 
     const fetchContext = () => {
-        setNavActive(true);
         rpcClient.getVisualizerLocation().then((value) => {
+            console.log("visualizer type value: ", value);
             if (!value?.view) {
                 setViewComponent(<LoadingRing />);
             } else {
                 switch (value?.view) {
                     case MACHINE_VIEW.Overview:
+                        setNavActive(false);
                         if (value.isBI) {
                             // setViewComponent(<OverviewBI />);
                             break;
@@ -168,6 +169,7 @@ const MainPanel = () => {
                         setViewComponent(<Overview visualizerLocation={value} />);
                         break;
                     case MACHINE_VIEW.ServiceDesigner:
+                        setNavActive(false);
                         console.log("has to display service designer. coming from bi")
                         setViewComponent(
                             <ServiceDesigner
@@ -187,6 +189,7 @@ const MainPanel = () => {
                         setViewComponent(<ERDiagram />);
                         break;
                     case MACHINE_VIEW.TypeDiagram:
+                        setNavActive(false);
                         console.log("has to display type diagram")
                         setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
                         break;
@@ -219,7 +222,7 @@ const MainPanel = () => {
                         // setViewComponent(<GraphQLDiagram filePath={value?.documentUri} position={value?.position} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.SequenceDiagram:
-                        console.log("has to display sequence diagram")
+                        setNavActive(true);
                         setViewComponent(
                             <SequenceDiagram syntaxTree={value?.syntaxTree} applyModifications={applyModifications} />
                         );
@@ -398,9 +401,9 @@ const MainPanel = () => {
                         <PopupPanel onClose={handleOnClose} formState={popupState} />
                     </PopUpContainer>
                 )}
-                {/* {sidePanel !== "EMPTY" && sidePanel === "ADD_ACTION" && (
+                {sidePanel !== "EMPTY" && sidePanel === "ADD_ACTION" && (
                     <EndpointList stSymbolInfo={getSymbolInfo()} applyModifications={applyModifications} />
-                )} */}
+                )}
             </VisualizerContainer>
         </>
     );
