@@ -99,7 +99,7 @@ export function graphqlModeller(rootService: Type, refs: Type[]): DiagramModel {
 }
 
 export function entityModeller(components: Type[], selectedEntityId?: string): DiagramModel {
-    let filteredComponents = components;
+    let filteredComponents = components.filter((type) => type.codedata.node === "RECORD");
 
     // If selectedEntityId is provided, filter for related entities
     if (selectedEntityId) {

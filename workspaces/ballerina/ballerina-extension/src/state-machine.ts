@@ -91,6 +91,7 @@ const stateMachine = createMachine<MachineContext>(
                         actions: assign({
                             view: (context, event) => event.viewLocation.view,
                             documentUri: (context, event) => event.viewLocation.documentUri,
+                            projectUri: (context, event) => getProjectUri(event.viewLocation.documentUri),
                             position: (context, event) => event.viewLocation.position,
                             identifier: (context, event) => event.viewLocation.identifier,
                             serviceType: (context, event) => event.viewLocation.serviceType,
@@ -141,6 +142,7 @@ const stateMachine = createMachine<MachineContext>(
                                 actions: assign({
                                     view: (context, event) => event.viewLocation.view,
                                     documentUri: (context, event) => event.viewLocation.documentUri,
+                                    projectUri: (context, event) => getProjectUri(event.viewLocation.documentUri),
                                     position: (context, event) => event.viewLocation.position,
                                     identifier: (context, event) => event.viewLocation.identifier,
                                     serviceType: (context, event) => event.viewLocation.serviceType,
@@ -164,6 +166,7 @@ const stateMachine = createMachine<MachineContext>(
                                 target: "viewEditing",
                                 actions: assign({
                                     documentUri: (context, event) => event.viewLocation.documentUri,
+                                    projectUri: (context, event) => getProjectUri(event.viewLocation.documentUri),
                                     position: (context, event) => event.viewLocation.position,
                                     identifier: (context, event) => event.viewLocation.identifier,
                                     type: (context, event) => event.viewLocation?.type,
@@ -439,6 +442,25 @@ export function updateView() {
         commands.executeCommand("BI.project-explorer.refresh");
     }
     // notifyCurrentWebview();
+}
+
+function getProjectUri(filePath: string) : string {
+    const workspaceFolders = workspace.workspaceFolders;
+    if (!workspaceFolders || workspaceFolders.length === 0) {
+        throw new Error("No workspace folders found");
+    }
+    const projectUri = workspaceFolders.find((folder) => {
+        const folderUri = folder.uri.toString();
+        return filePath.includes(folderUri) && filePath.startsWith(folderUri);
+    });
+    console.log("finding project uri: ", {
+        "filepath": filePath,
+        "project uri": projectUri
+    });
+    if (!projectUri) {
+        throw new Error(`No matching workspace folder found for the given file path: ${filePath}`);
+    }
+    return projectUri.uri.toString();
 }
 
 async function checkForProjects() {

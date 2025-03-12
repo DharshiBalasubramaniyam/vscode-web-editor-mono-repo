@@ -46,10 +46,10 @@ import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
 // import { Overview as OverviewBI } from "./views/BI/Overview/index";
 // import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
-// import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
+import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
 // import { ServiceWizard } from "./views/BI/ServiceDesigner/ServiceWizard";
-// import { ServiceEditView } from "./views/BI/ServiceDesigner/ServiceEditView";
-// import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
+import { ServiceEditView } from "./views/BI/ServiceDesigner/ServiceEditView";
+import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
 // import { ServiceClassDesigner } from "./views/BI/ServiceClassEditor/ServiceClassDesigner";
 // import { ServiceClassConfig } from "./views/BI/ServiceClassEditor/ServiceClassConfig";
 // import { GraphQLDiagram } from "./views/GraphQLDiagram";
@@ -256,7 +256,7 @@ const MainPanel = () => {
                         // );
                         break;
                     case MACHINE_VIEW.BIServiceConfigView:
-                        // setViewComponent(<ServiceEditView filePath={value.documentUri} position={value?.position} />);
+                        setViewComponent(<ServiceEditView filePath={value.documentUri} position={value?.position} />);
                         break;
                     case MACHINE_VIEW.BIServiceClassConfigView:
                         // setViewComponent(
@@ -267,7 +267,7 @@ const MainPanel = () => {
                         // );
                         break;
                     case MACHINE_VIEW.BIListenerConfigView:
-                        // setViewComponent(<ListenerEditView filePath={value.documentUri} position={value?.position} />);
+                        setViewComponent(<ListenerEditView filePath={value.documentUri} position={value?.position} />);
                         break;
                     case MACHINE_VIEW.AddConnectionWizard:
                         rpcClient.getVisualizerLocation().then((location) => {
@@ -304,11 +304,11 @@ const MainPanel = () => {
                         break;
                     case MACHINE_VIEW.ViewConfigVariables:
                         rpcClient.getVisualizerLocation().then((location) => {
-                            // setViewComponent(
-                            //     <ViewConfigurableVariables
-                            //         fileName={Utils.joinPath(URI.file(location.projectUri), 'config.bal').fsPath}
-                            //     />
-                            // );
+                            setViewComponent(
+                                <ViewConfigurableVariables
+                                    fileName={value.documentUri}
+                                />
+                            );
                         });
                         break;
                     case MACHINE_VIEW.EditConfigVariables:
@@ -325,12 +325,12 @@ const MainPanel = () => {
                                         }
                                     );
 
-                                    // setViewComponent(
-                                    //     <ViewConfigurableVariables
-                                    //         variableIndex={variableIndex}
-                                    //         isExternallauncher={true}
-                                    //         fileName={Utils.joinPath(URI.file(location.projectUri), 'config.bal').fsPath} />
-                                    // );
+                                    setViewComponent(
+                                        <ViewConfigurableVariables
+                                            variableIndex={variableIndex}
+                                            isExternallauncher={true}
+                                            fileName={location.documentUri} />
+                                    );
                                 }
                             });
                         });

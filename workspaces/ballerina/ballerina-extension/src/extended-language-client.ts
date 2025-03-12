@@ -172,7 +172,7 @@ export const HTTP_CONNECTOR_LIST_CACHE = "HTTP_CONNECTOR_LIST_CACHE";
 export const BALLERINA_LANG_ID = "ballerina";
 export const NOT_SUPPORTED = {};
 
-export class ExtendedLanguageClient extends LanguageClient {
+export class ExtendedLanguageClient extends LanguageClient implements ExtendedLangClientInterface{
     private ballerinaExtendedServices: Set<String> | undefined;
     private isDynamicRegistrationSupported: boolean;
     extensionContext: ExtensionContext;
@@ -849,6 +849,26 @@ export class ExtendedLanguageClient extends LanguageClient {
     }
 
     // <------------ BI APIS END --------------->
+
+
+    public updateStatusBar() {
+        console.log("update status bar in els");
+        // if (!this.ballerinaExtInstance || !this.ballerinaExtInstance.getCodeServerContext().statusBarItem) {
+        //     return;
+        // }
+        // this.ballerinaExtInstance.getCodeServerContext().statusBarItem?.updateGitStatus();
+    }
+
+    public getDidOpenParams(): DidOpenParams {
+        return {
+            textDocument: {
+                uri: "web-bala:/",
+                languageId: "ballerina",
+                text: '',
+                version: 1
+            }
+        };
+    }
 
 }
 

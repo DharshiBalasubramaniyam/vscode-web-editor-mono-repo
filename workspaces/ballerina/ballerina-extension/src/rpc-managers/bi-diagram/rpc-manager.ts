@@ -114,6 +114,7 @@ import { notifyBreakpointChange } from "../../RPCLayer";
 // import { ballerinaExtInstance } from "../../core";
 // import { BreakpointManager } from "../../features/debugger/breakpoint-manager";
 import { StateMachine, openView, updateView } from "../../state-machine";
+import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 // import { getCompleteSuggestions } from '../../utils/ai/completions';
 // import { README_FILE, createBIAutomation, createBIFunction, createBIProjectPure } from "../../utils/bi";
 // import { writeBallerinaFileDidOpen } from "../../utils/modification";
@@ -154,6 +155,59 @@ export class BiDiagramRpcManager
         });
     }
 
+    async getVisibleVariableTypes(params: BIGetVisibleVariableTypesRequest): Promise<BIGetVisibleVariableTypesResponse> {
+        return new Promise((resolve, reject) => {
+            StateMachine.langClient()
+                .getVisibleVariableTypes(params)
+                .then((types) => {
+                    resolve(types as BIGetVisibleVariableTypesResponse);
+                })
+                .catch((error) => {
+                    reject("Error fetching visible variable types from ls");
+                });
+        });
+    }
+
+    async getExpressionCompletions(params: ExpressionCompletionsRequest): Promise<ExpressionCompletionsResponse> {
+        return new Promise((resolve, reject) => {
+            if (!params.filePath) {
+                params.filePath = StateMachine.context().documentUri;
+            }
+            StateMachine.langClient()
+                .getExpressionCompletions(params)
+                .then((completions) => {
+                    resolve(completions);
+                })
+                .catch((error) => {
+                    reject("Error fetching expression completions from ls");
+                });
+        });
+    }
+
+    async getConfigVariables(): Promise<ConfigVariableResponse> {
+        return new Promise(async (resolve) => {
+            const projectPath = StateMachine.context().projectUri;
+            const variables = await StateMachine.langClient().getConfigVariables({ projectPath: projectPath }) as ConfigVariableResponse;
+            resolve(variables);
+        });
+    }
+
+    async updateConfigVariables(params: UpdateConfigVariableRequest): Promise<UpdateConfigVariableResponse> {
+        return new Promise(async (resolve) => {
+            const req: UpdateConfigVariableRequest = params;
+
+            // if (!fs.existsSync(params.configFilePath)) {
+
+            //     // Create config.bal if it doesn't exist
+            //     writeBallerinaFileDidOpen(params.configFilePath, "\n");
+            // }
+
+            const response = await StateMachine.langClient().updateConfigVariables(req) as BISourceCodeResponse;
+            this.updateSource(response, undefined, false);
+            resolve(response);
+        });
+    }
+
     async renameIdentifier(params: RenameIdentifierRequest): Promise<void> {
         console.log("rename identifier params: ", params);
         // const projectUri = StateMachine.context().projectUri;
@@ -178,7 +232,7 @@ export class BiDiagramRpcManager
                 const modificationRequests: Record<string, { filePath: string; modifications: STModification[] }> = {};
 
                 for (const [key, value] of Object.entries(workspaceEdit.changes)) {
-                    const fileUri = key;
+                    const fileUri = Uri.parse(`${WEB_IDE_SCHEME}:${Uri.parse(key).path}`).toString();
                     const edits = value;
 
                     if (edits && edits.length > 0) {
@@ -270,10 +324,20 @@ export class BiDiagramRpcManager
         isFunctionNodeUpdate?: boolean
     ): Promise<void> {
         const modificationRequests: Record<string, { filePath: string; modifications: STModification[] }> = {};
-        const fileUri = params?.filePath;
         for (const [key, value] of Object.entries(params.textEdits)) {
-            // const fileUri = Uri.parse(key);
-            // const fileUriString = fileUri.toString();
+            let fileUri = key.replace(/\\/g, "/");
+            const projectRootPath = Uri.parse(StateMachine.context().projectUri).path
+            const startIndex = fileUri.indexOf(projectRootPath);
+            if (startIndex !== -1) {
+                fileUri = Uri.file(fileUri.substring(startIndex)).with({scheme: WEB_IDE_SCHEME}).toString();
+            }
+
+            console.log({
+                "actual key": key,
+                "projecturi": projectRootPath,
+                "new key": fileUri
+            });
+
             const edits = value;
 
             if (edits && edits.length > 0) {
@@ -344,6 +408,99 @@ export class BiDiagramRpcManager
             updateView();
         }
     }
+
+    async getProjectStructure(): Promise<ProjectStructureResponse> {
+        return new Promise(async (resolve) => {
+            const projectPath = StateMachine.context().projectUri;
+            const res: ProjectStructureResponse = await buildProjectStructure(
+                projectPath,
+                StateMachine.context().langClient
+            );
+            resolve(res);
+        });
+    }
+
+    async getVisibleTypes(params: VisibleTypesRequest): Promise<VisibleTypesResponse> {
+        return new Promise((resolve, reject) => {
+            StateMachine.langClient()
+                .getVisibleTypes(params)
+                .then((visibleTypes) => {
+                    resolve(visibleTypes);
+                })
+                .catch((error) => {
+                    reject("Error fetching visible types from ls");
+                });
+        });
+    }
+
+    async getEndOfFile(params: EndOfFileRequest): Promise<LinePosition> {
+        return new Promise(async (resolve, reject) => {
+            const { filePath } = params;
+            try {
+                const fileContent = await balExtInstance.fsProvider.readFile(Uri.parse(filePath));
+                const lines = (new TextDecoder().decode(fileContent)).split('\n');
+                const lastLine = lines[lines.length - 1];
+                const lastLineLength = lastLine.length;
+                resolve({ line: lines.length - 1, offset: lastLineLength });
+            } catch (error) {
+                console.log(error);
+                resolve({ line: 0, offset: 0 });
+            }
+        });
+    }
+
+    // async formDidOpen(params: FormDidOpenParams): Promise<void> {
+    //     return new Promise(async (resolve, reject) => {
+    //         const { filePath } = params;
+    //         const fileUri = Uri.file(filePath);
+    //         const exprFileSchema = fileUri.with({ scheme: 'expr' });
+    
+    //         let languageId: string;
+    //         let version: number;
+    //         let text: string;
+            
+    //         try {
+    //             const textDocument = await workspace.openTextDocument(fileUri);
+    //             languageId = textDocument.languageId;
+    //             version = textDocument.version;
+    //             text = textDocument.getText();
+    //         } catch (error) {
+    //             languageId = "ballerina";
+    //             version = 1;
+    //             text = "";
+    //         }
+
+    //         StateMachine.langClient().didOpen({
+    //             textDocument: {
+    //                 uri: exprFileSchema.toString(),
+    //                 languageId,
+    //                 version,
+    //                 text
+    //             }
+    //         });
+    //     });
+    // }
+
+    // async formDidClose(params: FormDidCloseParams): Promise<void> {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             const { filePath } = params;
+    //             const fileUri = Uri.file(filePath);
+    //             const exprFileSchema = fileUri.with({ scheme: 'expr' });
+    //             StateMachine.langClient().didClose({
+    //                 textDocument: {
+    //                     uri: exprFileSchema.toString()
+    //                 }
+    //             });
+    //             resolve();
+    //         } catch (error) {
+    //             console.error("Error closing file in didClose", error);
+    //             reject(error);
+    //         }
+    //     });
+    // }
+
+
 
 
 }

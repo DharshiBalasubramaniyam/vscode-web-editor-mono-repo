@@ -102,6 +102,7 @@ export function Parameters(props: ParametersProps) {
     };
 
     const onSaveParam = (param: ParameterModel) => {
+        console.log("on save param: ", {"already:": p, "adding:": param})
         param.enabled = true;
         if (isNew) {
             onChange([...parameters, param]);
@@ -129,7 +130,7 @@ export function Parameters(props: ParametersProps) {
                 />
             ))}
             {editModel && (editModel.httpParamType === "QUERY" || editModel.httpParamType === "Header") &&
-                <ParamEditor
+                <ParamEditor // header
                     param={editModel}
                     onChange={onChangeParam}
                     onSave={onSaveParam}

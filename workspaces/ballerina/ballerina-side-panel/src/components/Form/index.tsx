@@ -162,7 +162,7 @@ export interface FormProps {
     formFields: FormField[];
     submitText?: string;
     targetLineRange?: LineRange; // TODO: make them required after connector wizard is fixed
-    fileName?: string; // TODO: make them required after connector wizard is fixed
+    fileName?: string; 
     projectPath?: string;
     selectedNode?: NodeKind;
     onSubmit?: (data: FormValues) => void;
@@ -461,6 +461,7 @@ export const Form = forwardRef((props: FormProps, ref) => {
                         {variableField &&
                             <EditorFactory
                                 field={variableField}
+                                filePath={fileName}
                                 handleOnFieldFocus={handleOnFieldFocus}
                                 autoFocus={firstEditableFieldIndex === formFields.indexOf(variableField)}
                                 visualizableFields={visualizableFields}
@@ -469,6 +470,7 @@ export const Form = forwardRef((props: FormProps, ref) => {
                         {typeField && (
                             <EditorFactory
                                 field={typeField}
+                                filePath={fileName}
                                 openRecordEditor={openRecordEditor && ((open: boolean) => handleOpenRecordEditor(open, typeField))}
                                 openSubPanel={handleOpenSubPanel}
                                 handleOnFieldFocus={handleOnFieldFocus}
@@ -493,6 +495,7 @@ export const Form = forwardRef((props: FormProps, ref) => {
                                     <EditorFactory
                                         ref={exprRef}
                                         field={field}
+                                        filePath={fileName}
                                         selectedNode={selectedNode}
                                         openRecordEditor={openRecordEditor && ((open: boolean) => handleOpenRecordEditor(open, field))}
                                         openSubPanel={handleOpenSubPanel}
@@ -539,6 +542,7 @@ export const Form = forwardRef((props: FormProps, ref) => {
                                         <EditorFactory
                                             ref={exprRef}
                                             field={field}
+                                            filePath={fileName}
                                             openRecordEditor={openRecordEditor && ((open: boolean) => handleOpenRecordEditor(open, field))}
                                             openSubPanel={handleOpenSubPanel}
                                             subPanelView={subPanelView}

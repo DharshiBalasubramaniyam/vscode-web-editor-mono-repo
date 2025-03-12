@@ -102,6 +102,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
             })
             .catch((error) => {
                 console.log("error getting service modal");
+                console.log(error);
             });
         getProjectListeners();
     };
@@ -176,7 +177,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
         setShowForm(false);
     };
 
-    const handleFunctionEdit = (value: FunctionModel) => {
+    const handleFunctionEdit = (value: FunctionModel) => { // click on edit resource icon
         setFunctionModel(value);
         setIsNew(false);
         setShowForm(true);
@@ -200,7 +201,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
         }
     };
 
-    const handleResourceSubmit = async (value: FunctionModel) => {
+    const handleResourceSubmit = async (value: FunctionModel) => { // click on save buton of resource edit
         setIsSaving(true);
         const lineRange: LineRange = {
             startLine: { line: position.startLine, offset: position.startColumn },
@@ -418,7 +419,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
                     </>
                 )}
                 {functionModel && functionModel.kind === "RESOURCE" && (
-                    <PanelContainer
+                    <PanelContainer // edit resource
                         title={"Resource Configuration"}
                         show={showForm}
                         onClose={handleNewFunctionClose}

@@ -5,6 +5,11 @@ import { ConstructorPanel } from '../ConstructorPanel';
 import { WorkspacesFileResponse } from '@dharshi/ballerina-core';
 import { SELECT_ALL_FILES } from '../../Overview';
 
+// import {
+//     EVENT_TYPE,
+//     MACHINE_VIEW,
+// } from "@wso2-enterprise/ballerina-core";
+
 const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -51,6 +56,16 @@ export function TitleBar(props: TitleBarProps) {
     workspacesFileResponse?.files.map((file) => {
         workspaceFiles.push({ value: file.path, content: file.relativePath });
     });
+
+    
+    const handleAddConstruct = () => {
+        rpcClient.getVisualizerRpcClient().openView({
+            type: EVENT_TYPE.OPEN_VIEW,
+            location: {
+                view: MACHINE_VIEW.BIComponentView,
+            },
+        });
+    };
 
     return (
         <Container>

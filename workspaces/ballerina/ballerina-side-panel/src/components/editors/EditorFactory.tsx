@@ -30,6 +30,7 @@ import { ReadonlyField } from "./ReadonlyField";
 
 interface FormFieldEditorProps {
     field: FormField;
+    filePath?: string;
     selectedNode?: NodeKind;
     openRecordEditor?: (open: boolean) => void;
     openSubPanel?: (subPanel: SubPanel) => void;
@@ -43,6 +44,7 @@ interface FormFieldEditorProps {
 export const EditorFactory = React.forwardRef<FormExpressionEditorRef, FormFieldEditorProps>((props, ref) => {
     const {
         field,
+        filePath,
         selectedNode,
         openRecordEditor,
         openSubPanel,
@@ -52,6 +54,8 @@ export const EditorFactory = React.forwardRef<FormExpressionEditorRef, FormField
         handleOnTypeChange,
         visualizableFields
     } = props;
+
+    console.log("====editor fatcory props=====", props)
 
     if (field.type === "MULTIPLE_SELECT") {
         return <MultiSelectEditor field={field} label={"Add Another"} openSubPanel={openSubPanel} />;
@@ -106,7 +110,7 @@ export const EditorFactory = React.forwardRef<FormExpressionEditorRef, FormField
     } else if (field.type === "REPEATABLE_PROPERTY") {
         return <FormMapEditor field={field} label={"Add Another Key-Value Pair"} />;
     } else if (field.type === "IDENTIFIER" && !field.editable && field?.lineRange) {
-        return <IdentifierEditor field={field} handleOnFieldFocus={handleOnFieldFocus} autoFocus={autoFocus} />;
+        return <IdentifierEditor field={field} filePath={filePath} handleOnFieldFocus={handleOnFieldFocus} autoFocus={autoFocus} />;
     } else if (field.type !== "IDENTIFIER" && !field.editable) {
         return <ReadonlyField field={field} />;
     } else {

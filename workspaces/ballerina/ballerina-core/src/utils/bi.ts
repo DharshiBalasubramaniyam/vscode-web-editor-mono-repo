@@ -12,7 +12,8 @@ import { ComponentInfo } from "../interfaces/ballerina";
 import { DIRECTORY_MAP, ProjectStructureArtifactResponse, ProjectStructureResponse } from "../interfaces/bi";
 import { BallerinaProjectComponents, ExtendedLangClientInterface, SyntaxTree } from "../interfaces/extended-lang-client";
 import { CDModel } from "../interfaces/component-diagram";
-import { URI, Utils } from "vscode-uri";
+import { URI } from "vscode-uri";
+import { Uri } from "vscode";
 import { LineRange } from "../interfaces/common";
 import { ServiceModel } from "../interfaces/service";
 
@@ -40,6 +41,7 @@ export async function buildProjectStructure(projectDir: string, langClient: Exte
         projectPath: projectDir
     });
     await traverseComponents(components, result, langClient, componentModel?.designModel);
+    console.log("build project structure: ", result);
     return result;
 }
 
@@ -89,16 +91,36 @@ async function traverseComponents(components: BallerinaProjectComponents, respon
 
     for (const pkg of components.packages) {
         for (const module of pkg.modules) {
-            response.directoryMap[DIRECTORY_MAP.AUTOMATION].push(...await getComponents(langClient, module.automations, pkg.filePath, "task", DIRECTORY_MAP.AUTOMATION));
-            response.directoryMap[DIRECTORY_MAP.SERVICES].push(...await getComponents(langClient, designServices.length > 0 ? designServices : module.services, pkg.filePath, "http-service", DIRECTORY_MAP.SERVICES));
-            response.directoryMap[DIRECTORY_MAP.LISTENERS].push(...await getComponents(langClient, module.listeners, pkg.filePath, "http-service", DIRECTORY_MAP.LISTENERS));
-            response.directoryMap[DIRECTORY_MAP.FUNCTIONS].push(...await getComponents(langClient, module.functions, pkg.filePath, "function"));
-            response.directoryMap[DIRECTORY_MAP.CONNECTIONS].push(...await getComponents(langClient, module.moduleVariables, pkg.filePath, "connection", DIRECTORY_MAP.CONNECTIONS));
-            response.directoryMap[DIRECTORY_MAP.TYPES].push(...await getComponents(langClient, module.types, pkg.filePath, "type"));
-            response.directoryMap[DIRECTORY_MAP.RECORDS].push(...await getComponents(langClient, module.records, pkg.filePath, "type"));
-            response.directoryMap[DIRECTORY_MAP.ENUMS].push(...await getComponents(langClient, module.enums, pkg.filePath, "type"));
-            response.directoryMap[DIRECTORY_MAP.CLASSES].push(...await getComponents(langClient, module.classes, pkg.filePath, "type"));
-            response.directoryMap[DIRECTORY_MAP.CONFIGURATIONS].push(...await getComponents(langClient, module.configurableVariables, pkg.filePath, "config"));
+            console.log(">>>automation>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.AUTOMATION].push(...await getComponents(langClient, module.automations, pkg.filePath, module?.name, "task", DIRECTORY_MAP.AUTOMATION));
+            console.log("response: ", response);
+            console.log(">>>services>>>>>>")
+            // response.directoryMap[DIRECTORY_MAP.SERVICES].push(...await getComponents(langClient, designServices.length > 0 ? designServices : module.services, pkg.filePath, module?.name, "http-service", DIRECTORY_MAP.SERVICES));
+            response.directoryMap[DIRECTORY_MAP.SERVICES].push(...await getComponents(langClient, module.services, pkg.filePath, module?.name, "http-service", DIRECTORY_MAP.SERVICES));
+            console.log("response: ", response);
+            console.log(">>>listenders>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.LISTENERS].push(...await getComponents(langClient, module.listeners, pkg.filePath, module?.name, "http-service", DIRECTORY_MAP.LISTENERS));
+            console.log("response: ", response);
+            console.log(">>>functions>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.FUNCTIONS].push(...await getComponents(langClient, module.functions, pkg.filePath, module?.name, "function"));
+            console.log("response: ", response);
+            console.log(">>>connections>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.CONNECTIONS].push(...await getComponents(langClient, module.moduleVariables, pkg.filePath, module?.name, "connection", DIRECTORY_MAP.CONNECTIONS));
+            console.log("response: ", response);
+            console.log(">>>types>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.TYPES].push(...await getComponents(langClient, module.types, pkg.filePath, module?.name, "type"));
+            console.log("response: ", response);
+            console.log(">>>records>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.RECORDS].push(...await getComponents(langClient, module.records, pkg.filePath, module?.name, "type"));
+            console.log("response: ", response);
+            console.log(">>>enums>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.ENUMS].push(...await getComponents(langClient, module.enums, pkg.filePath, module?.name, "type"));
+            console.log("response: ", response);
+            console.log(">>>classes>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.CLASSES].push(...await getComponents(langClient, module.classes, pkg.filePath, module?.name, "type"));
+            console.log("response: ", response);
+            console.log(">>>config vars>>>>>>")
+            response.directoryMap[DIRECTORY_MAP.CONFIGURATIONS].push(...await getComponents(langClient, module.configurableVariables, pkg.filePath, module?.name, "config"));
         }
     }
 
@@ -114,18 +136,21 @@ async function traverseComponents(components: BallerinaProjectComponents, respon
             response.directoryMap[DIRECTORY_MAP.FUNCTIONS].push(func);
         }
     }
+
+    console.log("final response: ", response)
 }
 
-async function getComponents(langClient: ExtendedLangClientInterface, components: ComponentInfo[], projectPath: string, icon: string, dtype?: DIRECTORY_MAP): Promise<ProjectStructureArtifactResponse[]> {
+async function getComponents(langClient: ExtendedLangClientInterface, components: ComponentInfo[], projectPath: string, moduleName: string, icon: string, dtype?: DIRECTORY_MAP): Promise<ProjectStructureArtifactResponse[]> {
+    console.log("getting components for: ", {"components": components, "module": moduleName})
     const entries: ProjectStructureArtifactResponse[] = [];
     let compType = "HTTP";
     let serviceModel: ServiceModel = undefined;
     for (const comp of components) {
-        const componentFile = Utils.joinPath(URI.parse(projectPath), comp.filePath).fsPath;
+        const componentFile = Uri.joinPath(Uri.parse(projectPath), moduleName ? `modules/${moduleName}/${comp.filePath}` : comp.filePath).toString();
         let stNode: SyntaxTree;
         try {
             stNode = await langClient.getSTByRange({
-                documentIdentifier: { uri: URI.parse(componentFile).toString() },
+                documentIdentifier: { uri: componentFile },
                 lineRange: {
                     start: {
                         line: comp.startLine,
@@ -172,7 +197,7 @@ async function getComponents(langClient: ExtendedLangClientInterface, components
             context: comp.name,
             st: stNode.syntaxTree,
             serviceModel: serviceModel,
-            resources: comp?.resources ? await getComponents(langClient, comp?.resources, projectPath, "") : [],
+            resources: comp?.resources ? await getComponents(langClient, comp?.resources, projectPath, "", "") : [],
             position: {
                 endColumn: comp.endColumn,
                 endLine: comp.endLine,
@@ -190,6 +215,8 @@ async function getComponents(langClient: ExtendedLangClientInterface, components
         } else {
             entries.push(fileEntry);
         }
+
+        console.log("entry: ", entries);
 
     }
     return entries;

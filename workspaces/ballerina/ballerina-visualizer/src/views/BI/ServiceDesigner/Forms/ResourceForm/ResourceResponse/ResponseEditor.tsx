@@ -39,7 +39,7 @@ export function ResponseEditor(props: ParamProps) {
     const [targetLineRange, setTargetLineRange] = useState<LineRange>();
 
     useEffect(() => {
-        rpcClient.getVisualizerLocation().then(res => { setFilePath(Utils.joinPath(URI.file(res.projectUri), 'main.bal').fsPath) });
+        rpcClient.getVisualizerLocation().then(res => { setFilePath(res.documentUri ? res.documentUri : Utils.joinPath(URI.parse(res.projectUri), 'main.bal').toString()) });
     }, []);
 
     useEffect(() => {

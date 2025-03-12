@@ -71,7 +71,7 @@ export function ServiceConfigForm(props: ServiceConfigFormProps) {
 
     useEffect(() => {
         serviceModel && setServiceFields(convertConfig(serviceModel));
-        rpcClient.getVisualizerLocation().then(res => { setFilePath(Utils.joinPath(URI.file(res.projectUri), 'main.bal').fsPath) });
+        rpcClient.getVisualizerLocation().then(res => { setFilePath(res.documentUri) });
     }, [serviceModel]);
 
     const handleListenerSubmit = async (data: FormValues) => {
@@ -95,6 +95,7 @@ export function ServiceConfigForm(props: ServiceConfigFormProps) {
     };
 
     const handleListenerForm = (panel: SubPanel) => {
+        consoe.log(">>>> openning listener form");
         if (panel.view === SubPanelView.ADD_NEW_FORM) {
             openListenerForm && openListenerForm();
         }

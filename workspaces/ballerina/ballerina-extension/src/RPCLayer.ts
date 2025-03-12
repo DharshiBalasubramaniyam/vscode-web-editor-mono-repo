@@ -5,7 +5,7 @@ import { stateChanged, getVisualizerLocation, VisualizerLocation, projectContent
 import { registerVisualizerRpcHandlers } from './rpc-managers/visualizer/rpc-handler';
 import { registerLangClientRpcHandlers } from './rpc-managers/lang-client/rpc-handler';
 import { registerLibraryBrowserRpcHandlers } from './rpc-managers/library-browser/rpc-handler';
-// import { registerServiceDesignerRpcHandlers } from './rpc-managers/service-designer/rpc-handler';
+import { registerServiceDesignerRpcHandlers } from './rpc-managers/service-designer/rpc-handler';
 import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
 // import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
 // import { registerGraphqlDesignerRpcHandlers } from './rpc-managers/graphql-designer/rpc-handler';
@@ -54,7 +54,7 @@ export class RPCLayer {
         registerVisualizerRpcHandlers(RPCLayer._messenger);
         registerLangClientRpcHandlers(RPCLayer._messenger);
         registerLibraryBrowserRpcHandlers(RPCLayer._messenger);
-        // registerServiceDesignerRpcHandlers(RPCLayer._messenger);
+        registerServiceDesignerRpcHandlers(RPCLayer._messenger);
         registerCommonRpcHandlers(RPCLayer._messenger);
         // registerPersistDiagramRpcHandlers(RPCLayer._messenger);
         // registerGraphqlDesignerRpcHandlers(RPCLayer._messenger);

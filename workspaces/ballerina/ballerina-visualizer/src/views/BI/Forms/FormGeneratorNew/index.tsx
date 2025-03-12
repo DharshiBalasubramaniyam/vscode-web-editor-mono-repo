@@ -67,7 +67,7 @@ export function FormGeneratorNew(props: FormProps) {
     } = props;
 
     const { rpcClient } = useRpcContext();
-    console.log("======FormGeneratorNew======,", fields)
+    console.log("======FormGeneratorNew======,", props)
 
     const [showRecordEditor, setShowRecordEditor] = useState(false);
 

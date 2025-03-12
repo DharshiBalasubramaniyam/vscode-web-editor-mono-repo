@@ -109,15 +109,15 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(getAiSuggestions, (args: BIAiSuggestionsRequest) => rpcManger.getAiSuggestions(args));
     // messenger.onNotification(createProject, (args: ProjectRequest) => rpcManger.createProject(args));
     // messenger.onRequest(getWorkspaces, () => rpcManger.getWorkspaces());
-    // messenger.onRequest(getProjectStructure, () => rpcManger.getProjectStructure());
+    messenger.onRequest(getProjectStructure, () => rpcManger.getProjectStructure());
     // messenger.onRequest(getProjectComponents, () => rpcManger.getProjectComponents());
     // messenger.onRequest(createComponent, (args: ComponentRequest) => rpcManger.createComponent(args));
     // messenger.onRequest(getBIConnectors, (args: BIConnectorsRequest) => rpcManger.getBIConnectors(args));
     // messenger.onRequest(handleReadmeContent, (args: ReadmeContentRequest) => rpcManger.handleReadmeContent(args));
-    // messenger.onRequest(getVisibleVariableTypes, (args: BIGetVisibleVariableTypesRequest) => rpcManger.getVisibleVariableTypes(args));
-    // messenger.onRequest(getExpressionCompletions, (args: ExpressionCompletionsRequest) => rpcManger.getExpressionCompletions(args));
-    // messenger.onRequest(getConfigVariables, () => rpcManger.getConfigVariables());
-    // messenger.onRequest(updateConfigVariables, (args: UpdateConfigVariableRequest) => rpcManger.updateConfigVariables(args));
+    messenger.onRequest(getVisibleVariableTypes, (args: BIGetVisibleVariableTypesRequest) => rpcManger.getVisibleVariableTypes(args));
+    messenger.onRequest(getExpressionCompletions, (args: ExpressionCompletionsRequest) => rpcManger.getExpressionCompletions(args));
+    messenger.onRequest(getConfigVariables, () => rpcManger.getConfigVariables());
+    messenger.onRequest(updateConfigVariables, (args: UpdateConfigVariableRequest) => rpcManger.updateConfigVariables(args));
     // messenger.onRequest(getModuleNodes, () => rpcManger.getModuleNodes());
     // messenger.onRequest(getReadmeContent, () => rpcManger.getReadmeContent());
     // messenger.onNotification(openReadme, () => rpcManger.openReadme());
@@ -127,7 +127,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(getSignatureHelp, (args: SignatureHelpRequest) => rpcManger.getSignatureHelp(args));
     // messenger.onNotification(buildProject, () => rpcManger.buildProject());
     // messenger.onNotification(runProject, () => rpcManger.runProject());
-    // messenger.onRequest(getVisibleTypes, (args: VisibleTypesRequest) => rpcManger.getVisibleTypes(args));
+    messenger.onRequest(getVisibleTypes, (args: VisibleTypesRequest) => rpcManger.getVisibleTypes(args));
     // messenger.onNotification(addBreakpointToSource, (args: BreakpointRequest) => rpcManger.addBreakpointToSource(args));
     // messenger.onNotification(removeBreakpointFromSource, (args: BreakpointRequest) => rpcManger.removeBreakpointFromSource(args));
     // messenger.onRequest(getBreakpointInfo, () => rpcManger.getBreakpointInfo());
@@ -147,5 +147,5 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(updateImports, (args: UpdateImportsRequest) => rpcManger.updateImports(args));
     // messenger.onRequest(addFunction, (args: AddFunctionRequest) => rpcManger.addFunction(args));
     // messenger.onRequest(getFunctionNode, (args: FunctionNodeRequest) => rpcManger.getFunctionNode(args));
-    // messenger.onRequest(getEndOfFile, (args: EndOfFileRequest) => rpcManger.getEndOfFile(args));
+    messenger.onRequest(getEndOfFile, (args: EndOfFileRequest) => rpcManger.getEndOfFile(args));
 }

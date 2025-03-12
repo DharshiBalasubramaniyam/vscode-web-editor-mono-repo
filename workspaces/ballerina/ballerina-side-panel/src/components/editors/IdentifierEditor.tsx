@@ -111,13 +111,14 @@ export namespace S {
 
 interface IdentifierEditorProps {
     field: FormField;
+    filePath?: string;
     handleOnFieldFocus?: (key: string) => void;
     autoFocus?: boolean;
     showWarning?: boolean;
 }
 
 export function IdentifierEditor(props: IdentifierEditorProps) {
-    const { field, handleOnFieldFocus, autoFocus, showWarning } = props;
+    const { field, filePath, handleOnFieldFocus, autoFocus, showWarning } = props;
     const { form } = useFormContext();
     const { rpcClient } = useRpcContext();
     const { register, setValue } = form;
@@ -143,7 +144,7 @@ export function IdentifierEditor(props: IdentifierEditorProps) {
         }
 
         await rpcClient.getBIDiagramRpcClient().renameIdentifier({
-            fileName: field.lineRange?.fileName,
+            fileName: filePath || field.lineRange?.fileName,
             position: {
                 line: field.lineRange?.startLine?.line,
                 character: field.lineRange?.startLine?.offset

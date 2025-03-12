@@ -77,6 +77,7 @@ export interface ListenerEditViewProps {
 }
 
 export function ListenerEditView(props: ListenerEditViewProps) {
+    console.log('listener edit view props: ', props)
     const { filePath, position } = props;
     const { rpcClient } = useRpcContext();
     const [listenerModel, setListenerModel] = useState<ListenerModel>(undefined);
