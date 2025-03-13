@@ -432,7 +432,8 @@ export function openView(type: EVENT_TYPE, viewLocation: VisualizerLocation, res
         history.clear();
     }
     // type: OPEN_VIEW, viewLocation: { documenturi, position }
-    stateService.send({ type: type, viewLocation: viewLocation });
+    const location = viewLocation.documentUri || StateMachine.context().documentUri || 'main.bal'
+    stateService.send({ type: type, viewLocation: {...viewLocation, documentUri: location} });
 }
 
 export function updateView() {
@@ -451,7 +452,7 @@ function getProjectUri(filePath: string) : string {
     }
     const projectUri = workspaceFolders.find((folder) => {
         const folderUri = folder.uri.toString();
-        return filePath.includes(folderUri) && filePath.startsWith(folderUri);
+        return filePath?.includes(folderUri) && filePath.startsWith(folderUri);
     });
     console.log("finding project uri: ", {
         "filepath": filePath,

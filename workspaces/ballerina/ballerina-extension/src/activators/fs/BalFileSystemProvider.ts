@@ -191,4 +191,21 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 			{ type: vscode.FileChangeType.Changed, uri: source }
 		]);
 	}
+
+	// async isExists(uri: vscode.Uri): Promise<{ exists: boolean; isDirectory: boolean }> {
+    //     console.log("isExists: ", uri.path);
+    //     const response = await fetch(`${FS_BASE_URL}/exists?url=${uri.path}&scheme=${uri.scheme}`);
+    //     console.log("Sending request to: ", `${FS_BASE_URL}/exists?url=${uri.path}&scheme=${uri.scheme}`);
+
+    //     if (!response.ok) {
+    //         console.log(`Failed to check file existence: ${response.statusText}`);
+    //         throw new Error('Failed to check file existence');
+    //     }
+
+    //     const result = await response.json();
+    //     console.log(`Existence check result for ${uri.path}: `, result);
+
+    //     return result; 
+    // }
+
 }

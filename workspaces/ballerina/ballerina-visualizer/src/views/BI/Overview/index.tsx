@@ -19,7 +19,7 @@ import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { Typography, Codicon, ProgressRing, Button, Icon } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
 import { ThemeColors } from "@dharshi/ui-toolkit";
-import { getProjectFromResponse, parseSSEEvent, replaceCodeBlocks, splitContent } from "../../AIPanel/AIChat";
+// import { getProjectFromResponse, parseSSEEvent, replaceCodeBlocks, splitContent } from "../../AIPanel/AIChat";
 import ComponentDiagram from "../ComponentDiagram";
 import { VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import ReactMarkdown from "react-markdown";
@@ -274,7 +274,8 @@ export function Overview(props: ComponentDiagramProps) {
         if (!responseText) {
             return;
         }
-        const segments = splitContent(responseText);
+        // const segments = splitContent(responseText);
+        const segments = responseText;
         console.log(">>> ai code", { segments });
 
         segments.forEach((segment) => {
@@ -290,117 +291,117 @@ export function Overview(props: ComponentDiagramProps) {
         return Object.values(projectStructure.directoryMap || {}).every((array) => array.length === 0);
     }
 
-    async function fetchAiResponse(isQuestion: boolean = false) {
-        if (readmeContent === "" && !isQuestion) {
-            return;
-        }
+    // async function fetchAiResponse(isQuestion: boolean = false) {
+    //     if (readmeContent === "" && !isQuestion) {
+    //         return;
+    //     }
 
-        setIsLoading(true);
-        setLoadingMessage("Reading...");
-        let assistant_response = "";
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const url = backendRootUri.current;
-        const response = await fetch(url + "/code", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ usecase: readmeContent, chatHistory: [] }),
-            signal: signal,
-        });
-        if (!response.ok) {
-            setIsLoading(false);
-            throw new Error("Failed to fetch response");
-        }
+    //     setIsLoading(true);
+    //     setLoadingMessage("Reading...");
+    //     let assistant_response = "";
+    //     const controller = new AbortController();
+    //     const signal = controller.signal;
+    //     const url = backendRootUri.current;
+    //     const response = await fetch(url + "/code", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ usecase: readmeContent, chatHistory: [] }),
+    //         signal: signal,
+    //     });
+    //     if (!response.ok) {
+    //         setIsLoading(false);
+    //         throw new Error("Failed to fetch response");
+    //     }
 
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
-        let functions: any;
-        let buffer = "";
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                setIsLoading(false);
-                break;
-            }
+    //     const reader = response.body?.getReader();
+    //     const decoder = new TextDecoder();
+    //     let functions: any;
+    //     let buffer = "";
+    //     while (true) {
+    //         const { done, value } = await reader.read();
+    //         if (done) {
+    //             setIsLoading(false);
+    //             break;
+    //         }
 
-            buffer += decoder.decode(value, { stream: true });
+    //         buffer += decoder.decode(value, { stream: true });
 
-            let boundary = buffer.indexOf("\n\n");
-            while (boundary !== -1) {
-                const chunk = buffer.slice(0, boundary + 2);
-                buffer = buffer.slice(boundary + 2);
+    //         let boundary = buffer.indexOf("\n\n");
+    //         while (boundary !== -1) {
+    //             const chunk = buffer.slice(0, boundary + 2);
+    //             buffer = buffer.slice(boundary + 2);
 
-                try {
-                    const event = parseSSEEvent(chunk);
-                    if (event.event == "libraries") {
-                        setLoadingMessage("Looking for libraries...");
-                    } else if (event.event == "functions") {
-                        functions = event.body;
-                        setLoadingMessage("Fetching functions...");
-                    } else if (event.event == "content_block_delta") {
-                        let textDelta = event.body.text;
-                        assistant_response += textDelta;
-                        console.log(">>> Text Delta: " + textDelta);
-                        setLoadingMessage("Generating components...");
-                    } else if (event.event == "message_stop") {
-                        console.log(">>> Streaming stop: ", { responseText, assistant_response });
-                        setLoadingMessage("Verifying components...");
-                        console.log(assistant_response);
-                        const newSourceFiles: ProjectSource = getProjectFromResponse(assistant_response);
-                        // Check diagnostics
-                        const diags: ProjectDiagnostics = await rpcClient
-                            .getAiPanelRpcClient()
-                            .getShadowDiagnostics(newSourceFiles);
-                        if (diags.diagnostics.length > 0) {
-                            console.log("Diagnostics : ");
-                            console.log(diags.diagnostics);
-                            const diagReq = {
-                                response: assistant_response,
-                                diagnostics: diags.diagnostics,
-                            };
-                            const startTime = performance.now();
-                            const response = await fetch(url + "/code/repair", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    usecase: readmeContent,
-                                    diagnosticRequest: diagReq,
-                                    functions: functions,
-                                }),
-                                signal: signal,
-                            });
-                            if (!response.ok) {
-                                console.log("repair error");
-                                setIsLoading(false);
-                            } else {
-                                const jsonBody = await response.json();
-                                const repairResponse = jsonBody.repairResponse;
-                                // replace original response with new code blocks
-                                const fixedResponse = replaceCodeBlocks(assistant_response, repairResponse);
-                                const endTime = performance.now();
-                                const executionTime = endTime - startTime;
-                                console.log(`Repair call time: ${executionTime} milliseconds`);
-                                assistant_response = fixedResponse;
-                            }
-                        }
-                        setResponseText(assistant_response);
-                        setIsLoading(false);
-                    } else if (event.event == "error") {
-                        console.log(">>> Streaming Error: " + event.body);
-                        setIsLoading(false);
-                    }
-                } catch (error) {
-                    console.error("Failed to parse SSE event:", error);
-                }
+    //             try {
+    //                 const event = parseSSEEvent(chunk);
+    //                 if (event.event == "libraries") {
+    //                     setLoadingMessage("Looking for libraries...");
+    //                 } else if (event.event == "functions") {
+    //                     functions = event.body;
+    //                     setLoadingMessage("Fetching functions...");
+    //                 } else if (event.event == "content_block_delta") {
+    //                     let textDelta = event.body.text;
+    //                     assistant_response += textDelta;
+    //                     console.log(">>> Text Delta: " + textDelta);
+    //                     setLoadingMessage("Generating components...");
+    //                 } else if (event.event == "message_stop") {
+    //                     console.log(">>> Streaming stop: ", { responseText, assistant_response });
+    //                     setLoadingMessage("Verifying components...");
+    //                     console.log(assistant_response);
+    //                     const newSourceFiles: ProjectSource = getProjectFromResponse(assistant_response);
+    //                     // Check diagnostics
+    //                     const diags: ProjectDiagnostics = await rpcClient
+    //                         .getAiPanelRpcClient()
+    //                         .getShadowDiagnostics(newSourceFiles);
+    //                     if (diags.diagnostics.length > 0) {
+    //                         console.log("Diagnostics : ");
+    //                         console.log(diags.diagnostics);
+    //                         const diagReq = {
+    //                             response: assistant_response,
+    //                             diagnostics: diags.diagnostics,
+    //                         };
+    //                         const startTime = performance.now();
+    //                         const response = await fetch(url + "/code/repair", {
+    //                             method: "POST",
+    //                             headers: {
+    //                                 "Content-Type": "application/json",
+    //                             },
+    //                             body: JSON.stringify({
+    //                                 usecase: readmeContent,
+    //                                 diagnosticRequest: diagReq,
+    //                                 functions: functions,
+    //                             }),
+    //                             signal: signal,
+    //                         });
+    //                         if (!response.ok) {
+    //                             console.log("repair error");
+    //                             setIsLoading(false);
+    //                         } else {
+    //                             const jsonBody = await response.json();
+    //                             const repairResponse = jsonBody.repairResponse;
+    //                             // replace original response with new code blocks
+    //                             const fixedResponse = replaceCodeBlocks(assistant_response, repairResponse);
+    //                             const endTime = performance.now();
+    //                             const executionTime = endTime - startTime;
+    //                             console.log(`Repair call time: ${executionTime} milliseconds`);
+    //                             assistant_response = fixedResponse;
+    //                         }
+    //                     }
+    //                     setResponseText(assistant_response);
+    //                     setIsLoading(false);
+    //                 } else if (event.event == "error") {
+    //                     console.log(">>> Streaming Error: " + event.body);
+    //                     setIsLoading(false);
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Failed to parse SSE event:", error);
+    //             }
 
-                boundary = buffer.indexOf("\n\n");
-            }
-        }
-    }
+    //             boundary = buffer.indexOf("\n\n");
+    //         }
+    //     }
+    // }
 
     if (!projectStructure) {
         return (

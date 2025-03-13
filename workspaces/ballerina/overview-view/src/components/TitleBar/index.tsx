@@ -5,11 +5,6 @@ import { ConstructorPanel } from '../ConstructorPanel';
 import { WorkspacesFileResponse } from '@dharshi/ballerina-core';
 import { SELECT_ALL_FILES } from '../../Overview';
 
-// import {
-//     EVENT_TYPE,
-//     MACHINE_VIEW,
-// } from "@wso2-enterprise/ballerina-core";
-
 const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -37,7 +32,6 @@ export interface TitleBarProps {
 
 export function TitleBar(props: TitleBarProps) {
     const { onQueryChange, onSelectedFileChange, selectedFile, query, workspacesFileResponse } = props;
-
     const [isPanelOpen, setPanelOpen] = useState(false);
 
     const openPanel = () => {
@@ -57,15 +51,17 @@ export function TitleBar(props: TitleBarProps) {
         workspaceFiles.push({ value: file.path, content: file.relativePath });
     });
 
+    console.log({"workspaceFiles": workspaceFiles, "selectedFile": selectedFile});
     
-    const handleAddConstruct = () => {
-        rpcClient.getVisualizerRpcClient().openView({
-            type: EVENT_TYPE.OPEN_VIEW,
-            location: {
-                view: MACHINE_VIEW.BIComponentView,
-            },
-        });
-    };
+    // const handleAddConstruct = () => {
+    //     rpcClient.getVisualizerRpcClient().openView({
+    //         type: EVENT_TYPE.OPEN_VIEW,
+    //         location: {
+    //             view: MACHINE_VIEW.BIComponentView,
+    //             documentUri: selectedFile
+    //         },
+    //     });
+    // };
 
     return (
         <Container>

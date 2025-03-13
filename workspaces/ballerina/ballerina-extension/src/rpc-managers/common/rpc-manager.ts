@@ -38,7 +38,7 @@ import { FileType, Uri, commands, env, window, workspace, ViewColumn, Range, Sel
 import { StateMachine } from "../../state-machine";
 // import { goToSource } from "../../utils";
 import { askFilePath, askProjectPath, getUpdatedSource } from "./utils";
-import { balExtInstance } from "../../extension";
+import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 
 export class CommonRpcManager implements CommonRPCAPI {
     async getTypeCompletions(): Promise<TypeResponse> {
@@ -160,7 +160,7 @@ export class CommonRpcManager implements CommonRPCAPI {
                     resolve({ path: "" });
                 } else {
                     const filePath = selectedFile[0].fsPath;
-                    resolve({ path: filePath });
+                    resolve({ path: Uri.file(filePath).with({scheme: WEB_IDE_SCHEME}).toString() });
                 }
             } else {
                 const selectedDir = await askProjectPath();
@@ -169,7 +169,7 @@ export class CommonRpcManager implements CommonRPCAPI {
                     resolve({ path: "" });
                 } else {
                     const dirPath = selectedDir[0].fsPath;
-                    resolve({ path: dirPath });
+                    resolve({ path: Uri.file(dirPath).with({scheme: WEB_IDE_SCHEME}).toString() });
                 }
             }
         });

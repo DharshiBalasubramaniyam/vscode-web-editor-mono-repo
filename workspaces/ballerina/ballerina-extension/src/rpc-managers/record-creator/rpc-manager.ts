@@ -6,7 +6,7 @@ import {
     XMLToRecordParams,
     TypeDataWithReferences
 } from "@dharshi/ballerina-core";
-import * as vscode from "vscode";
+import {Uri} from "vscode";
 import { StateMachine } from "../../state-machine";
 
 export class RecordCreatorRpcManager implements RecordCreatorAPI {
@@ -25,8 +25,13 @@ export class RecordCreatorRpcManager implements RecordCreatorAPI {
     }
 
     async convertJsonToRecordType(params: JsonToRecordParams): Promise<TypeDataWithReferences> {
-        // const projectUri = StateMachine.context().projectUri;
-        // const filePathUri = vscode.Uri.joinPath(vscode.Uri.parse(projectUri), 'types.bal').toString();
+        if (StateMachine.context().isBI) {
+            const projectDir = Uri.parse(StateMachine.context().projectUri);
+            const targetFile = Uri.joinPath(projectDir, `types.bal`).toString();
+            params.filePathUri = targetFile;
+        } else {
+            params.filePathUri = StateMachine.context().documentUri;
+        }
         return new Promise(async (resolve) => {
             const response = await StateMachine.langClient().convertJsonToRecordType({
                 ...params
@@ -36,8 +41,13 @@ export class RecordCreatorRpcManager implements RecordCreatorAPI {
     }
 
     async convertXmlToRecordType(params: XMLToRecordParams): Promise<TypeDataWithReferences> {
-        // const projectUri = StateMachine.context().projectUri;
-        // const filePath = vscode.Uri.joinPath(vscode.Uri.parse(projectUri), 'types.bal').toString();
+        if (StateMachine.context().isBI) {
+            const projectDir = Uri.parse(StateMachine.context().projectUri);
+            const targetFile = Uri.joinPath(projectDir, `types.bal`).toString();
+            params.filePath = targetFile;
+        } else {
+            params.filePath = StateMachine.context().documentUri;
+        }
         return new Promise(async (resolve) => {
             const response = await StateMachine.langClient().convertXmlToRecordType({
                 ...params

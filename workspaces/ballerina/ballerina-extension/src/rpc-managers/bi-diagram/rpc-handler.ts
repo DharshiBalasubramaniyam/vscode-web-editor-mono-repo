@@ -99,13 +99,13 @@ import { BiDiagramRpcManager } from "./rpc-manager";
 export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     const rpcManger = new BiDiagramRpcManager();
     // messenger.onRequest(getFlowModel, () => rpcManger.getFlowModel());
-    // messenger.onRequest(getSourceCode, (args: BISourceCodeRequest) => rpcManger.getSourceCode(args));
+    messenger.onRequest(getSourceCode, (args: BISourceCodeRequest) => rpcManger.getSourceCode(args));
     // messenger.onRequest(deleteFlowNode, (args: BISourceCodeRequest) => rpcManger.deleteFlowNode(args));
     // messenger.onRequest(deleteByComponentInfo, (args: BIDeleteByComponentInfoRequest) => rpcManger.deleteByComponentInfo(args));
     // messenger.onRequest(getAvailableNodes, (args: BIAvailableNodesRequest) => rpcManger.getAvailableNodes(args));
     // messenger.onRequest(getFunctions, (args: BIGetFunctionsRequest) => rpcManger.getFunctions(args));
     // messenger.onRequest(getEnclosedFunction, (args: BIGetEnclosedFunctionRequest) => rpcManger.getEnclosedFunction(args));
-    // messenger.onRequest(getNodeTemplate, (args: BINodeTemplateRequest) => rpcManger.getNodeTemplate(args));
+    messenger.onRequest(getNodeTemplate, (args: BINodeTemplateRequest) => rpcManger.getNodeTemplate(args));
     // messenger.onRequest(getAiSuggestions, (args: BIAiSuggestionsRequest) => rpcManger.getAiSuggestions(args));
     // messenger.onNotification(createProject, (args: ProjectRequest) => rpcManger.createProject(args));
     // messenger.onRequest(getWorkspaces, () => rpcManger.getWorkspaces());
@@ -146,6 +146,6 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(createGraphqlClassType, (args: UpdateTypeRequest) => rpcManger.createGraphqlClassType(args));
     // messenger.onRequest(updateImports, (args: UpdateImportsRequest) => rpcManger.updateImports(args));
     // messenger.onRequest(addFunction, (args: AddFunctionRequest) => rpcManger.addFunction(args));
-    // messenger.onRequest(getFunctionNode, (args: FunctionNodeRequest) => rpcManger.getFunctionNode(args));
+    messenger.onRequest(getFunctionNode, (args: FunctionNodeRequest) => rpcManger.getFunctionNode(args));
     messenger.onRequest(getEndOfFile, (args: EndOfFileRequest) => rpcManger.getEndOfFile(args));
 }

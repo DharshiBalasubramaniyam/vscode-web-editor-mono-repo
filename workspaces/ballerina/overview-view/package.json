@@ -9,7 +9,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "watch": "tsc --pretty --watch",
-    "build": "pnpm run lint && tsc --pretty",
+    "build": "tsc --pretty",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {

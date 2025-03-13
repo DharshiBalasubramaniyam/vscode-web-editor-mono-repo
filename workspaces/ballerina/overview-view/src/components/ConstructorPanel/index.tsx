@@ -3,14 +3,29 @@ import React from "react";
 
 import styled from "@emotion/styled";
 import { Button, Codicon, Divider, SidePanel, Typography } from "@dharshi/ui-toolkit";
+import { MACHINE_VIEW, EVENT_TYPE } from "@dharshi/ballerina-core";
+import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 
 interface ConstructorPanelProps {
     isPanelOpen: boolean;
     setPanelOpen: (value: React.SetStateAction<boolean>) => void
 }
 
-export function ConstructorPanel(props: ConstructorPanelProps) {
+enum PlusMenuCategories {
+    MODULE_INIT,
+    CONSTRUCT,
+    ENTRY_POINT
+}
 
+interface Entry {
+    name: string;
+    category: PlusMenuCategories;
+    view: MACHINE_VIEW;
+    serviceType: string | undefined
+}
+
+export function ConstructorPanel(props: ConstructorPanelProps) {
+    const { rpcClient } = useRpcContext();
     const closePanel = () => {
         props.setPanelOpen(false);
     };
@@ -48,27 +63,30 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
         }
     `;
 
-    enum PlusMenuCategories {
-        MODULE_INIT,
-        CONSTRUCT,
-        ENTRY_POINT
+    const handleClick = async (entry: Entry) => {
+        console.log("add contruct: ", entry)
+        await rpcClient.getVisualizerRpcClient().openView({
+            type: EVENT_TYPE.OPEN_VIEW,
+            location: {
+                view: entry.view,
+                serviceType: entry.serviceType,
+            },
+        });
     }
 
-    const moduleLevelEntries: any[] = [
-        { name: 'Main', type: 'FunctionDefinition', category: PlusMenuCategories.ENTRY_POINT },
-        { name: 'Service', type: 'ServiceDeclaration', category: PlusMenuCategories.ENTRY_POINT },
-        { name: 'Trigger', type: 'TriggerList', category: PlusMenuCategories.ENTRY_POINT },
-        { name: 'Record', type: 'RecordEditor', category: PlusMenuCategories.CONSTRUCT },
-        { name: 'Function', type: 'FunctionDefinition', category: PlusMenuCategories.CONSTRUCT },
-        { name: 'Listener', type: 'ListenerDeclaration', category: PlusMenuCategories.CONSTRUCT },
-        { name: 'Enum', type: 'EnumDeclaration', category: PlusMenuCategories.CONSTRUCT },
-        { name: 'Class', type: 'ClassDefinition', category: PlusMenuCategories.CONSTRUCT },
-        { name: 'Connector', type: 'ModuleConnectorDecl', category: PlusMenuCategories.MODULE_INIT },
-        { name: 'Variable', type: 'ModuleVarDecl', category: PlusMenuCategories.MODULE_INIT },
-        { name: 'Configurable', type: 'Configurable', category: PlusMenuCategories.MODULE_INIT },
-        { name: 'Constant', type: 'ConstDeclaration', category: PlusMenuCategories.MODULE_INIT },
-        { name: 'Other', type: 'Custom', category: PlusMenuCategories.MODULE_INIT },
-        { name: 'Data Mapper', type: 'DataMapper', category: PlusMenuCategories.CONSTRUCT }
+    const moduleLevelEntries: Entry[] = [
+        { name: 'Main', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.Overview, serviceType: undefined },
+        { name: 'HTTP service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "http" },
+        { name: 'GraphQL service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "graphql" },
+        { name: 'Trigger', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.Overview, serviceType: undefined },
+
+        { name: 'Type', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.TypeDiagram, serviceType: undefined },
+        { name: 'Function', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: undefined },
+        { name: 'Class', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIServiceWizard, serviceType: undefined },
+        { name: 'Data Mapper', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIDataMapperForm, serviceType: undefined },
+
+        { name: 'Connector', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: undefined },
+        { name: 'Configurable', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.ViewConfigVariables, serviceType: undefined }
     ];
 
     const entryPoints: JSX.Element[] = [];
@@ -79,27 +97,29 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
         switch (entry.category) {
             case PlusMenuCategories.CONSTRUCT:
                 constructs.push((
-                    <ButtonWrapper>
+                    <ButtonWrapper onClick={() => handleClick(entry)} >
                         <Typography variant="h4"> {entry.name} </Typography>
                     </ButtonWrapper>
                 ));
                 break;
             case PlusMenuCategories.ENTRY_POINT:
                 entryPoints.push((
-                    <ButtonWrapper>
+                    <ButtonWrapper onClick={() => handleClick(entry)} >
                         <Typography variant="h4"> {entry.name} </Typography>
                     </ButtonWrapper>
                 ));
                 break;
             case PlusMenuCategories.MODULE_INIT:
                 moduleInit.push((
-                    <ButtonWrapper>
+                    <ButtonWrapper onClick={() => handleClick(entry)} >
                         <Typography variant="h4"> {entry.name} </Typography>
                     </ButtonWrapper>
                 ));
                 break;
         }
     })
+
+    console.log(moduleInit)
 
     return (
         <SidePanel

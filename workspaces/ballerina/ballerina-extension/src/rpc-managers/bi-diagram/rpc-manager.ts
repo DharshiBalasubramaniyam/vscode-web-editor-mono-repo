@@ -210,9 +210,6 @@ export class BiDiagramRpcManager
 
     async renameIdentifier(params: RenameIdentifierRequest): Promise<void> {
         console.log("rename identifier params: ", params);
-        // const projectUri = StateMachine.context().projectUri;
-        // const filePath = path.join(projectUri, params.fileName);
-
         const fileUri = Uri.parse(params.fileName).toString();
         const request: RenameRequest = {
             textDocument: {
@@ -299,8 +296,6 @@ export class BiDiagramRpcManager
     }
 
     async updateType(params: UpdateTypeRequest): Promise<UpdateTypeResponse> {
-        // const projectUri = StateMachine.context().projectUri;
-        // const filePath = path.join(projectUri, params.filePath);
         return new Promise((resolve, reject) => {
             StateMachine.langClient()
                 .updateType({ filePath: params.filePath, type: params.type, description: "" })
@@ -317,6 +312,62 @@ export class BiDiagramRpcManager
         });
     }
 
+    async getFunctionNode(params: FunctionNodeRequest): Promise<FunctionNodeResponse> {
+        return new Promise((resolve) => {
+            StateMachine.langClient().getFunctionNode(params)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(">>> Error getting function node", error);
+                    resolve(undefined);
+                });
+        });
+    }
+
+    async getSourceCode(params: BISourceCodeRequest): Promise<BISourceCodeResponse> {
+        console.log(">>> requesting bi source code from ls", params);
+        const { flowNode, isFunctionNodeUpdate } = params;
+        return new Promise((resolve) => {
+            StateMachine.langClient()
+                .getSourceCode(params)
+                .then(async (model) => {
+                    console.log(">>> bi source code from ls", model);
+                    if (params?.isConnector) {
+                        await this.updateSource(model, flowNode, true, isFunctionNodeUpdate);
+                        resolve(model);
+                        commands.executeCommand("BI.project-explorer.refresh");
+                    } else {
+                        this.updateSource(model, flowNode, false, isFunctionNodeUpdate);
+                        resolve(model);
+                    }
+                })
+                .catch((error) => {
+                    console.log(">>> error fetching source code from ls", error);
+                    return new Promise((resolve) => {
+                        resolve(undefined);
+                    });
+                });
+        });
+    }
+
+    async getNodeTemplate(params: BINodeTemplateRequest): Promise<BINodeTemplateResponse> {
+        console.log(">>> requesting bi node template from ls", params);
+
+        return new Promise((resolve) => {
+            StateMachine.langClient()
+                .getNodeTemplate(params)
+                .then((model) => {
+                    resolve(model);
+                })
+                .catch((error) => {
+                    return new Promise((resolve) => {
+                        resolve(undefined);
+                    });
+                });
+        });
+    }
+
     async updateSource(
         params: BISourceCodeResponse,
         flowNode?: FlowNode | FunctionNode,
@@ -326,18 +377,20 @@ export class BiDiagramRpcManager
         const modificationRequests: Record<string, { filePath: string; modifications: STModification[] }> = {};
         for (const [key, value] of Object.entries(params.textEdits)) {
             let fileUri = key.replace(/\\/g, "/");
-            const projectRootPath = Uri.parse(StateMachine.context().projectUri).path
-            const startIndex = fileUri.indexOf(projectRootPath);
-            if (startIndex !== -1) {
-                fileUri = Uri.file(fileUri.substring(startIndex)).with({scheme: WEB_IDE_SCHEME}).toString();
+            if (!isFunctionNodeUpdate) {
+                const projectRootPath = Uri.parse(StateMachine.context().projectUri).path;
+                const startIndex = fileUri.indexOf(projectRootPath);
+                if (startIndex !== -1) {
+                    fileUri = Uri.file(fileUri.substring(startIndex)).with({scheme: WEB_IDE_SCHEME}).toString();
+                }
+                console.log({
+                    "actual key": key,
+                    "projecturi": projectRootPath,
+                    "new key": fileUri
+                });
+            } else {
+                fileUri = StateMachine.context().documentUri;
             }
-
-            console.log({
-                "actual key": key,
-                "projecturi": projectRootPath,
-                "new key": fileUri
-            });
-
             const edits = value;
 
             if (edits && edits.length > 0) {
@@ -404,7 +457,7 @@ export class BiDiagramRpcManager
         } catch (error) {
             console.log(">>> error updating source", error);
         }
-        if (!isConnector && !isFunctionNodeUpdate) {
+        if (!isConnector) {
             updateView();
         }
     }

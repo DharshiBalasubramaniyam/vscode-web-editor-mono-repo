@@ -22,16 +22,16 @@ import styled from "@emotion/styled";
 import { NavigationBar } from "./components/NavigationBar";
 import { LoadingRing } from "./components/Loader";
 import { ServiceDesigner } from "./views/BI/ServiceDesigner";
-// import {
-//     WelcomeView,
-//     ProjectForm,
-//     ComponentListView,
-//     PopupMessage,
-//     MainForm,
-//     FunctionForm,
-//     SetupView,
-//     TestFunctionForm
-// } from "./views/BI";
+import {
+    // WelcomeView,
+    // ProjectForm,
+    ComponentListView,
+    // PopupMessage,
+    // MainForm,
+    FunctionForm,
+    // SetupView,
+    // TestFunctionForm
+} from "./views/BI";
 import { handleRedo, handleUndo } from "./utils/utils";
 import { FunctionDefinition, ServiceDeclaration } from "@dharshi/syntax-tree";
 import { URI, Utils } from "vscode-uri";
@@ -47,7 +47,7 @@ import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import { Overview as OverviewBI } from "./views/BI/Overview/index";
 // import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
 import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
-// import { ServiceWizard } from "./views/BI/ServiceDesigner/ServiceWizard";
+import { ServiceWizard } from "./views/BI/ServiceDesigner/ServiceWizard";
 import { ServiceEditView } from "./views/BI/ServiceDesigner/ServiceEditView";
 import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
 // import { ServiceClassDesigner } from "./views/BI/ServiceClassEditor/ServiceClassDesigner";
@@ -159,6 +159,8 @@ const MainPanel = () => {
             if (!value?.view) {
                 setViewComponent(<LoadingRing />);
             } else {
+                const isBI = value.isBI;
+                const projectUri = value.projectUri
                 switch (value?.view) {
                     case MACHINE_VIEW.Overview:
                         setNavActive(false);
@@ -170,7 +172,6 @@ const MainPanel = () => {
                         break;
                     case MACHINE_VIEW.ServiceDesigner:
                         setNavActive(false);
-                        console.log("has to display service designer. coming from bi")
                         setViewComponent(
                             <ServiceDesigner
                                 filePath={value.documentUri}
@@ -179,22 +180,18 @@ const MainPanel = () => {
                         );
                         break;
                     case MACHINE_VIEW.BIDiagram:
-                        console.log("has to display bi diagram")
                         // setViewComponent(
                         //     <DiagramWrapper syntaxTree={value?.syntaxTree} projectPath={value.projectUri} />
                         // );
                         break;
                     case MACHINE_VIEW.ERDiagram:
-                        console.log("has to display er diagram")
                         setViewComponent(<ERDiagram />);
                         break;
                     case MACHINE_VIEW.TypeDiagram:
                         setNavActive(false);
-                        console.log("has to display type diagram")
                         setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.DataMapper:
-                        console.log("has to display data mapper")
                         setViewComponent(
                             <DataMapper
                                 filePath={value.documentUri}
@@ -205,7 +202,6 @@ const MainPanel = () => {
                         );
                         break;
                     case MACHINE_VIEW.BIDataMapperForm:
-                        console.log("has to display data mapper form")
                         rpcClient.getVisualizerLocation().then((location) => {
                             // setViewComponent(
                             //     <FunctionForm
@@ -218,7 +214,6 @@ const MainPanel = () => {
                         });
                         break;
                     case MACHINE_VIEW.GraphQLDiagram:
-                        console.log("has to display graphql diagram")
                         // setViewComponent(<GraphQLDiagram filePath={value?.documentUri} position={value?.position} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.SequenceDiagram:
@@ -228,7 +223,6 @@ const MainPanel = () => {
                         );
                         break;
                     case MACHINE_VIEW.BIWelcome:
-                        console.log("has to display bi welcome")
                         setNavActive(false);
                         // setViewComponent(<WelcomeView />);
                         break;
@@ -241,10 +235,10 @@ const MainPanel = () => {
                         // setViewComponent(<ProjectForm />);
                         break;
                     case MACHINE_VIEW.BIComponentView:
-                        // setViewComponent(<ComponentListView />);
+                        setViewComponent(<ComponentListView />);
                         break;
                     case MACHINE_VIEW.BIServiceWizard:
-                        // setViewComponent(<ServiceWizard type={value.serviceType} />);
+                        setViewComponent(<ServiceWizard type={value.serviceType} />);
                         break;
                     case MACHINE_VIEW.BIServiceClassDesigner:
                         // setViewComponent(
@@ -292,8 +286,8 @@ const MainPanel = () => {
                         // setViewComponent(<MainForm />);
                         break;
                     case MACHINE_VIEW.BIFunctionForm:
-                        const fileName = value?.documentUri ? URI.parse(value.documentUri).path.split('/').pop() : 'functions.bal';
-                        // setViewComponent(<FunctionForm projectPath={value.projectUri} fileName={fileName} functionName={value?.identifier} />);
+                        // const fileName = value?.documentUri ? URI.parse(value.documentUri).path.split('/').pop() : 'functions.bal';
+                        setViewComponent(<FunctionForm projectPath={value.projectUri} fileName={value.documentUri} functionName={value?.identifier} />);
                         break;
                     case MACHINE_VIEW.BITestFunctionForm:
                         // setViewComponent(<TestFunctionForm

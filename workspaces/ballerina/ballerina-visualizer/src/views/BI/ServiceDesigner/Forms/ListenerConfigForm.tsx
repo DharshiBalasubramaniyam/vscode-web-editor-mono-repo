@@ -58,7 +58,13 @@ export function ListenerConfigForm(props: ListenerConfigFormProps) {
 
     useEffect(() => {
         listenerModel && setListenerFields(convertConfig(listenerModel));
-        rpcClient.getVisualizerLocation().then(res => { setFilePath(res.documentUri) });
+        rpcClient.getVisualizerLocation().then(res => { 
+            if (res.isBI) {
+                setFilePath(Utils.join(URI.parse(res.projectUri), "main.bal").toString())
+            } else {
+                setFilePath(res.documentUri)
+            }
+         });
     }, [listenerModel]);
 
     const handleListenerSubmit = async (data: FormValues) => {

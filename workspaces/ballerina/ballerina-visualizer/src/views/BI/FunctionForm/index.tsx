@@ -52,7 +52,7 @@ export function FunctionForm(props: FunctionFormProps) {
     const formType = useRef(isDataMapper ? "Data Mapper" : "Function");
 
     useEffect(() => {
-        setFilePath(Utils.joinPath(URI.file(projectPath), fileName).fsPath)
+        setFilePath(fileName)
         if (functionName) {
             getExistingFunctionNode();
         } else {
@@ -81,7 +81,7 @@ export function FunctionForm(props: FunctionFormProps) {
             .getBIDiagramRpcClient()
             .getNodeTemplate({
                 position: { line: 0, offset: 0 },
-                filePath: Utils.joinPath(URI.file(projectPath), fileName).fsPath,
+                filePath: fileName,
                 id: { node: isDataMapper ? 'DATA_MAPPER_DEFINITION' : 'FUNCTION_DEFINITION' },
             });
         const flowNode = res.flowNode;

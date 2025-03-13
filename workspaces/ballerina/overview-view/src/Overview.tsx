@@ -92,13 +92,10 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
     }
 
     const checkSelectedFile = (fileName: string, moduleName: string) => {
-        console.log(fileName, " ", moduleName)
         const relativePath = selectedFile.replace(workspaceInfo?.workspaceRoot, '').substring(1);
-        console.log("r: ", relativePath)
         if (relativePath === fileName) return true;
         const splitPaths = relativePath.split("/");
         if (splitPaths.length === 1) return false;
-        console.log("m: ", moduleName, " ", splitPaths);
         return splitPaths[1] === moduleName;
     }
 

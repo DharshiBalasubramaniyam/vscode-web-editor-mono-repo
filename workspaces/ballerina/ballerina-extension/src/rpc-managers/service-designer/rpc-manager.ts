@@ -48,7 +48,7 @@ import { ModulePart, NodePosition, STKindChecker, TypeDefinition } from "@dharsh
 // import { existsSync, writeFileSync } from "fs";
 // import * as yaml from 'js-yaml';
 // import * as path from 'path';
-import { Uri, commands, window, workspace } from "vscode";
+import { Uri, commands, window, workspace, FileSystemError } from "vscode";
 import { StateMachine } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 
@@ -101,70 +101,82 @@ export class ServiceDesignerRpcManager
     //     });
     // }
 
-    // async getListeners(params: ListenersRequest): Promise<ListenersResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const context = StateMachine.context();
-    //         try {
-    //             const projectDir = path.join(StateMachine.context().projectUri);
-    //             const targetFile = path.join(projectDir, `main.bal`);
-    //             params.filePath = targetFile;
-    //             const res: ListenersResponse = await context.langClient.getListeners(params);
-    //             resolve(res);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+    async getListeners(params: ListenersRequest): Promise<ListenersResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
+                const res: ListenersResponse = await context.langClient.getListeners(params);
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
-    // async getListenerModel(params: ListenerModelRequest): Promise<ListenerModelResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const context = StateMachine.context();
-    //         try {
-    //             const res: ListenerModelResponse = await context.langClient.getListenerModel(params);
-    //             resolve(res);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+    async getListenerModel(params: ListenerModelRequest): Promise<ListenerModelResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                const res: ListenerModelResponse = await context.langClient.getListenerModel(params);
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
-    // async addListenerSourceCode(params: ListenerSourceCodeRequest): Promise<SourceUpdateResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const context = StateMachine.context();
-    //         try {
-    //             const projectDir = path.join(StateMachine.context().projectUri);
-    //             const targetFile = path.join(projectDir, `main.bal`);
-    //             params.filePath = targetFile;
-    //             const res: ListenerSourceCodeResponse = await context.langClient.addListenerSourceCode(params);
-    //             const position = await this.updateSource(res);
-    //             const result: SourceUpdateResponse = {
-    //                 filePath: targetFile,
-    //                 position: position
-    //             };
-    //             if (StateMachine.context().isBI) {
-    //                 commands.executeCommand("BI.project-explorer.refresh");
-    //             }
-    //             resolve(result);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+    async addListenerSourceCode(params: ListenerSourceCodeRequest): Promise<SourceUpdateResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
+                const res: ListenerSourceCodeResponse = await context.langClient.addListenerSourceCode(params);
+                const position = await this.updateSource(res);
+                const result: SourceUpdateResponse = {
+                    filePath: params.filePath,
+                    position: position
+                };
+                if (context.isBI) {
+                    commands.executeCommand("BI.project-explorer.refresh");
+                }
+                resolve(result);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
     async updateListenerSourceCode(params: ListenerSourceCodeRequest): Promise<SourceUpdateResponse> {
         return new Promise(async (resolve) => {
             const context = StateMachine.context();
             try {
-                // const projectDir = path.join(StateMachine.context().projectUri);
-                // const targetFile = path.join(projectDir, `main.bal`);
-                // params.filePath = targetFile;
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
                 const res: ListenerSourceCodeResponse = await context.langClient.updateListenerSourceCode(params);
                 const position = await this.updateSource(res);
                 const result: SourceUpdateResponse = {
                     filePath: params.filePath,
                     position: position
                 };
-                if (StateMachine.context().isBI) {
+                if (context.isBI) {
                     commands.executeCommand("BI.project-explorer.refresh");
                 }
                 resolve(result);
@@ -178,6 +190,13 @@ export class ServiceDesignerRpcManager
         return new Promise(async (resolve) => {
             const context = StateMachine.context();
             try {
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
                 const res: ServiceModelResponse = await context.langClient.getServiceModel(params);
                 resolve(res);
             } catch (error) {
@@ -187,55 +206,67 @@ export class ServiceDesignerRpcManager
     }
 
 
-    // async addServiceSourceCode(params: ServiceSourceCodeRequest): Promise<SourceUpdateResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const context = StateMachine.context();
-    //         try {
-    //             const projectDir = path.join(StateMachine.context().projectUri);
-    //             const targetFile = path.join(projectDir, `main.bal`);
-    //             params.filePath = targetFile;
-    //             const identifiers = [];
-    //             for (let property in params.service.properties) {
-    //                 const value = params.service.properties[property].value || params.service.properties[property].values?.at(0);
-    //                 if (value) {
-    //                     identifiers.push(value);
-    //                 }
-    //                 if (params.service.properties[property].choices) {
-    //                     params.service.properties[property].choices.forEach(choice => {
-    //                         if (choice.properties) {
-    //                             Object.keys(choice.properties).forEach(subProperty => {
-    //                                 const subPropertyValue = choice.properties[subProperty].value;
-    //                                 if (subPropertyValue) {
-    //                                     identifiers.push(subPropertyValue);
-    //                                 }
-    //                             });
-    //                         }
-    //                     });
-    //                 }
-    //             }
-    //             const res: ListenerSourceCodeResponse = await context.langClient.addServiceSourceCode(params);
-    //             const position = await this.updateSource(res, identifiers);
-    //             const result: SourceUpdateResponse = {
-    //                 filePath: targetFile,
-    //                 position: position
-    //             };
-    //             if (StateMachine.context().isBI) {
-    //                 commands.executeCommand("BI.project-explorer.refresh");
-    //             }
-    //             resolve(result);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+    async addServiceSourceCode(params: ServiceSourceCodeRequest): Promise<SourceUpdateResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
+                const identifiers = [];
+                for (let property in params.service.properties) {
+                    const value = params.service.properties[property].value || (
+                        params.service.properties[property].values &&
+                        params.service.properties[property].values.length > 0 &&
+                        params.service.properties[property].values[0] 
+                    );
+                    if (value) {
+                        identifiers.push(value);
+                    }
+                    if (params.service.properties[property].choices) {
+                        params.service.properties[property].choices.forEach(choice => {
+                            if (choice.properties) {
+                                Object.keys(choice.properties).forEach(subProperty => {
+                                    const subPropertyValue = choice.properties[subProperty].value;
+                                    if (subPropertyValue) {
+                                        identifiers.push(subPropertyValue);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+                const res: ListenerSourceCodeResponse = await context.langClient.addServiceSourceCode(params);
+                const position = await this.updateSource(res, identifiers);
+                const result: SourceUpdateResponse = {
+                    filePath: params.filePath,
+                    position: position
+                };
+                if (context.isBI) {
+                    commands.executeCommand("BI.project-explorer.refresh");
+                }
+                resolve(result);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
     async updateServiceSourceCode(params: ServiceSourceCodeRequest): Promise<SourceUpdateResponse> {
         return new Promise(async (resolve) => {
             const context = StateMachine.context();
             try {
-                // const projectDir = path.join(StateMachine.context().projectUri);
-                // const targetFile = path.join(projectDir, `main.bal`);
-                // params.filePath = targetFile;
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
                 const identifiers = [];
                 for (let property in params.service.properties) {
                     const value = params.service.properties[property].value || params.service.properties[property].values[0];
@@ -249,7 +280,7 @@ export class ServiceDesignerRpcManager
                     filePath: params.filePath,
                     position: position
                 };
-                if (StateMachine.context().isBI) {
+                if (context.isBI) {
                     commands.executeCommand("BI.project-explorer.refresh");
                 }
                 resolve(result);
@@ -287,9 +318,13 @@ export class ServiceDesignerRpcManager
         return new Promise(async (resolve) => {
             const context = StateMachine.context();
             try {
-                // const projectDir = path.join(StateMachine.context().projectUri);
-                // const targetFile = path.join(projectDir, `main.bal`);
-                // params.filePath = targetFile;
+                if (context.isBI) {
+                    const projectDir = Uri.parse(context.projectUri);
+                    const targetFile = Uri.joinPath(projectDir, `main.bal`).toString();
+                    params.filePath = targetFile;
+                } else {
+                    params.filePath = context.documentUri;
+                }
                 const targetPosition: NodePosition = {
                     startLine: params.codedata.lineRange.startLine.line,
                     startColumn: params.codedata.lineRange.startLine.offset
@@ -336,7 +371,7 @@ export class ServiceDesignerRpcManager
         for (const [key, value] of Object.entries(params.textEdits)) {
             // const fileUri = Uri.parse(`${WEB_IDE_SCHEME}:${Uri.parse(key).path}`).toString();
             let fileUri = key.replace(/\\/g, "/");
-            const projectRootPath = Uri.parse(StateMachine.context().projectUri).path
+            const projectRootPath = Uri.parse(StateMachine.context().projectUri).path;
             const startIndex = fileUri.indexOf(projectRootPath);
             if (startIndex !== -1) {
                 fileUri = Uri.file(fileUri.substring(startIndex)).with({scheme: WEB_IDE_SCHEME}).toString();
@@ -348,6 +383,22 @@ export class ServiceDesignerRpcManager
                 "new key": fileUri
             });
             const edits = value;
+
+            
+            try {
+                const fileStat = await balExtInstance.fsProvider.stat(Uri.parse(fileUri))
+            } catch (error) {
+                if (error instanceof FileSystemError && error.code === 'FileNotFound') {
+                    console.log("File not found:", fileUri);
+                    await balExtInstance.fsProvider.writeFile(
+                        Uri.parse(fileUri),
+                        new TextEncoder().encode(""),
+                        {create: true, overwrite: true}
+                    )
+                } else {
+                    console.error("An unexpected error occurred:", error);
+                }
+            }
 
             if (edits && edits.length > 0) {
                 const modificationList: STModification[] = [];
@@ -394,25 +445,13 @@ export class ServiceDesignerRpcManager
                             }
                         }
                     });
-                    balExtInstance.fsProvider.writeFile(Uri.parse(fileUriString), new TextEncoder().encode(source), {create: true, overwrite: true})
-                    // fs.writeFileSync(request.filePath, source);
-                    // await StateMachine.langClient().didChange({
-                    //     textDocument: { uri: fileUriString, version: 1 },
-                    //     contentChanges: [
-                    //         {
-                    //             text: source,
-                    //         },
-                    //     ],
-                    // });
+                    balExtInstance.fsProvider.writeFile(Uri.parse(fileUriString), new TextEncoder().encode(source), {create: true, overwrite: true});
 
                     if (!targetPosition) {
                         await StateMachine.langClient().resolveMissingDependencies({
                             documentIdentifier: { uri: fileUriString },
                         });
                     }
-                    // await StateMachine.langClient().didOpen({
-                    //     textDocument: { uri: fileUriString, languageId: "ballerina", version: 1, text: source },
-                    // });
                 }
             }
         } catch (error) {

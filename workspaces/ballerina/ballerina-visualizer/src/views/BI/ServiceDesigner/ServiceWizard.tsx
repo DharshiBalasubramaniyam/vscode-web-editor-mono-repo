@@ -142,6 +142,7 @@ export function ServiceWizard(props: ServiceWizardProps) {
     };
 
     const handleServiceSubmit = async (value: ServiceModel) => {
+        console.log("handling service submit: ", value)
         setSaving(true);
         const res = await rpcClient.getServiceDesignerRpcClient().addServiceSourceCode({ filePath: "", service: value });
         rpcClient.getVisualizerRpcClient().openView({

@@ -44,11 +44,12 @@ export function ChoiceForm(props: ChoiceFormProps) {
     const { field } = props;
     const { form } = useFormContext();
     const { setValue } = form;
-
+    
     const [selectedOption, setSelectedOption] = useState<number>(1);
-
+    
     const [dynamicFields, setDynamicFields] = useState<FormField[]>([]);
-
+    
+    console.log("choice field: ", field)
 
     // Add useEffect to set initial values
     useEffect(() => {
