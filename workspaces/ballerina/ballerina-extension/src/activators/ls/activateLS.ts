@@ -5,6 +5,8 @@ import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 import { SERVER_BASE_URL } from "../../utils/constants";
 
 export function activateLanguageServer(): ExtendedLanguageClient {
+
+    // activate status bar
     const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     balExtInstance.statusBar = statusBar;
     statusBar.text = "Ballerina detecting";
@@ -16,6 +18,8 @@ export function activateLanguageServer(): ExtendedLanguageClient {
             statusBar.hide();
         }
     });
+
+    // activate language server
     const langClient = createExtendedLanguageClient(balExtInstance.context);
     langClient.start().then(async () => {
         console.log('Language client started successfully. Registering extended capabilities...');

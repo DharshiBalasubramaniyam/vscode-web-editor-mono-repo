@@ -23,17 +23,17 @@ export class BallerinaExtension {
 		this.balServerUrl = "http://localhost:9091";
 	}
 
-	public enabledExperimentalFeatures(): boolean {
-        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);
-    }
+	// public enabledExperimentalFeatures(): boolean {
+    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);
+    // }
 
-	public enableSequenceDiagramView(): boolean {
-        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_SEQUENCE_DIAGRAM_VIEW);
-    }
+	// public enableSequenceDiagramView(): boolean {
+    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_SEQUENCE_DIAGRAM_VIEW);
+    // }
 
-    public enableAiSuggestions(): boolean {
-        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_AI_SUGGESTIONS);
-    }
+    // public enableAiSuggestions(): boolean {
+    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_AI_SUGGESTIONS);
+    // }
 }
 
 export const balExtInstance: BallerinaExtension = new BallerinaExtension();
@@ -41,12 +41,9 @@ export const balExtInstance: BallerinaExtension = new BallerinaExtension();
 export async function activate(context: vscode.ExtensionContext) {
 	balExtInstance.context = context;
 
-	// Init RPC Layer methods
     RPCLayer.init();
-    // Wait for the ballerina extension to be ready
     await StateMachine.initialize();
 
-	// activate visualizer
 	activateVisualizer(balExtInstance);
 
 }
