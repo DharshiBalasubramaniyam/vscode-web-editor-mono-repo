@@ -35,7 +35,10 @@ const webExtensionConfig = {
 			// Webpack 5 no longer polyfills Node.js core modules automatically.
 			// see https://webpack.js.org/configuration/resolve/#resolvefallback
 			// for the list of Node.js core module polyfills.
-			'assert': require.resolve('assert')
+			'assert': require.resolve('assert'),
+			'os': false,
+			'path': false,
+			'crypto': false
 		}
 	},
 	module: {
@@ -71,7 +74,7 @@ const browserServerConfig = {
 	mode: 'none',
 	target: 'webworker', // web extensions run in a webworker context
 	entry: {
-		browserServerMain: './src/browserServerMain.ts',
+		browserServerMain: './src/activators/ls/browserServerMain.ts',
 	},
 	output: {
 		filename: '[name].js',

@@ -1,0 +1,54 @@
+
+import { DiagramModel } from "@projectstorm/react-diagrams-core";
+import * as dagre from "dagre";
+import { GraphLabel } from "dagre";
+import { forEach } from "lodash";
+
+export interface DagreEngineOptions {
+    graph?: GraphLabel;
+    nodeMargin?: number;
+}
+
+export class DagreEngine {
+    options: DagreEngineOptions;
+
+    constructor(options: DagreEngineOptions = {}) {
+        this.options = options;
+    }
+
+    redistribute(model: DiagramModel) {
+        // Create a new directed graph
+        const g = new dagre.graphlib.Graph({
+            multigraph: true,
+            compound: true,
+        });
+        g.setGraph(this.options.graph || {});
+        g.setDefaultEdgeLabel(function () {
+            return {};
+        });
+
+        // set nodes
+        forEach(model.getNodes(), (node) => {
+            g.setNode(node.getID(), { width: node.width, height: node.height });
+        });
+
+        forEach(model.getLinks(), (link) => {
+            // set edges
+            if (link.getSourcePort() && link.getTargetPort()) {
+                g.setEdge({
+                    v: link.getSourcePort().getNode().getID(),
+                    w: link.getTargetPort().getNode().getID(),
+                    name: link.getID(),
+                });
+            }
+        });
+
+        // layout the graph
+        dagre.layout(g);
+
+        g.nodes().forEach((v) => {
+            const node = g.node(v);
+            model.getNode(v).setPosition(node.x - node.width / 2, node.y - node.height / 2);
+        });
+    }
+}

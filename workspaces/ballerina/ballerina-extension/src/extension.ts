@@ -1,102 +1,54 @@
 import * as vscode from 'vscode';
-import { LanguageClientOptions, LanguageClient as WorkerLanguageClient } from 'vscode-languageclient/browser';
-import { BalFileSystemProvider } from './BalFileSystemProvider';
+import { ExtendedLanguageClient } from './extended-language-client';
+import { BalFileSystemProvider } from './activators/fs/BalFileSystemProvider';
+import { activateVisualizer } from './activators/visualizer/activateVisualizer';
+import { RPCLayer } from './RPCLayer';
+import { StateMachine } from './state-machine';
 
-let client: WorkerLanguageClient | undefined;
+export const WEB_IDE_SCHEME = 'web-bala';
+export const STD_LIB_SCHEME = 'bala';
+export const ENABLE_EXPERIMENTAL_FEATURES = "kolab.experimental";
+export const ENABLE_SEQUENCE_DIAGRAM_VIEW = "kolab.enableSequenceDiagramView";
+export const ENABLE_AI_SUGGESTIONS = "kolab.enableAiSuggestions";
 
-const WEB_IDE_SCHEME = 'web-bala';
-const STD_LIB_SCHEME = 'bala';
-const fsProvider = new BalFileSystemProvider();
+export class BallerinaExtension {
+	public context!: vscode.ExtensionContext;
+	public langClient?: ExtendedLanguageClient;
+	public fsProvider?: BalFileSystemProvider;
+	public balServerUrl: string;
+	public activeBalFileUri?: string | undefined;
+	public statusBar: vscode.StatusBarItem;
+
+	init() {
+		this.balServerUrl = "http://localhost:9091";
+	}
+
+	public enabledExperimentalFeatures(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);
+    }
+
+	public enableSequenceDiagramView(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_SEQUENCE_DIAGRAM_VIEW);
+    }
+
+    public enableAiSuggestions(): boolean {
+        return <boolean>vscode.workspace.getConfiguration().get(ENABLE_AI_SUGGESTIONS);
+    }
+}
+
+export const balExtInstance: BallerinaExtension = new BallerinaExtension();
 
 export async function activate(context: vscode.ExtensionContext) {
+	balExtInstance.context = context;
 
-	// Test command
-	context.subscriptions.push(vscode.commands.registerCommand('ballerina.hello', () => {
-		vscode.window.showInformationMessage('Hello from ballerina!');
-	}));
+	// Init RPC Layer methods
+    RPCLayer.init();
+    // Wait for the ballerina extension to be ready
+    await StateMachine.initialize();
 
-	// Register the file system provider
-	context.subscriptions.push(
-		vscode.workspace.registerFileSystemProvider(WEB_IDE_SCHEME, fsProvider, { isReadonly: false }),
-		vscode.workspace.registerFileSystemProvider(STD_LIB_SCHEME, fsProvider, { isReadonly: true })
-	);
+	// activate visualizer
+	activateVisualizer(balExtInstance);
 
-	// Register the command to open a github repository
-	context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
-		const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
-		if (!repoUrl) {
-			return;
-		}
-		const repoInfo = extractGitHubRepoInfo(repoUrl);
-		if (!repoInfo) {
-			vscode.window.showErrorMessage('Invalid repository URL');
-			return;
-		}
-		vscode.workspace.updateWorkspaceFolders(
-			vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0, 0, 
-			{
-				uri: vscode.Uri.parse(`${WEB_IDE_SCHEME}:/${repoInfo.username}/${repoInfo.repo}`),
-				name: `${repoInfo.username}/${repoInfo.repo}`
-			}
-		);
-		vscode.window.showInformationMessage('Cloning the repository...');
-	}));
-
-	// Start language client
-	client = createWorkerLanguageClient(context);
-	client.start().then(() => {
-        console.log('Language client started successfully');
-    }).catch((error: any) => {
-        console.error('Failed to start language client:', error);
-    });
-	context.subscriptions.push(client);
-
-	// Delete folder in the fs while removing folder from the workspace
-	vscode.workspace.onDidChangeWorkspaceFolders(event => {
-		if (event.removed.length > 0) {
-		 	console.log("Removed folders:", event.removed);
-			for (const folder of event.removed) {
-				if (folder.uri.scheme === WEB_IDE_SCHEME) {
-					fsProvider.delete(folder.uri);
-				}
-			}
-		}
-	});
-
-}
-
-function createWorkerLanguageClient(context: vscode.ExtensionContext): WorkerLanguageClient {
-	const serverMain = vscode.Uri.joinPath(context.extensionUri, '/dist/browserServerMain.js');
-	console.log(context.extensionUri, '/dist/browserServerMain.js');
-	const worker = new Worker(serverMain.toString(true));
-	console.log('Worker created with script:', serverMain.toString(true));
-	return new WorkerLanguageClient('ballerinalangClient', 'Ballerina Language Client', getClientOptions(), worker);
-}
-
-function getClientOptions(): LanguageClientOptions {
-	return {
-		documentSelector: [
-            { scheme: 'file', language: "ballerina" },
-            { scheme: 'file', language: "toml"},
-			{ scheme: WEB_IDE_SCHEME, language: "ballerina" },
-            { scheme: WEB_IDE_SCHEME, language: "toml"}
-        ],
-        synchronize: { configurationSection: "ballerina" },
-        initializationOptions: {
-            "enableSemanticHighlighting": <string>vscode.workspace.getConfiguration().get("kolab.enableSemanticHighlighting"),
-			"enableInlayHints": <string>vscode.workspace.getConfiguration().get("kolab.enableInlayHints"),
-			"supportBalaScheme": "true",
-			"supportQuickPick": "true",
-			"supportPositionalRenamePopup": "true"
-        },
-        outputChannel: vscode.window.createOutputChannel('Ballerina'),
-        traceOutputChannel: vscode.window.createOutputChannel('Trace'),
-	};
-}
-
-function extractGitHubRepoInfo(url: string): { username: string; repo: string } | null {
-	const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)(?:\.git)?$/);
-	return match ? { username: match[1], repo: match[2].replace(".git", "") } : null;
 }
 
 export async function deactivate(): Promise<void> {
@@ -104,12 +56,12 @@ export async function deactivate(): Promise<void> {
 	if (workspaceFolders) {
 		for (const folder of workspaceFolders) {
 			if (folder.uri.scheme === WEB_IDE_SCHEME) {
-				fsProvider.delete(folder.uri);
+				balExtInstance.fsProvider?.delete(folder.uri);
 			}
 		}
 	}
-	if (client) {
-        await client.stop();
-        client = undefined;
-    }
+	if (balExtInstance.langClient) {
+		await balExtInstance.langClient.stop();
+		balExtInstance.langClient = undefined;
+	}
 }

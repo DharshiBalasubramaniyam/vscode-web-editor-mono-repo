@@ -3,7 +3,223 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
   "packages": [
     {
+      "name": "@babel/core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@babel/preset-env",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@date-io/date-fns",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-inline-data-mapper",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-low-code-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-rpc-client",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-side-panel",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-statement-editor",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ballerina-visualizer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/bi-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/component-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/data-mapper-view",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/font-wso2-vscode",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/overview-view",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/persist-layer-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/record-creator",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/sequence-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/syntax-tree",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/type-diagram",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/type-editor",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@dharshi/ui-toolkit",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@emotion/css",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@emotion/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@emotion/styled",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@headlessui/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@hookform/resolvers",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@monaco-editor/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/geometry",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-canvas-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams-defaults",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@projectstorm/react-diagrams-routing",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@rollup/plugin-commonjs",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@rollup/plugin-json",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@rollup/plugin-node-resolve",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-actions",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-essentials",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/addon-links",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/builder-webpack5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/manager-webpack5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@storybook/theming",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@tanstack/query-core",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@tanstack/react-query",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/assert",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/blueimp-md5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/classnames",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/dagre",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/handlebars",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash.camelcase",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash.clonedeep",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/lodash.debounce",
       "allowedCategories": [ "library" ]
     },
     {
@@ -11,11 +227,59 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/mousetrap",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/node",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/prismjs",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react-collapse",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react-dom",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react-lottie",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/react-syntax-highlighter",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/uuid",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/vscode",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/vscode-webview",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/webpack",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/webpack-env",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@types/ws",
       "allowedCategories": [ "library" ]
     },
     {
@@ -27,7 +291,19 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@vitejs/plugin-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@vscode/codicons",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@vscode/test-web",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "@vscode/webview-ui-toolkit",
       "allowedCategories": [ "library" ]
     },
     {
@@ -35,7 +311,167 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "babel-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "babel-plugin-transform-typescript-metadata",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "blueimp-md5",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "buffer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "classnames",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "clipboard-copy",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "closest",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "clsx",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "copy-webpack-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "copyfiles",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "cron-validator",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "css-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "dagre",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "date-fns",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "date-fns-tz",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "dexie",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "eslint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint-plugin-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint-plugin-react-hooks",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint-plugin-react-refresh",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "eslint-plugin-unused-imports",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "express",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "fantasticon",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "file-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "fork-ts-checker-webpack-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "gh-pages",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "glob",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "graphql",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "handlebars",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "html-to-image",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "http-server",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "icon-font-generator",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "isomorphic-ws",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "jest",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "joi",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "js-yaml",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "jsonc-parser",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash.camelcase",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash.clonedeep",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "lodash.debounce",
       "allowedCategories": [ "library" ]
     },
     {
@@ -43,11 +479,191 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "monaco-editor",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "monaco-editor-webpack-plugin",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "monaco-languageclient",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "mousetrap",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "pathfinding",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "paths-js",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "prettier",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "prismjs",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "process",
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-collapse",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-dom",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-error-boundary",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-hook-form",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-icons",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-intl",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-lottie",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-markdown",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-scripts-ts",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-syntax-highlighter",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-test-renderer",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "react-zoom-pan-pinch",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "reflect-metadata",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "resize-observer-polyfill",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rimraf",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-import-css",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-peer-deps-external",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-postcss",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-scss",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-svg",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "rollup-plugin-typescript2",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "sass",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "sass-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "source-map-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "storybook",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "style-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "stylelint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "stylelint-config-standard",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "svg-url-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tree-kill",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "ts-loader",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslib",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint-react",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tslint-react-hooks",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "tsyringe",
       "allowedCategories": [ "library" ]
     },
     {
@@ -59,6 +675,14 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "vite",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-jsonrpc",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "vscode-languageclient",
       "allowedCategories": [ "library" ]
     },
@@ -67,7 +691,35 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "vscode-languageserver-protocol",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "vscode-languageserver-textdocument",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-languageserver-types",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger-common",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-messenger-webview",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-uri",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "vscode-ws-jsonrpc",
       "allowedCategories": [ "library" ]
     },
     {
@@ -76,6 +728,22 @@
     },
     {
       "name": "webpack-cli",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "webpack-dev-server",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "xstate",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "yup",
+      "allowedCategories": [ "library" ]
+    },
+    {
+      "name": "zustand",
       "allowedCategories": [ "library" ]
     }
   ]

@@ -1,115 +1,182 @@
 {
-  "name": "ballerina",
-  "displayName": "ballerina-extension",
-  "description": "Vs code web extension for ballerina",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.97.0"
-  },
-  "categories": [
-    "Programming Languages"
-  ],
-  "activationEvents": [
-    "*"
-  ],
-  "browser": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "ballerina.hello",
-        "title": "Hello World"
-      },
-      {
-        "command": "ballerina.openGithubRepository",
-        "title": "Open GitHub Repository"
-      }
+    "name": "ballerina",
+    "displayName": "ballerina-extension",
+    "description": "Vs code web extension for ballerina",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.97.0"
+    },
+    "enabledApiProposals": [
+        "extensionRuntime"
     ],
-    "languages": [
-      {
-				"id": "ballerina",
-				"aliases": [
-					"Ballerina",
-					"ballerina"
-				],
-				"extensions": [
-					".bal"
-				],
-				"configuration": "./ballerina.configuration.json",
-				"icon": {
-					"light": "./resources/images/icons/ballerina.svg",
-					"dark": "./resources/images/icons/ballerina-inverse.svg"
-				}
-			},
-      {
-				"id": "toml",
-				"aliases": [
-					"Toml",
-					"toml"
-				],
-				"extensions": [
-					".toml"
-				]
-			}
+    "categories": [
+        "Programming Languages"
     ],
-    "grammars": [
-			{
-				"language": "ballerina",
-				"scopeName": "source.ballerina",
-				"path": "./grammar/ballerina-grammar/syntaxes/ballerina.tmLanguage"
-			}
-		],
-    "configuration": [
-			{
-				"order": 22,
-				"id": "ballerina",
-				"title": "ballerina",
-				"properties": {
-					"ballerina.trace.server": {
-						"type": "string",
-						"scope": "window",
-						"enum": [
-							"off",
-							"messages",
-							"verbose"
-						],
-						"default": "verbose",
-						"description": "Traces the communication between VS Code and the lsp-web-extension-sample language server."
-					}
-				}
-			}
-		]
-  },
-  "scripts": {
-    "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
-    "pretest": "npm run build",
-    "vscode:prepublish": "npm run package-web",
-    "build": "webpack",
-    "watch-web": "webpack --watch",
-    "package-web": "webpack --mode production --devtool hidden-source-map",
-    "lint": "eslint src",
-    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
-  },
-  "dependencies": {
-		"vscode-languageclient": "^9.0.1",
-    "uuid": "^11.1.0",
-		"vscode-languageserver": "^9.0.1",
-		"vscode-languageserver-textdocument": "^1.0.12"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.97.0",
-    "@types/mocha": "^10.0.10",
-    "@types/assert": "^1.5.11",
-    "eslint": "^9.16.0",
-    "@typescript-eslint/eslint-plugin": "^8.17.0",
-    "@typescript-eslint/parser": "^8.17.0",
-    "mocha": "^11.0.1",
-    "typescript": "^5.7.2",
-    "@vscode/test-web": "^0.0.65",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4",
-    "@types/webpack-env": "^1.18.5",
-    "assert": "^2.1.0",
-    "process": "^0.11.10"
-  }
+    "activationEvents": [
+        "onLanguage:ballerina"
+    ],
+    "browser": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "ballerina.openGithubRepository",
+                "title": "Open GitHub Repository"
+            },
+            {
+                "command": "ballerina.showVisualizer",
+                "title": "Show Visualizer",
+                "icon": "$(eye)"
+            }
+        ],
+        "languages": [
+            {
+                "id": "ballerina",
+                "aliases": [
+                    "Ballerina",
+                    "ballerina"
+                ],
+                "extensions": [
+                    ".bal"
+                ],
+                "configuration": "./ballerina.configuration.json",
+                "icon": {
+                    "light": "./resources/images/icons/ballerina.svg",
+                    "dark": "./resources/images/icons/ballerina-inverse.svg"
+                }
+            },
+            {
+                "id": "toml",
+                "aliases": [
+                    "Toml",
+                    "toml"
+                ],
+                "extensions": [
+                    ".toml"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "ballerina",
+                "scopeName": "source.ballerina",
+                "path": "./grammar/ballerina-grammar/syntaxes/ballerina.tmLanguage"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "when": "resourceLangId == ballerina",
+                    "command": "ballerina.showVisualizer",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "icons": {
+            "distro-design-view": {
+                "description": "design-view",
+                "default": {
+                    "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
+                    "fontCharacter": "\\f164"
+                }
+            },
+            "distro-start": {
+                "description": "start",
+                "default": {
+                    "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
+                    "fontCharacter": "\\f1d8"
+                }
+            },
+            "distro-debug": {
+                "description": "debug",
+                "default": {
+                    "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
+                    "fontCharacter": "\\f15f"
+                }
+            },
+            "distro-persist-diagram": {
+                "description": "persist-diagram",
+                "default": {
+                    "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
+                    "fontCharacter": "\\f1b3"
+                }
+            },
+            "distro-file-submodule": {
+                "description": "file-submodule",
+                "default": {
+                    "fontPath": "./resources/codicons/codicon.ttf",
+                    "fontCharacter": "\\eaec"
+                }
+            },
+            "distro-new-file": {
+                "description": "new-file",
+                "default": {
+                    "fontPath": "./resources/codicons/codicon.ttf",
+                    "fontCharacter": "\\ea7f"
+                }
+            },
+            "distro-new-folder": {
+                "description": "new-folder",
+                "default": {
+                    "fontPath": "./resources/codicons/codicon.ttf",
+                    "fontCharacter": "\\ea80"
+                }
+            },
+            "distro-refresh": {
+                "description": "refresh",
+                "default": {
+                    "fontPath": "./resources/codicons/codicon.ttf",
+                    "fontCharacter": "\\eb37"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+        "pretest": "npm run build",
+        "vscode:prepublish": "npm run package-web",
+        "compile": "webpack",
+        "copyFonts": "copyfiles -f ./node_modules/@dharshi/font-wso2-vscode/dist/* ./resources/font-wso2-vscode/dist/",
+        "copyJSLibs": "copyfiles -f ../ballerina-visualizer/build/*.js resources/jslibs",
+        "build": "pnpm run compile && pnpm run postbuild",
+        "postbuild": "pnpm run copyFonts && pnpm run copyJSLibs",
+        "watch-web": "webpack --watch",
+        "package-web": "webpack --mode production --devtool hidden-source-map",
+        "lint": "eslint src",
+        "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.200",
+        "@dharshi/ballerina-core": "workspace:*",
+        "@dharshi/syntax-tree": "workspace:*",
+        "@dharshi/ballerina-visualizer": "workspace:*",
+        "@dharshi/font-wso2-vscode": "workspace:*",
+        "lodash": "^4.17.21",
+        "vscode-languageclient": "^9.0.1",
+        "uuid": "^11.1.0",
+        "vscode-languageserver": "^9.0.1",
+        "vscode-languageserver-textdocument": "^1.0.12",
+        "monaco-languageclient": "0.13.1-next.9",
+        "vscode-messenger": "^0.4.5",
+        "vscode-messenger-common": "^0.4.5",
+        "xstate": "^4.38.3",
+        "js-yaml": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.97.0",
+        "@types/mocha": "^10.0.10",
+        "@types/assert": "^1.5.11",
+        "eslint": "^9.16.0",
+        "copyfiles": "^2.4.1",
+        "@typescript-eslint/eslint-plugin": "^8.17.0",
+        "@typescript-eslint/parser": "^8.17.0",
+        "mocha": "^11.0.1",
+        "typescript": "^5.7.2",
+        "@vscode/test-web": "^0.0.65",
+        "ts-loader": "^9.5.1",
+        "webpack": "^5.95.0",
+        "webpack-cli": "^5.1.4",
+        "@types/webpack-env": "^1.18.5",
+        "assert": "^2.1.0",
+        "process": "^0.11.10"
+    }
 }
