@@ -52,7 +52,7 @@ This server serves `ballerina web extension` from `workspaces/ballerina/ballerin
 
 The current implementation of ballerina extension supports below features:
 
-1. Language features:
+**Language features:**
 - Completion
 - Hover
 - Publish diagnostics
@@ -63,7 +63,8 @@ The current implementation of ballerina extension supports below features:
 - Folding ranges
 - Code action
 - Inlayhint
-2. Diagram features:
+  
+**Diagram features:**
 - Overview view
 - Function view - add/view
 - Type diagram view - add/view/edit/delete
