@@ -36,6 +36,10 @@ rush build
 npm start
 ```
 
+6. Open your browser and navigate to `http://localhost:3001`.  
+7. Press `Ctrl+Shift+P` to open the command palette.  
+8. Select the `Open GitHub Repository` command and provide the repository URL of a Ballerina project to get started.  
+
 ## Packages
 
 ### Vscode web server ([`workspaces/server/`](./workspaces/server/server.js))

@@ -186,6 +186,9 @@ importers:
       '@dharshi/ballerina-core':
         specifier: workspace:*
         version: link:../ballerina-core
+      '@dharshi/ballerina-rpc-client':
+        specifier: workspace:*
+        version: link:../ballerina-rpc-client
       '@dharshi/syntax-tree':
         specifier: workspace:*
         version: link:../syntax-tree
