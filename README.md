@@ -48,24 +48,25 @@ This server serves `ballerina web extension` from `workspaces/ballerina/ballerin
 
 The current implementation of ballerina extension supports below features:
 
-1. Language features.
-        1.1. Completion
-        1.2. Hover
-        1.3. Publish diagnostics
-        1.4. Rename
-        1.5. Go to definition
-        1.6. Go to references
-        1.7. Document symbol
-        1.8. Folding ranges
-        1.9. Code action
-        1.10. Inlayhint
-3. Diagram features
-        2.1. Overview view
-        2.2. Function view - add/view
-        2.3. Type diagram view - add/view/edit/delete
-        2.4. Service designer - http
-        2.5. Triggers/Connectors - add/edit/view/delete
-        2.6. Configurables - add/edit/view/delete
+**Language features:**
+- Completion
+- Hover
+- Publish diagnostics
+- Rename
+- Go to definition
+- Go to references
+- Document symbol
+- Folding ranges
+- Code action
+- Inlayhint
+  
+**Diagram features:**
+- Overview view
+- Function view - add/view
+- Type diagram view - add/view/edit/delete
+- Service designer - http
+- Triggers/Connectors - add/edit/view/delete
+- Configurables - add/edit/view/delete
 
 [`workspaces/ballerina/ballerina-extension/src/extension.ts`](./workspaces/ballerina/ballerina-extension/src/extension.ts), serves as the entry point for the Ballerina extension. When the extension is activated, it initializes the following components:
 
