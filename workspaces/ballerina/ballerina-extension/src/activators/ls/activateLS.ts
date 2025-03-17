@@ -2,9 +2,11 @@ import * as vscode from "vscode";
 import { ExtendedLanguageClient } from "../../extended-language-client";
 import { LanguageClientOptions } from "vscode-languageclient";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
+import { SERVER_BASE_URL } from "../../utils/constants";
 
 export function activateLanguageServer(): ExtendedLanguageClient {
     const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    balExtInstance.statusBar = statusBar;
     statusBar.text = "Ballerina detecting";
     statusBar.show();
     vscode.window.onDidChangeActiveTextEditor((editor) => {
@@ -15,15 +17,17 @@ export function activateLanguageServer(): ExtendedLanguageClient {
         }
     });
     const langClient = createExtendedLanguageClient(balExtInstance.context);
-	langClient.start().then(async () => {
+    langClient.start().then(async () => {
         console.log('Language client started successfully. Registering extended capabilities...');
-		await langClient?.registerExtendedAPICapabilities();
+        await langClient?.registerExtendedAPICapabilities();
+        await getBallerinaVersion(statusBar);
     }).catch((error: any) => {
-	balExtInstance.context?.subscriptions.push(langClient);
+        balExtInstance.context?.subscriptions.push(langClient);
+        statusBar.text = "Ballerina Not found";
         console.error('Failed to start language client:', error);
     });
     balExtInstance.langClient = langClient;
-	balExtInstance.context?.subscriptions.push(langClient);
+    balExtInstance.context?.subscriptions.push(langClient);
     return langClient;
 }
 
@@ -39,9 +43,9 @@ function getClientOptions(): LanguageClientOptions {
     return {
         documentSelector: [
             { scheme: 'file', language: "ballerina" },
-            { scheme: 'file', language: "toml"},
+            { scheme: 'file', language: "toml" },
             { scheme: WEB_IDE_SCHEME, language: "ballerina" },
-            { scheme: WEB_IDE_SCHEME, language: "toml"}
+            { scheme: WEB_IDE_SCHEME, language: "toml" }
         ],
         synchronize: { configurationSection: "ballerina" },
         initializationOptions: {
@@ -54,4 +58,14 @@ function getClientOptions(): LanguageClientOptions {
         outputChannel: vscode.window.createOutputChannel('Ballerina'),
         traceOutputChannel: vscode.window.createOutputChannel('Trace'),
     };
+}
+
+async function getBallerinaVersion(statusBar: vscode.StatusBarItem) {
+    const balInfo = await fetch(`${SERVER_BASE_URL}/bala/info`);
+    console.log("sending request to: ", `${SERVER_BASE_URL}/bala/info`);
+    if (!balInfo.ok) {
+        statusBar.text = "Ballerina not found";
+    }
+    const data = await balInfo.json();
+    statusBar.text = `Ballerina ${data.ballerinaVersionText}`;
 }

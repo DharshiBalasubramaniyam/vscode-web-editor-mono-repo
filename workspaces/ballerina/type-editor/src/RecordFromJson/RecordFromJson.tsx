@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 
 import React, { useState } from 'react';
 import { Button, SidePanelBody, TextArea, CheckBox } from '@dharshi/ui-toolkit';
@@ -83,7 +75,18 @@ export const RecordFromJson = (props: RecordFromJsonProps) => {
             isRecordTypeDesc: !isSeparateDefinitions,
             prefix: ""
         });
-        onImport(resp.types.map((t) => t.type));
+        const targetRecord = resp.types.find((t) => t.type.name === name);
+        const otherRecords = resp.types
+            .filter((t) => t.type.name !== name)
+            .map((t) => t.type);
+        if (otherRecords.length > 0) {
+            await rpcClient.getBIDiagramRpcClient().updateTypes({
+                filePath: filePathUri,
+                types: otherRecords
+            });
+        }
+
+        onImport([targetRecord.type]);
     }
 
     return (
@@ -98,7 +101,6 @@ export const RecordFromJson = (props: RecordFromJsonProps) => {
                 onChange={onJsonChange}
                 errorMsg={error}
             />
-            <CheckBox label="Is Closed" checked={isClosed} onChange={setIsClosed} />
             <CheckBox label="Is Separate Definitions" checked={isSeparateDefinitions} onChange={setIsSeparateDefinitions} />
             <S.Footer>
                 <Button appearance="secondary" onClick={onCancel}>Cancel</Button>

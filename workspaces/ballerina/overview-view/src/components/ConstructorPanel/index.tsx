@@ -3,12 +3,13 @@ import React from "react";
 
 import styled from "@emotion/styled";
 import { Button, Codicon, Divider, SidePanel, Typography } from "@dharshi/ui-toolkit";
-import { MACHINE_VIEW, EVENT_TYPE } from "@dharshi/ballerina-core";
+import { MACHINE_VIEW, EVENT_TYPE, NodePosition } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 
 interface ConstructorPanelProps {
     isPanelOpen: boolean;
-    setPanelOpen: (value: React.SetStateAction<boolean>) => void
+    setPanelOpen: (value: React.SetStateAction<boolean>) => void;
+    filePath: string
 }
 
 enum PlusMenuCategories {
@@ -50,6 +51,7 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
         gap: 8px;
         overflow-y: scroll;
         height: 100%;
+        padding-bottom: 100px;
     `;
 
     const ButtonWrapper = styled.div`
@@ -65,27 +67,47 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
 
     const handleClick = async (entry: Entry) => {
         console.log("add contruct: ", entry)
+        let position: NodePosition = {
+            startLine: 0, startColumn: 0, endColumn: 0, endLine: 0
+        }
+        await rpcClient.getBIDiagramRpcClient()
+            .getEndOfFile({ filePath: props.filePath })
+            .then((res) => {
+                console.log("get end of file res: ", res)
+                position = { ...position, endColumn: res.offset, endLine: res.line }
+            })
+        console.log("add construct req: ", {
+            type: EVENT_TYPE.OPEN_VIEW,
+            location: {
+                view: entry.view,
+                serviceType: entry.serviceType,
+                documentUri: props.filePath,
+                position: position
+            },
+        })
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
                 view: entry.view,
                 serviceType: entry.serviceType,
+                documentUri: props.filePath,
+                position: position,
+                isNew: true
             },
         });
     }
 
     const moduleLevelEntries: Entry[] = [
-        { name: 'Main', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.Overview, serviceType: undefined },
+        { name: 'Main', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIMainFunctionForm, serviceType: undefined },
         { name: 'HTTP service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "http" },
         { name: 'GraphQL service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "graphql" },
-        { name: 'Trigger', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.Overview, serviceType: undefined },
+        { name: 'Trigger', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "trigger" },
 
         { name: 'Type', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.TypeDiagram, serviceType: undefined },
         { name: 'Function', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: undefined },
-        { name: 'Class', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIServiceWizard, serviceType: undefined },
-        { name: 'Data Mapper', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIDataMapperForm, serviceType: undefined },
+        { name: 'Data Mapper', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.DataMapper, serviceType: undefined },
 
-        { name: 'Connector', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: undefined },
+        { name: 'Connector', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "connector" },
         { name: 'Configurable', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.ViewConfigVariables, serviceType: undefined }
     ];
 
@@ -140,11 +162,6 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
                 <Divider />
                 <Typography variant="h3">  Module level variables</Typography>
                 {moduleInit}
-                {/* <ActionButtons
-                    primaryButton={{ text: "Save", onClick: () => console.log("Save Button Clicked"), tooltip: "Save Button" }}
-                    secondaryButton={{ text: "Cancel", onClick: closePanel, tooltip: "Cancel Button" }}
-                    sx={{ justifyContent: "flex-end" }}
-                /> */}
             </SidePanelBody>
         </SidePanel>
 

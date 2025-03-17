@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 
 import { NotificationType, RequestType } from "vscode-messenger-common";
 import { NodePosition, STNode } from "@dharshi/syntax-tree";
@@ -67,6 +59,15 @@ export enum MACHINE_VIEW {
     BIDataMapperForm = "Add Data Mapper",
 }
 
+export enum SCOPE {
+    AUTOMATION = "automation",
+    INTEGRATION_AS_API = "integration-as-api",
+    EVENT_INTEGRATION = "event-integration",
+    FILE_INTEGRATION = "file-integration",
+    AI_AGENT = "ai-agent",
+    ANY = "any"
+}
+
 export interface MachineEvent {
     type: EVENT_TYPE;
 }
@@ -90,6 +91,7 @@ export interface VisualizerLocation {
     type?: Type;
     isGraphql?: boolean;
     metadata?: VisualizerMetadata;
+    isNew?: boolean;
 }
 
 export interface VisualizerMetadata {

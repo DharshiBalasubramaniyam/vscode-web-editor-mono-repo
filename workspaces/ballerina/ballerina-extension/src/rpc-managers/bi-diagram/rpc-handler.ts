@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- * 
- * THIS FILE INCLUDES AUTO GENERATED CODE
- */
 import {
     AIChatRequest,
     AddFunctionRequest,
@@ -31,6 +21,7 @@ import {
     FunctionNodeRequest,
     GetTypeRequest,
     GetTypesRequest,
+    BISearchRequest,
     ModelFromCodeRequest,
     ProjectRequest,
     ReadmeContentRequest,
@@ -87,11 +78,14 @@ import {
     updateConfigVariables,
     updateType,
     updateImports,
+    search,
     updateClassField,
     updateServiceClass,
     AddFieldRequest,
     renameIdentifier,
-    RenameIdentifierRequest
+    RenameIdentifierRequest,
+    updateTypes,
+    UpdateTypesRequest
 } from "@dharshi/ballerina-core";
 import { Messenger } from "vscode-messenger";
 import { BiDiagramRpcManager } from "./rpc-manager";
@@ -100,7 +94,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     const rpcManger = new BiDiagramRpcManager();
     // messenger.onRequest(getFlowModel, () => rpcManger.getFlowModel());
     messenger.onRequest(getSourceCode, (args: BISourceCodeRequest) => rpcManger.getSourceCode(args));
-    // messenger.onRequest(deleteFlowNode, (args: BISourceCodeRequest) => rpcManger.deleteFlowNode(args));
+    messenger.onRequest(deleteFlowNode, (args: BISourceCodeRequest) => rpcManger.deleteFlowNode(args));
     // messenger.onRequest(deleteByComponentInfo, (args: BIDeleteByComponentInfoRequest) => rpcManger.deleteByComponentInfo(args));
     // messenger.onRequest(getAvailableNodes, (args: BIAvailableNodesRequest) => rpcManger.getAvailableNodes(args));
     // messenger.onRequest(getFunctions, (args: BIGetFunctionsRequest) => rpcManger.getFunctions(args));
@@ -139,6 +133,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     messenger.onRequest(getTypes, (args: GetTypesRequest) => rpcManger.getTypes(args));
     messenger.onRequest(getType, (args: GetTypeRequest) => rpcManger.getType(args));
     messenger.onRequest(updateType, (args: UpdateTypeRequest) => rpcManger.updateType(args));
+    messenger.onRequest(updateTypes, (args: UpdateTypesRequest) => rpcManger.updateTypes(args));
     // messenger.onRequest(getServiceClassModel, (args: ModelFromCodeRequest) => rpcManger.getServiceClassModel(args));
     // messenger.onRequest(updateClassField, (args: ClassFieldModifierRequest) => rpcManger.updateClassField(args));
     // messenger.onRequest(addClassField, (args: AddFieldRequest) => rpcManger.addClassField(args));
@@ -148,4 +143,5 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(addFunction, (args: AddFunctionRequest) => rpcManger.addFunction(args));
     messenger.onRequest(getFunctionNode, (args: FunctionNodeRequest) => rpcManger.getFunctionNode(args));
     messenger.onRequest(getEndOfFile, (args: EndOfFileRequest) => rpcManger.getEndOfFile(args));
+    messenger.onRequest(search, (args: BISearchRequest) => rpcManger.search(args));
 }

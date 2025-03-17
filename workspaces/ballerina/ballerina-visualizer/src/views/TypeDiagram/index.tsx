@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 
 import React, { useEffect } from "react";
 import { VisualizerLocation, NodePosition, Type, EVENT_TYPE, MACHINE_VIEW } from "@dharshi/ballerina-core";
@@ -18,6 +10,7 @@ import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { TypeEditor } from "@dharshi/type-editor";
 import { TopNavigationBar } from "../../components/TopNavigationBar";
 import { TitleBar } from "../../components/TitleBar";
+import { FormTypeEditor } from "../BI/TypeEditor";
 
 const HeaderContainer = styled.div`
     align-items: center;
@@ -234,11 +227,18 @@ export function TypeDiagram(props: TypeDiagramProps) {
                     show={true}
                     onClose={onTypeEditorClosed}
                 >
-                    <TypeEditor
+                    {/* <TypeEditor
                         type={findSelectedType(editingTypeId)}
                         filePath={visualizerLocation?.documentUri}
                         newType={editingTypeId ? false : true}
                         rpcClient={rpcClient}
+                        onTypeChange={onTypeChange}
+                    /> */}
+
+                    <FormTypeEditor
+                        type={findSelectedType(editingTypeId)}
+                        filePath={visualizerLocation?.documentUri}
+                        newType={editingTypeId ? false : true}
                         onTypeChange={onTypeChange}
                     />
                 </PanelContainer>

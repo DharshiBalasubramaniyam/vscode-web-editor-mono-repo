@@ -23,6 +23,8 @@ import {
     BIModuleNodesResponse,
     BINodeTemplateRequest,
     BINodeTemplateResponse,
+    BISearchRequest,
+    BISearchResponse,
     BISourceCodeRequest,
     BISourceCodeResponse,
     BreakpointRequest,
@@ -59,7 +61,9 @@ import {
     UpdateConfigVariableRequest,
     UpdateConfigVariableResponse,
     UpdateTypeRequest,
+    UpdateTypesRequest,
     UpdateTypeResponse,
+    UpdateTypesResponse,
     UpdateImportsRequest,
     UpdateImportsResponse,
     VisibleTypesRequest,
@@ -114,10 +118,12 @@ import {
     updateImports,
     updateServiceClass,
     updateType,
+    updateTypes,
     ServiceClassSourceRequest,
     AddFieldRequest,
     RenameIdentifierRequest,
-    renameIdentifier
+    renameIdentifier,
+    search
 } from "@dharshi/ballerina-core";
 import { HOST_EXTENSION } from "vscode-messenger-common";
 import { Messenger } from "vscode-messenger-webview";
@@ -293,6 +299,10 @@ export class BiDiagramRpcClient implements BIDiagramAPI {
         return this._messenger.sendRequest(updateType, HOST_EXTENSION, params);
     }
 
+    updateTypes(params: UpdateTypesRequest): Promise<UpdateTypesResponse> {
+        return this._messenger.sendRequest(updateTypes, HOST_EXTENSION, params);
+    }
+
     getServiceClassModel(params: ModelFromCodeRequest): Promise<ServiceClassModelResponse> {
         return this._messenger.sendRequest(getServiceClassModel, HOST_EXTENSION, params);
     }
@@ -327,5 +337,8 @@ export class BiDiagramRpcClient implements BIDiagramAPI {
 
     getEndOfFile(params: EndOfFileRequest): Promise<LinePosition> {
         return this._messenger.sendRequest(getEndOfFile, HOST_EXTENSION, params);
+    }
+    search(params: BISearchRequest): Promise<BISearchResponse> {
+        return this._messenger.sendRequest(search, HOST_EXTENSION, params);
     }
 }

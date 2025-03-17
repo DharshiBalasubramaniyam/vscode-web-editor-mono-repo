@@ -158,7 +158,8 @@
         "monaco-languageclient": "0.13.1-next.9",
         "vscode-messenger": "^0.4.5",
         "vscode-messenger-common": "^0.4.5",
-        "xstate": "^4.38.3"
+        "xstate": "^4.38.3",
+        "js-yaml": "^4.1.0"
     },
     "devDependencies": {
         "@types/vscode": "^1.97.0",

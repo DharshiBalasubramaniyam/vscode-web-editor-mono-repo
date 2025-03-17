@@ -17,4 +17,6 @@ export class SequenceDiagramRpcClient implements SequenceDiagramAPI {
     getSequenceModel(): Promise<SequenceModelResponse> {
         return this._messenger.sendRequest(getSequenceModel, HOST_EXTENSION);
     }
+
+    
 }

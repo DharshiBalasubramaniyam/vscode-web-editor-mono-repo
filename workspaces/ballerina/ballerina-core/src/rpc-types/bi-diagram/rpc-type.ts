@@ -50,7 +50,11 @@ import {
     SourceEditResponse,
     ServiceClassSourceRequest,
     AddFieldRequest,
-    RenameIdentifierRequest
+    RenameIdentifierRequest,
+    UpdateTypesRequest,
+    UpdateTypesResponse,
+    BISearchRequest,
+    BISearchResponse
 } from "../../interfaces/extended-lang-client";
 import {
     ProjectRequest,
@@ -114,6 +118,7 @@ export const getDesignModel: RequestType<void, BIDesignModelResponse> = { method
 export const getTypes: RequestType<GetTypesRequest, GetTypesResponse> = { method: `${_preFix}/getTypes` };
 export const getType: RequestType<GetTypeRequest, GetTypeResponse> = { method: `${_preFix}/getType` };
 export const updateType: RequestType<UpdateTypeRequest, UpdateTypeResponse> = { method: `${_preFix}/updateType` };
+export const updateTypes: RequestType<UpdateTypesRequest, UpdateTypesResponse> = { method: `${_preFix}/updateTypes` };
 export const getServiceClassModel: RequestType<ModelFromCodeRequest, ServiceClassModelResponse> = { method: `${_preFix}/getServiceClassModel` };
 export const updateClassField: RequestType<ClassFieldModifierRequest, SourceEditResponse> = { method: `${_preFix}/updateClassField` };
 export const addClassField: RequestType<AddFieldRequest, SourceEditResponse> = { method: `${_preFix}/addClassField` };
@@ -123,3 +128,4 @@ export const updateImports: RequestType<UpdateImportsRequest, UpdateImportsRespo
 export const addFunction: RequestType<AddFunctionRequest, AddFunctionResponse> = { method: `${_preFix}/addFunction` };
 export const getFunctionNode: RequestType<FunctionNodeRequest, FunctionNodeResponse> = { method: `${_preFix}/getFunctionNode` };
 export const getEndOfFile: RequestType<EndOfFileRequest, LinePosition> = { method: `${_preFix}/getEndOfFile` };
+export const search: RequestType<BISearchRequest, BISearchResponse> = { method: `${_preFix}/search` };

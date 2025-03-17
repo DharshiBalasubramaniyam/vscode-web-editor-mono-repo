@@ -877,6 +877,7 @@ export interface SignatureHelpResponse {
 export interface VisibleTypesRequest {
     filePath: string;
     position: LinePosition;
+    typeConstraint?: string;
 }
 
 export interface VisibleTypeItem {
@@ -933,11 +934,24 @@ export const functionKinds = {
 } as const;
 
 export type FunctionKind = typeof functionKinds[keyof typeof functionKinds];
+export type SearchKind = 'FUNCTION' | 'CONNECTOR' | 'TYPE' | "NP_FUNCTION";
+
+export type BISearchRequest = {
+    position: LineRange;
+    filePath: string;
+    queryMap: SearchQueryParams;
+    searchKind: SearchKind;
+}
+
+export type BISearchResponse = {
+    categories: Category[];
+}
 
 export interface AddFunctionRequest {
     filePath: string;
     codedata: CodeData;
     kind: FunctionKind;
+    searchKind: SearchKind;
 }
 
 export interface AddFunctionResponse {
@@ -1137,6 +1151,7 @@ export interface Member {
     name?: string;
     docs?: string;
     defaultValue?: string;
+    optional?: boolean;
 }
 
 export interface GetGraphqlTypeRequest {
@@ -1162,6 +1177,19 @@ export interface UpdateTypeRequest {
     filePath: string;
     description: string;
     type: Type;
+}
+
+export interface UpdateTypesRequest {
+    filePath: string;
+    types: Type[];
+}
+
+export interface UpdateTypesResponse {
+    textEdits: {
+        [filePath: string]: TextEdit[];
+    };
+    errorMsg?: string;
+    stacktrace?: string;
 }
 
 export interface GetTypesResponse {

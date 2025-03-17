@@ -354,7 +354,7 @@ export function addToTargetPosition(
     }
     const splitContent: string[] = currentContent.split(/\n/g) || [];
     const splitCodeSnippet: string[] = codeSnippet.split(/\n/g) || [];
-    const noOfLines: number = position.endLine - position.startLine + 1;
+    const noOfLines: number = position.endLine - position.startLine + 1; // 10
     const startLine = splitContent[position.startLine].slice(0, position.startColumn);
     const endLine = isFinite(position?.endLine)
         ? splitContent[position.endLine].slice(position.endColumn || position.startColumn)

@@ -25,7 +25,7 @@ import { ServiceDesigner } from "./views/BI/ServiceDesigner";
 import {
     // WelcomeView,
     // ProjectForm,
-    ComponentListView,
+    // ComponentListView,
     // PopupMessage,
     // MainForm,
     FunctionForm,
@@ -43,9 +43,9 @@ import { ConnectorList } from "./views/Connectors/ConnectorWizard";
 import { EndpointList } from "./views/Connectors/EndpointList";
 import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 // import DiagramWrapper from "./views/BI/DiagramWrapper";
-// import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
+import AddConnectionWizard from "./views/BI/Connection/AddConnectionWizard";
 // import { Overview as OverviewBI } from "./views/BI/Overview/index";
-// import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
+import EditConnectionWizard from "./views/BI/Connection/EditConnectionWizard";
 import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
 import { ServiceWizard } from "./views/BI/ServiceDesigner/ServiceWizard";
 import { ServiceEditView } from "./views/BI/ServiceDesigner/ServiceEditView";
@@ -56,10 +56,11 @@ import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
 import { TypeDiagram } from "./views/TypeDiagram";
 import { EditPanel } from "./views/EditPanel";
 import { RecordEditor } from "./views/RecordEditor/RecordEditor";
-import { DataMapper } from "./views/DataMapper";
+// import { DataMapper } from "./views/DataMapper";
 import { ERDiagram } from "./views/ERDiagram";
 import { SequenceDiagram } from "./views/SequenceDiagram";
 import { Overview } from "./views/Overview";
+import TriggerPanel from "./views/Connectors/TriggerWizard";
 
 const globalStyles = css`
     *,
@@ -90,7 +91,7 @@ const PopUpContainer = styled.div`
 
 const MainPanel = () => {
     const { rpcClient } = useRpcContext();
-    const { sidePanel, setSidePanel, popupMessage, setPopupMessage, activePanel } = useVisualizerContext();
+    const { sidePanel, setSidePanel, popupMessage, setPopupMessage, activePanel, setActivePanel, setActiveFileInfo } = useVisualizerContext();
     const [viewComponent, setViewComponent] = useState<React.ReactNode>();
     const [navActive, setNavActive] = useState<boolean>(true);
     const [showHome, setShowHome] = useState<boolean>(true);
@@ -192,14 +193,14 @@ const MainPanel = () => {
                         setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
                         break;
                     case MACHINE_VIEW.DataMapper:
-                        setViewComponent(
-                            <DataMapper
-                                filePath={value.documentUri}
-                                model={value?.syntaxTree as FunctionDefinition}
-                                isBI={value.isBI}
-                                applyModifications={applyModifications}
-                            />
-                        );
+                        // setViewComponent(
+                        //     <DataMapper
+                        //         filePath={value.documentUri}
+                        //         model={value?.syntaxTree as FunctionDefinition}
+                        //         isBI={value.isBI}
+                        //         applyModifications={applyModifications}
+                        //     />
+                        // );
                         break;
                     case MACHINE_VIEW.BIDataMapperForm:
                         rpcClient.getVisualizerLocation().then((location) => {
@@ -235,7 +236,7 @@ const MainPanel = () => {
                         // setViewComponent(<ProjectForm />);
                         break;
                     case MACHINE_VIEW.BIComponentView:
-                        setViewComponent(<ComponentListView />);
+                        // setViewComponent(<ComponentListView scope={value?.scope} />);
                         break;
                     case MACHINE_VIEW.BIServiceWizard:
                         setViewComponent(<ServiceWizard type={value.serviceType} />);
@@ -265,29 +266,36 @@ const MainPanel = () => {
                         break;
                     case MACHINE_VIEW.AddConnectionWizard:
                         rpcClient.getVisualizerLocation().then((location) => {
-                            // setViewComponent(
-                            //     <AddConnectionWizard
-                            //         fileName={Utils.joinPath(URI.file(location.projectUri), 'connections.bal').fsPath}
-                            //     />
-                            // );
+                            if (isBI) {
+                                setViewComponent(
+                                    <AddConnectionWizard
+                                        fileName={`${projectUri}/connections.bal`}
+                                    />
+                                );
+                            } else if (value.serviceType && value.serviceType === "connector") {
+                                setActivePanel({ isActive: false });
+                                setSidePanel("ADD_CONNECTION");
+                            } else if (value.serviceType && value.serviceType === "trigger") {
+                                setActivePanel({ isActive: false });
+                                setSidePanel("ADD_TRIGGER");
+                            }
                         });
                         break;
                     case MACHINE_VIEW.EditConnectionWizard:
                         rpcClient.getVisualizerLocation().then((location) => {
-                            // setViewComponent(
-                            //     <EditConnectionWizard
-                            //         fileName={Utils.joinPath(URI.file(location.projectUri), 'connections.bal').fsPath}
-                            //         connectionName={value?.identifier}
-                            //     />
-                            // );
+                            setViewComponent(
+                                <EditConnectionWizard
+                                    fileName={isBI ? Utils.joinPath(URI.file(location.projectUri), 'connections.bal').fsPath: value.documentUri}
+                                    connectionName={value?.identifier}
+                                />
+                            );
                         });
                         break;
                     case MACHINE_VIEW.BIMainFunctionForm:
-                        // setViewComponent(<MainForm />);
+                        setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={isBI ? `${projectUri}/functions.bal` : value.documentUri} functionName={value?.identifier} isAutomation={true} />);
                         break;
                     case MACHINE_VIEW.BIFunctionForm:
-                        // const fileName = value?.documentUri ? URI.parse(value.documentUri).path.split('/').pop() : 'functions.bal';
-                        setViewComponent(<FunctionForm projectPath={value.projectUri} fileName={value.documentUri} functionName={value?.identifier} />);
+                        setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={isBI ? `${projectUri}/functions.bal` : value.documentUri} functionName={value?.identifier} />);
                         break;
                     case MACHINE_VIEW.BITestFunctionForm:
                         // setViewComponent(<TestFunctionForm
@@ -370,6 +378,9 @@ const MainPanel = () => {
                 {viewComponent && <ComponentViewWrapper>{viewComponent}</ComponentViewWrapper>}
                 {sidePanel !== "EMPTY" && sidePanel === "ADD_CONNECTION" && (
                     <ConnectorList applyModifications={applyModifications} />
+                )}
+                {sidePanel !== "EMPTY" && sidePanel === "ADD_TRIGGER" && (
+                    <TriggerPanel />
                 )}
 
                 {/* {popupMessage && (

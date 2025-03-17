@@ -1,12 +1,3 @@
-/**
- * Copyright (c) 2022, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
-
 import { Member, Type, TypeFunctionModel, TypeNodeKind } from '@dharshi/ballerina-core';
 import { DiagramModel } from '@projectstorm/react-diagrams';
 import { EntityLinkModel, EntityModel, EntityPortModel } from '../../components/entity-relationship';
@@ -99,20 +90,15 @@ export function graphqlModeller(rootService: Type, refs: Type[]): DiagramModel {
 }
 
 export function entityModeller(components: Type[], selectedEntityId?: string): DiagramModel {
-    let filteredComponents = components.filter((type) => type.codedata.node === "RECORD");
+    let filteredComponents = components;
 
     // If selectedEntityId is provided, filter for related entities
     if (selectedEntityId) {
-        console.log("selected entity id: ", selectedEntityId); // Book
         const relatedEntities = new Set<string>();
         relatedEntities.add(selectedEntityId);
         findRelatedEntities(selectedEntityId, components, relatedEntities);
-        console.log(components);
-        console.log("related: ", relatedEntities)
         filteredComponents = components.filter(comp => relatedEntities.has(comp.name));
     }
-    console.log(selectedEntityId);
-    console.log(filteredComponents);
 
     // Create nodes and links
     const entityNodes = createEntityNodes(filteredComponents, selectedEntityId);
@@ -127,20 +113,18 @@ function findRelatedEntities(componentId: string, components: Type[], relatedEnt
     const component = components.find(comp => comp.name === componentId);
     if (!component) return;
 
-    component?.includes.forEach((i) => relatedEntities.add(i));
+    const members = isNodeClass(component?.codedata?.node) ? component.functions : component.members;
 
-    // const members = isNodeClass(component?.codedata?.node) ? component.functions : component.members;
-
-    // Object.values(members).forEach(member => {
-    //     if (member.refs) {
-    //         member.refs.forEach(ref => {
-    //             if (!relatedEntities.has(ref)) {
-    //                 relatedEntities.add(ref);
-    //                 findRelatedEntities(ref, components, relatedEntities);
-    //             }
-    //         });
-    //     }
-    // });
+    Object.values(members).forEach(member => {
+        if (member.refs) {
+            member.refs.forEach(ref => {
+                if (!relatedEntities.has(ref)) {
+                    relatedEntities.add(ref);
+                    findRelatedEntities(ref, components, relatedEntities);
+                }
+            });
+        }
+    });
 }
 
 function createLinks(sourcePort: EntityPortModel, targetPort: EntityPortModel, link: EntityLinkModel): EntityLinkModel {

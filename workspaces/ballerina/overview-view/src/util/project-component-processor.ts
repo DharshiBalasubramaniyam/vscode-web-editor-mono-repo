@@ -24,7 +24,6 @@ export class ProjectComponentProcessor {
             enums: [],
             listeners: [],
             moduleVariables: [],
-            configurableVariables: [],
             automations: []
         };
     }

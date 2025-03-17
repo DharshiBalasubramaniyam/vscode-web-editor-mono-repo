@@ -152,14 +152,6 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
                     return variable.name.toLowerCase().includes(query.toLowerCase());
                 }
             });
-            // const configVariables = module.configurableVariables.filter((configvar) => {
-            //     console.log(">>>> config")
-            //     if (selectedFile === SELECT_ALL_FILES || checkSelectedFile(configvar.filePath, module.name) ) {
-            //         console.log("selected.....")
-            //         return configvar.name.toLowerCase().includes(query.toLowerCase());
-            //     }
-            // });
-            // console.log(configVariables)
             return {
                 ...module,
                 services,
@@ -172,7 +164,6 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
                 enums,
                 listeners,
                 moduleVariables
-                // configVariables
             };
         });
         return {

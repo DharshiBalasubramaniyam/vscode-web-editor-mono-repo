@@ -451,6 +451,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "js-yaml",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "jsonc-parser",
       "allowedCategories": [ "library" ]
     },

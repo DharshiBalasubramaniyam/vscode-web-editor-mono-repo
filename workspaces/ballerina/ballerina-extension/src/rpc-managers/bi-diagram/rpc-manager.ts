@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- *
- * THIS FILE INCLUDES AUTO GENERATED CODE
- */
 import {
     AIChatRequest,
     AddFunctionRequest,
@@ -37,6 +27,10 @@ import {
     BINodeTemplateResponse,
     BISourceCodeRequest,
     BISourceCodeResponse,
+    BISearchRequest,
+    BISearchResponse,
+    UpdateTypesRequest,
+    UpdateTypesResponse,
     BISuggestedFlowModelRequest,
     BI_COMMANDS,
     BreakpointRequest,
@@ -230,7 +224,7 @@ export class BiDiagramRpcManager
 
                 for (const [key, value] of Object.entries(workspaceEdit.changes)) {
                     const fileUri = Uri.parse(`${WEB_IDE_SCHEME}:${Uri.parse(key).path}`).toString();
-                    const edits = value;
+                    const edits = value as any[];
 
                     if (edits && edits.length > 0) {
                         const modificationList: STModification[] = [];
@@ -309,6 +303,49 @@ export class BiDiagramRpcManager
                     console.log(">>> error fetching types from ls", error);
                     reject(error);
                 });
+        });
+    }
+
+    async deleteFlowNode(params: BISourceCodeRequest): Promise<BISourceCodeResponse> {
+        console.log(">>> requesting bi delete node from ls", params);
+        return new Promise((resolve) => {
+            StateMachine.langClient()
+                .deleteFlowNode(params)
+                .then((model) => {
+                    console.log(">>> bi delete node from ls", model);
+                    this.updateSource(model, params.flowNode);
+                    resolve(model);
+                })
+                .catch((error) => {
+                    console.log(">>> error fetching delete node from ls", error);
+                    return new Promise((resolve) => {
+                        resolve(undefined);
+                    });
+                });
+        });
+    }
+
+    async updateTypes(params: UpdateTypesRequest): Promise<UpdateTypesResponse> {
+        return new Promise((resolve, reject) => {
+            const projectUri = StateMachine.context().projectUri;
+            if (StateMachine.context().isBI) {
+                params.filePath = Uri.joinPath(Uri.parse(projectUri), params.filePath).toString();
+            }
+            StateMachine.langClient().updateTypes(
+                params
+            ).then((updateTypesresponse: UpdateTypesResponse) => {
+                console.log(">>> update type response", updateTypesresponse);
+                if (updateTypesresponse.textEdits) {
+                    this.updateSource({ textEdits: updateTypesresponse.textEdits });
+                    resolve(updateTypesresponse);
+                } else {
+                    console.log(">>> error updating types", updateTypesresponse?.errorMsg);
+                    resolve(undefined);
+                }
+            }).catch((error) => {
+                console.log(">>> error updating types", error);
+                reject(error);
+            });
         });
     }
 
@@ -492,6 +529,7 @@ export class BiDiagramRpcManager
             try {
                 const fileContent = await balExtInstance.fsProvider.readFile(Uri.parse(filePath));
                 const lines = (new TextDecoder().decode(fileContent)).split('\n');
+                console.log("get end of file content: ", lines);
                 const lastLine = lines[lines.length - 1];
                 const lastLineLength = lastLine.length;
                 resolve({ line: lines.length - 1, offset: lastLineLength });
@@ -499,6 +537,17 @@ export class BiDiagramRpcManager
                 console.log(error);
                 resolve({ line: 0, offset: 0 });
             }
+        });
+    }
+
+    async search(params: BISearchRequest): Promise<BISearchResponse> {
+        return new Promise((resolve, reject) => {
+            StateMachine.langClient().search(params).then((res) => {
+                resolve(res);
+            }).catch((error) => {
+                console.log(">>> error searching", error);
+                reject(error);
+            });
         });
     }
 

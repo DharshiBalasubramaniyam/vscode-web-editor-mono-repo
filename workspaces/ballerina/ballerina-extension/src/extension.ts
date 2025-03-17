@@ -16,6 +16,8 @@ export class BallerinaExtension {
 	public langClient?: ExtendedLanguageClient;
 	public fsProvider?: BalFileSystemProvider;
 	public balServerUrl: string;
+	public activeBalFileUri?: string | undefined;
+	public statusBar: vscode.StatusBarItem;
 
 	init() {
 		this.balServerUrl = "http://localhost:9091";

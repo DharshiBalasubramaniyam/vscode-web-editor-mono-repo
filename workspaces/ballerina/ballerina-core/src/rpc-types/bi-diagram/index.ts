@@ -46,8 +46,10 @@ import {
     BIDesignModelResponse,
     GetTypesResponse,
     UpdateTypeResponse,
+    UpdateTypesResponse,
     GetTypesRequest,
     UpdateTypeRequest,
+    UpdateTypesRequest,
     GetTypeRequest,
     GetTypeResponse,
     UpdateImportsRequest,
@@ -125,6 +127,7 @@ export interface BIDiagramAPI {
     getTypes: (params: GetTypesRequest) => Promise<GetTypesResponse>;
     getType: (params: GetTypeRequest) => Promise<GetTypeResponse>;
     updateType: (params: UpdateTypeRequest) => Promise<UpdateTypeResponse>;
+    updateTypes: (params: UpdateTypesRequest) => Promise<UpdateTypesResponse>;
     getServiceClassModel: (params: ModelFromCodeRequest) => Promise<ServiceClassModelResponse>;
     updateClassField: (params: ClassFieldModifierRequest) => Promise<SourceEditResponse>;
     addClassField: (params: AddFieldRequest) => Promise<SourceEditResponse>;

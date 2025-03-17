@@ -1,16 +1,17 @@
-/**
- * Copyright (c) 2021, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 // tslint:disable: jsx-no-multiline-js
 import React, { useEffect, useState } from "react";
+import {
+    LowCodeDiagram,
+    initVisitor,
+    PositioningVisitor,
+    SizingVisitor,
+    SymbolVisitor,
+    cleanLocalSymbols,
+    cleanModuleLevelSymbols,
+    getSymbolInfo,
+} from "@dharshi/ballerina-low-code-diagram";
 
-
-import { LocalVarDecl } from "@dharshi/syntax-tree";
+import { NodePosition, STKindChecker, STNode, traversNode } from "@dharshi/syntax-tree";
 import { BallerinaConnectorInfo, BallerinaModuleResponse, BallerinaConnectorsRequest, BallerinaConstruct, STModification } from "@dharshi/ballerina-core";
 
 
@@ -21,7 +22,6 @@ import { set } from "lodash";
 import { useVisualizerContext } from "../../../Context";
 import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { StatementEditorComponent } from "../../StatementEditorComponent";
-import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
 import { URI } from "vscode-uri";
 import { PackageLoader } from "../PackageLoader";
 
@@ -30,14 +30,19 @@ export interface ConnectorListProps {
     applyModifications: (modifications: STModification[]) => Promise<void>;
 }
 
+enum MESSAGE_TYPE {
+    ERROR,
+    WARNING,
+    INFO,
+}
+
 export function ConnectorList(props: ConnectorListProps) {
     const { applyModifications } = props;
     const [pullingPackage, setPullingPackage] = useState(false);
     const [selectedConnector, setSelectedConnector] = useState<BallerinaConnectorInfo>();
     const [showStatementEditor, setShowStatementEditor] = useState<boolean>(false);
     const [initialSource, setInitialSource] = useState<string>();
-    const { activeFileInfo, statementPosition, setActivePanel, setSidePanel } = useVisualizerContext();
-
+    const { activeFileInfo, statementPosition, setActivePanel, setSidePanel, setActiveFileInfo, setStatementPosition } = useVisualizerContext();
 
     const { rpcClient } = useRpcContext();
 
@@ -121,6 +126,61 @@ export function ConnectorList(props: ConnectorListProps) {
 
     const onMarketplaceClose = () => {
         setSidePanel("EMPTY");
+    }
+
+    useEffect(() => {
+        rpcClient
+            .getLangClientRpcClient()
+            .getSyntaxTree()
+            .then(async (model) => {
+                const parsedModel = sizingAndPositioningST(model.syntaxTree);
+                const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
+                const fullST = await rpcClient.getLangClientRpcClient().getST({
+                    documentIdentifier: { uri: URI.parse(filePath).toString() }
+                });
+                setActiveFileInfo({ fullST: fullST?.syntaxTree, filePath, activeSequence: parsedModel });
+                if (!statementPosition) {
+                    setStatementPosition({
+                        startLine: fullST.syntaxTree.position.endLine + 1,
+                        endLine: fullST.syntaxTree.position.endLine + 1,
+                        startColumn: fullST.syntaxTree.position.endColumn - 1,
+                        endColumn: fullST.syntaxTree.position.endColumn - 1,
+                    });
+                }
+            });
+    }, [])
+
+    function sizingAndPositioningST(
+        st: STNode,
+        experimentalEnabled?: boolean,
+        showMessage?: (
+            arg: string,
+            messageType: MESSAGE_TYPE,
+            ignorable: boolean,
+            filePath?: string,
+            fileContent?: string,
+            bypassChecks?: boolean
+        ) => void
+    ): STNode {
+        traversNode(st, initVisitor);
+        const sizingVisitor = new SizingVisitor(experimentalEnabled);
+        traversNode(st, sizingVisitor);
+        if (showMessage && sizingVisitor.getConflictResulutionFailureStatus()) {
+            showMessage(
+                "Something went wrong in the diagram rendering.",
+                MESSAGE_TYPE.ERROR,
+                false,
+                undefined,
+                undefined,
+                true
+            );
+        }
+        traversNode(st, new PositioningVisitor());
+        cleanLocalSymbols();
+        cleanModuleLevelSymbols();
+        traversNode(st, SymbolVisitor);
+        const clone = { ...st };
+        return clone;
     }
 
     return (

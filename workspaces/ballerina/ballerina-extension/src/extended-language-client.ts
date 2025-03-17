@@ -31,6 +31,8 @@ import {
     BallerinaExampleListParams,
     BallerinaExampleList,
     BallerinaProjectParams,
+    BISearchRequest,
+    BISearchResponse,
     BallerinaPackagesParams,
     BallerinaProjectComponents,
     PackageConfigSchema,
@@ -162,7 +164,9 @@ import {
     DidCloseParams,
     CompletionParams,
     Completion,
-    APITimeConsumption
+    APITimeConsumption,
+    UpdateTypesRequest,
+    UpdateTypesResponse
 } from "@dharshi/ballerina-core";
 import { CodeAction, CodeActionParams, DocumentSymbol, DocumentSymbolParams, ExecuteCommandParams, RenameParams, SymbolInformation, WorkspaceEdit } from "monaco-languageclient";
 import { ExtensionContext } from "vscode";
@@ -832,6 +836,10 @@ export class ExtendedLanguageClient extends LanguageClient implements ExtendedLa
         return this.sendRequest<UpdateTypeResponse>(EXTENDED_APIS.BI_UPDATE_TYPE, params);
     }
 
+    async updateTypes(params: UpdateTypesRequest): Promise<UpdateTypesResponse> {
+        return this.sendRequest<UpdateTypesResponse>(EXTENDED_APIS.BI_UPDATE_TYPES, params);
+    }
+
     async createGraphqlClassType(params: UpdateTypeRequest): Promise<UpdateTypeResponse> {
         return this.sendRequest<UpdateTypeResponse>(EXTENDED_APIS.BI_CREATE_GRAPHQL_CLASS_TYPE, params);
     }
@@ -846,6 +854,10 @@ export class ExtendedLanguageClient extends LanguageClient implements ExtendedLa
 
     async addFunction(params: AddFunctionRequest): Promise<AddFunctionResponse> {
         return this.sendRequest<AddFunctionResponse>(EXTENDED_APIS.BI_ADD_FUNCTION, params);
+    }
+
+    async search(params: BISearchRequest): Promise<BISearchResponse> {
+        return this.sendRequest<BISearchResponse>(EXTENDED_APIS.BI_SEARCH, params);
     }
 
     // <------------ BI APIS END --------------->
@@ -955,6 +967,7 @@ enum EXTENDED_APIS {
     BI_GET_TYPES = 'typesManager/getTypes',
     BI_GET_TYPE = 'typesManager/getType',
     BI_UPDATE_TYPE = 'typesManager/updateType',
+    BI_UPDATE_TYPES = 'typesManager/updateTypes',
     BI_GET_GRAPHQL_TYPE = 'typesManager/getGraphqlType',
     BI_CREATE_GRAPHQL_CLASS_TYPE = 'typesManager/createGraphqlClassType',
     BI_SERVICE_TRIGGER_MODELS = 'serviceDesign/getTriggerModels',
@@ -989,6 +1002,7 @@ enum EXTENDED_APIS {
     BI_IS_ICP_ENABLED = 'icpService/isIcpEnabled',
     BI_ADD_ICP = 'icpService/addICP',
     BI_DISABLE_ICP = 'icpService/disableICP',
+    BI_SEARCH = 'flowDesignService/search'
 }
 
 enum EXTENDED_APIS_ORG {

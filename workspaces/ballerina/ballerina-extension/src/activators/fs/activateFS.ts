@@ -44,6 +44,19 @@ export function activateFileSystemProvider() {
             }
         }
     });
+
+    vscode.window.onDidChangeActiveTextEditor(editor => {
+        if (!editor && vscode.window.visibleTextEditors.length === 0) {
+            balExtInstance.activeBalFileUri = undefined;
+        }
+        if (editor && editor.document.languageId === 'ballerina') {
+            balExtInstance.activeBalFileUri = editor.document.uri.toString();
+        }
+        if (editor && editor.document.languageId !== 'ballerina') {
+            balExtInstance.activeBalFileUri = undefined;
+        }
+        console.log("active file changed: ", {editor: editor, uri: balExtInstance.activeBalFileUri});
+    });
 }
 
 function extractGitHubRepoInfo(url: string): { username: string; repo: string } | null {

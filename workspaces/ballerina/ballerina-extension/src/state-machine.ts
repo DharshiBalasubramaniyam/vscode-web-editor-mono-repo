@@ -1,7 +1,7 @@
 import { createMachine, assign, interpret } from 'xstate';
-import { EVENT_TYPE, SyntaxTree, History, HistoryEntry, MachineStateValue, STByRangeRequest, SyntaxTreeResponse, UndoRedoManager, VisualizerLocation, webviewReady, MACHINE_VIEW, DIRECTORY_MAP } from "@dharshi/ballerina-core";
+import { EVENT_TYPE, SyntaxTree, History, HistoryEntry, MachineStateValue, STByRangeRequest, SyntaxTreeResponse, UndoRedoManager, VisualizerLocation, webviewReady, MACHINE_VIEW, DIRECTORY_MAP, vscode } from "@dharshi/ballerina-core";
 // import { fetchAndCacheLibraryData } from './features/library-browser';
-import { commands, Uri, workspace, RelativePattern, FileSystemProvider } from 'vscode';
+import { commands, Uri, workspace, RelativePattern, FileSystemProvider, window } from 'vscode';
 import { notifyCurrentWebview, RPCLayer } from './RPCLayer';
 import { generateUid, getComponentIdentifier, getNodeByIndex, getNodeByName, getNodeByUid, getView } from './utils/state-machine-utils';
 import { ExtendedLanguageClient } from './extended-language-client';
@@ -431,8 +431,18 @@ export function openView(type: EVENT_TYPE, viewLocation: VisualizerLocation, res
     if (resetHistory) {
         history.clear();
     }
-    // type: OPEN_VIEW, viewLocation: { documenturi, position }
-    const location = viewLocation.documentUri || StateMachine.context().documentUri || 'main.bal'
+    console.log("getting document uri: ", viewLocation);
+    let location = viewLocation.documentUri || StateMachine.context().documentUri;
+    if (viewLocation.documentUri && viewLocation.isNew) {
+        const activeEditor = balExtInstance.activeBalFileUri; 
+        console.log("new contruct: ", activeEditor);
+        if (!activeEditor) {
+            window.showErrorMessage("No active ballerina text editor found!");
+            return;
+        }
+        location = activeEditor;
+    }
+    console.log({"document uri: ": viewLocation.documentUri, "location": location});
     stateService.send({ type: type, viewLocation: {...viewLocation, documentUri: location} });
 }
 

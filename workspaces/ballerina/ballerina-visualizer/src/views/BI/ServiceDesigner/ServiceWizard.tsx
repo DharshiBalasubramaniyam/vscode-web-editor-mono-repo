@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 
 import { useEffect, useState } from 'react';
 import { EVENT_TYPE, ListenerModel, ListenersResponse, ServiceModel } from '@dharshi/ballerina-core';
@@ -120,7 +112,7 @@ export function ServiceWizard(props: ServiceWizardProps) {
 
     const handleListenerSubmit = async (value?: ListenerModel) => {
         setSaving(true);
-        let listenerName;
+        let listenerName: string;
         if (value) {
             await rpcClient.getServiceDesignerRpcClient().addListenerSourceCode({ filePath: "", listener: value });
             if (value.properties['name'].value) {
@@ -132,6 +124,7 @@ export function ServiceWizard(props: ServiceWizardProps) {
         }
         rpcClient.getServiceDesignerRpcClient().getServiceModel({ filePath: "", moduleName: type, listenerName }).then(res => {
             console.log("Service Model: ", res);
+            res.service.properties["listener"].items = [...res.service.properties["listener"].items, listenerName];
             if (existing) {
                 res.service.properties["listener"].editable = true;
             }

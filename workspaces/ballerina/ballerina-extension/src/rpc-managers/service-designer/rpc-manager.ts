@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- * 
- * THIS FILE INCLUDES AUTO GENERATED CODE
- */
 import {
     DIRECTORY_MAP,
     ExportOASRequest,
@@ -46,11 +36,13 @@ import {
 import { ModulePart, NodePosition, STKindChecker, TypeDefinition } from "@dharshi/syntax-tree";
 // import * as fs from 'fs';
 // import { existsSync, writeFileSync } from "fs";
-// import * as yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 // import * as path from 'path';
 import { Uri, commands, window, workspace, FileSystemError } from "vscode";
 import { StateMachine } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
+
+const textEncoder = new TextEncoder();
 
 export class ServiceDesignerRpcManager 
 // implements ServiceDesignerAPI 
@@ -69,37 +61,49 @@ export class ServiceDesignerRpcManager
     //     });
     // }
 
-    // async exportOASFile(params: ExportOASRequest): Promise<ExportOASResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const res: ExportOASResponse = { openSpecFile: null };
-    //         const documentFilePath = params.documentFilePath ? params.documentFilePath : StateMachine.context().documentUri;
-    //         const spec = await StateMachine.langClient().convertToOpenAPI({ documentFilePath }) as OpenAPISpec;
-    //         if (spec.content) {
-    //             // Convert the OpenAPI spec to a YAML string
-    //             const yamlStr = yaml.dump(spec.content[0].spec);
-    //             window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, openLabel: 'Select OAS Save Location' })
-    //                 .then(uri => {
-    //                     if (uri && uri[0]) {
-    //                         const projectLocation = uri[0].fsPath;
-    //                         // Construct the correct path for the output file
-    //                         const filePath = path.join(projectLocation, `${spec.content[0]?.serviceName}_openapi.yaml`);
+    async exportOASFile(params: ExportOASRequest): Promise<ExportOASResponse> {
+        return new Promise(async (resolve) => {
+            const res: ExportOASResponse = { openSpecFile: null };
+            const documentFilePath = params.documentFilePath ? params.documentFilePath : StateMachine.context().documentUri;
+            const spec = await StateMachine.langClient().convertToOpenAPI({ documentFilePath }) as OpenAPISpec;
+            if (spec.content && spec.content.length > 0) {
+                const yamlStr = yaml.dump(spec.content[0].spec);
+                // Convert the OpenAPI spec to a YAML string
+                // const yamlStr = yaml.dump(spec.content[0].spec);
+                // window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, openLabel: 'Select OAS Save Location' })
+                //     .then(uri => {
+                //         if (uri && uri[0]) {
+                //             const projectLocation = uri[0].fsPath;
+                //             // Construct the correct path for the output file
+                //             const filePath = path.join(projectLocation, `${spec.content[0]?.serviceName}_openapi.yaml`);
 
-    //                         // Save the YAML string to the file
-    //                         fs.writeFileSync(filePath, yamlStr, 'utf8');
-    //                         // Set the response
-    //                         res.openSpecFile = filePath;
-    //                         // Open the file in a new VSCode document
-    //                         workspace.openTextDocument(filePath).then(document => {
-    //                             window.showTextDocument(document);
-    //                         });
-    //                     }
-    //                 });
-    //         } else {
-    //             window.showErrorMessage(spec.error);
-    //         }
-    //         resolve(res);
-    //     });
-    // }
+                //             // Save the YAML string to the file
+                //             fs.writeFileSync(filePath, yamlStr, 'utf8');
+                //             // Set the response
+                //             res.openSpecFile = filePath;
+                //             // Open the file in a new VSCode document
+                //             workspace.openTextDocument(filePath).then(document => {
+                //                 window.showTextDocument(document);
+                //             });
+                //         }
+                //     });
+                const specFilePathUri = Uri.joinPath(Uri.parse(StateMachine.context().projectUri), `${spec.content[0]?.serviceName}_openapi.yaml`);
+                await balExtInstance.fsProvider
+                    .writeFile(
+                        specFilePathUri, 
+                        textEncoder.encode(yamlStr), 
+                        {create: true, overwrite: true}
+                    );
+                    res.openSpecFile = specFilePathUri.toString();
+                                workspace.openTextDocument(specFilePathUri).then(document => {
+                                    window.showTextDocument(document);
+                                });
+            } else {
+                window.showErrorMessage(spec.error);
+            }
+            resolve(res);
+        });
+    }
 
     async getListeners(params: ListenersRequest): Promise<ListenersResponse> {
         return new Promise(async (resolve) => {
@@ -386,13 +390,13 @@ export class ServiceDesignerRpcManager
 
             
             try {
-                const fileStat = await balExtInstance.fsProvider.stat(Uri.parse(fileUri))
+                const fileStat = await balExtInstance.fsProvider.stat(Uri.parse(fileUri));
             } catch (error) {
                 if (error instanceof FileSystemError && error.code === 'FileNotFound') {
                     console.log("File not found:", fileUri);
                     await balExtInstance.fsProvider.writeFile(
                         Uri.parse(fileUri),
-                        new TextEncoder().encode(""),
+                        textEncoder.encode(""),
                         {create: true, overwrite: true}
                     )
                 } else {
@@ -445,7 +449,7 @@ export class ServiceDesignerRpcManager
                             }
                         }
                     });
-                    balExtInstance.fsProvider.writeFile(Uri.parse(fileUriString), new TextEncoder().encode(source), {create: true, overwrite: true});
+                    balExtInstance.fsProvider.writeFile(Uri.parse(fileUriString), textEncoder.encode(source), {create: true, overwrite: true});
 
                     if (!targetPosition) {
                         await StateMachine.langClient().resolveMissingDependencies({
@@ -493,17 +497,17 @@ export class ServiceDesignerRpcManager
 //         });
 //     }
 
-//     async getTriggerModels(params: TriggerModelsRequest): Promise<TriggerModelsResponse> {
-//         return new Promise(async (resolve) => {
-//             const context = StateMachine.context();
-//             try {
-//                 const res: TriggerModelsResponse = await context.langClient.getTriggerModels(params);
-//                 resolve(res);
-//             } catch (error) {
-//                 console.log(error);
-//             }
-//         });
-//     }
+    async getTriggerModels(params: TriggerModelsRequest): Promise<TriggerModelsResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                const res: TriggerModelsResponse = await context.langClient.getTriggerModels(params);
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
 //     async getFunctionModel(params: FunctionModelRequest): Promise<FunctionModelResponse> {
 //         return new Promise(async (resolve) => {

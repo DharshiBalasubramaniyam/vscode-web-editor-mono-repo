@@ -21,8 +21,6 @@ export function ComponentView(props: ComponentViewProps) {
         switch (type) {
             case 'classes':
             case 'objects':
-            case 'types':
-            case 'enums':
             case 'listeners':
                 return false;
             default:

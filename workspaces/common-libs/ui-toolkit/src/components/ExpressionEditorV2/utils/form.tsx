@@ -8,8 +8,20 @@
  */
 
 import { MutableRefObject } from "react";
-import { HelperPaneOrigin, HelperPanePosition } from "../types";
+import { HelperPaneHeight, HelperPaneOrigin, HelperPanePosition } from "../types";
 import { HELPER_PANE_HEIGHT, HELPER_PANE_WIDTH, ARROW_HEIGHT, ARROW_OFFSET } from "../constants"
+
+
+export const convertHelperPaneHeightToCSS = (helperPaneHeight: HelperPaneHeight): string => {
+    switch (helperPaneHeight) {
+        case 'full':
+            return '100vh';
+        case '3/4':
+            return '75vh';
+        default:
+            return `${HELPER_PANE_HEIGHT}px`;
+    }
+}
 
 export const getHelperPanePosition = (
     expressionEditorRef: MutableRefObject<HTMLDivElement>,

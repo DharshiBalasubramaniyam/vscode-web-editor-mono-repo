@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 import {
     Category as PanelCategory,
     Node as PanelNode,
@@ -70,6 +62,16 @@ function convertAvailableNodeToPanelNode(node: AvailableNode, functionType?: FUN
         icon: <NodeIcon type={functionType === FUNCTION_TYPE.EXPRESSION_BODIED ? "DATA_MAPPER_CALL" : node.codedata.node} size={16} />,
     };
 }
+
+export const getFunctionItemKind = (category: string): FunctionKind => {
+    if (category.includes("Current")) {
+        return functionKinds.CURRENT;
+    } else if (category.includes("Imported")) {
+        return functionKinds.IMPORTED;
+    } else {
+        return functionKinds.AVAILABLE;
+    }
+};
 
 function convertDiagramCategoryToSidePanelCategory(category: Category, functionType?: FUNCTION_TYPE): PanelCategory {
     if (category.metadata.label !== "Current Integration" && functionType === FUNCTION_TYPE.EXPRESSION_BODIED) {
@@ -594,16 +596,6 @@ export const convertToHelperPaneConfigurableVariable = (variables: VisibleType[]
 const isCategoryType = (item: Item): item is Category => {
     return !(item as AvailableNode)?.codedata;
 }
-
-const getFunctionItemKind = (category: string): FunctionKind => {
-    if (category.includes('Current')) {
-        return functionKinds.CURRENT;
-    } else if (category.includes('Imported')) {
-        return functionKinds.IMPORTED;
-    } else {
-        return functionKinds.AVAILABLE;
-    }
-};
 
 export const convertToHelperPaneFunction = (functions: Category[]): HelperPaneFunctionInfo => {
     const response: HelperPaneFunctionInfo = {

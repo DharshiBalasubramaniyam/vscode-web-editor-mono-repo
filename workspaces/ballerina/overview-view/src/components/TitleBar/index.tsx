@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { ConstructorPanel } from '../ConstructorPanel';
 import { WorkspacesFileResponse } from '@dharshi/ballerina-core';
 import { SELECT_ALL_FILES } from '../../Overview';
+// import { useRpcContext } from '@dharshi/ballerina-rpc-client';
 
 const Container = styled.div`
     display: flex;
@@ -34,6 +35,8 @@ export function TitleBar(props: TitleBarProps) {
     const { onQueryChange, onSelectedFileChange, selectedFile, query, workspacesFileResponse } = props;
     const [isPanelOpen, setPanelOpen] = useState(false);
 
+    // const {rpcClient} = useRpcContext()
+
     const openPanel = () => {
         setPanelOpen(!isPanelOpen);
     };
@@ -52,16 +55,6 @@ export function TitleBar(props: TitleBarProps) {
     });
 
     console.log({"workspaceFiles": workspaceFiles, "selectedFile": selectedFile});
-    
-    // const handleAddConstruct = () => {
-    //     rpcClient.getVisualizerRpcClient().openView({
-    //         type: EVENT_TYPE.OPEN_VIEW,
-    //         location: {
-    //             view: MACHINE_VIEW.BIComponentView,
-    //             documentUri: selectedFile
-    //         },
-    //     });
-    // };
 
     return (
         <Container>
@@ -97,7 +90,7 @@ export function TitleBar(props: TitleBarProps) {
                     <Codicon name="add" sx={{ marginRight: 5 }} /> Component
                 </Button>
             </ComponentButton>
-            {isPanelOpen && <ConstructorPanel isPanelOpen={isPanelOpen} setPanelOpen={setPanelOpen} />}
+            {isPanelOpen && <ConstructorPanel isPanelOpen={isPanelOpen} setPanelOpen={setPanelOpen} filePath={selectedFile} />}
         </Container>
     );
 }

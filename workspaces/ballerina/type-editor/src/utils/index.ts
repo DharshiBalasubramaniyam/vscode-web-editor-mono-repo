@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
 import { ModulePart, NodePosition, STKindChecker, STNode, TypeDefinition } from "@dharshi/syntax-tree";
 import {
     DIAGNOSTIC_SEVERITY,
@@ -18,6 +10,9 @@ import {
 } from "@dharshi/ballerina-core";
 import { LangClientRpcClient, RecordCreatorRpcClient } from "@dharshi/ballerina-rpc-client";
 import { RecordItemModel } from "../types";
+import { RefObject } from "react";
+import { Position } from "@dharshi/ui-toolkit";
+import { ARROW_HEIGHT, ARROW_OFFSET, HELPER_PANE_WIDTH } from "../TypeHelper/Constant";
 
 export const isNotSupportedType = (resp: JsonToRecord | NOT_SUPPORTED_TYPE): resp is NOT_SUPPORTED_TYPE => {
     return  !("diagnostics" in resp);
@@ -243,4 +238,23 @@ export function getRemoveCreatedRecordRange(recordNames: string[], syntaxTree: S
         }
     }
     return modifications;
+}
+
+export function getHelperPanePosition(typeFieldRef: RefObject<HTMLElement>, offset: Position): Position {
+    const rect = typeFieldRef.current.getBoundingClientRect();
+    const position: Position = {
+        top: 0,
+        left: rect.left - HELPER_PANE_WIDTH - ARROW_HEIGHT + offset.left
+    };
+
+    return position;
+}
+
+export function getArrowPosition(typeFieldRef: RefObject<HTMLElement>, helperPanePosition: Position): Position {
+    const rect = typeFieldRef.current.getBoundingClientRect();
+    const position: Position = { top: 0, left: 0 };
+    position.top = rect.top - helperPanePosition.top + ARROW_OFFSET;
+    position.left = HELPER_PANE_WIDTH;
+
+    return position;
 }

@@ -98,6 +98,9 @@ importers:
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.17.16
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1883,6 +1886,9 @@ importers:
       '@vscode/webview-ui-toolkit':
         specifier: ~1.4.0
         version: 1.4.0(react@18.2.0)
+      lodash:
+        specifier: ~4.17.21
+        version: 4.17.21
       lodash.debounce:
         specifier: ^4.0.8
         version: 4.0.8
@@ -1905,6 +1911,9 @@ importers:
         specifier: ~3.0.8
         version: 3.0.8
     devDependencies:
+      '@types/lodash':
+        specifier: ~4.17.15
+        version: 4.17.16
       '@types/lodash.debounce':
         specifier: ^4.0.6
         version: 4.0.9
@@ -11429,7 +11438,6 @@ packages:
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-    dev: true
 
   /arr-diff@2.0.0:
     resolution: {integrity: sha512-dtXTVMkh6VkEEA7OhXnN1Ecb8aAGFdZ1LFxtOCoqj4qkyOJMt7+qs6Ahdy6p/NQCPYsRSXXivhSB/J5E9jmYKA==}
@@ -20179,7 +20187,6 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
-    dev: true
 
   /jsbn@0.1.1:
     resolution: {integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==}

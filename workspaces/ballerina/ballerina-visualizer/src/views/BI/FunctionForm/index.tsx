@@ -1,14 +1,5 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- */
-
 import { useEffect, useRef, useState } from "react";
-import { FunctionNode, LineRange, NodeProperties } from "@dharshi/ballerina-core";
+import { EVENT_TYPE, MACHINE_VIEW, FunctionNode, LineRange, NodeKind, NodeProperties, BINodeTemplateResponse } from "@dharshi/ballerina-core";
 import { View, ViewContent } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
@@ -34,59 +25,85 @@ const Container = styled.div`
 `;
 
 interface FunctionFormProps {
-    fileName: string;
+    filePath: string;
     projectPath: string;
     functionName: string;
     isDataMapper?: boolean;
+    isNpFunction?: boolean;
+    isAutomation?: boolean;
 }
 
 export function FunctionForm(props: FunctionFormProps) {
     const { rpcClient } = useRpcContext();
-    const { projectPath, fileName, functionName, isDataMapper } = props;
+    const { projectPath, functionName, filePath, isDataMapper, isNpFunction, isAutomation } = props;
 
     const [functionFields, setFunctionFields] = useState<FormField[]>([]);
-    const [filePath, setFilePath] = useState<string>('');
     const [functionNode, setFunctionNode] = useState<FunctionNode>(undefined);
     const [targetLineRange, setTargetLineRange] = useState<LineRange>();
+    const [titleSubtitle, setTitleSubtitle] = useState<string>("");
+    const [formSubtitle, setFormSubtitle] = useState<string>("");
 
-    const formType = useRef(isDataMapper ? "Data Mapper" : "Function");
+    const formType = useRef("Function");
 
     useEffect(() => {
-        setFilePath(fileName)
+        let nodeKind: NodeKind;
+        if (isAutomation || functionName === "main") {
+            nodeKind = 'FUNCTION_DEFINITION';
+            formType.current = "Automation";
+            setTitleSubtitle('An automation that can be invoked periodically or manually');
+            setFormSubtitle('Periodic invocation should be scheduled in an external system such as cronjob, k8s, or Devant');
+        } else if (isDataMapper) {
+            nodeKind = 'DATA_MAPPER_DEFINITION';
+            formType.current = 'Data Mapper';
+            setTitleSubtitle('Transform data between different data types');
+            setFormSubtitle('Create mappings on how to convert the inputs into a single output');
+        } else if (isNpFunction) {
+            nodeKind = 'NP_FUNCTION_DEFINITION';
+            formType.current = 'Natural Programming Function';
+            setTitleSubtitle('Build a flow using a natural language description');
+            setFormSubtitle('Describe what you need in a prompt and let AI handle the implementation');
+        } else {
+            nodeKind = 'FUNCTION_DEFINITION';
+            formType.current = 'Function';
+            setTitleSubtitle('Build reusable custom flows');
+            setFormSubtitle('Define a flow that can be used within your integration');
+        }
+
         if (functionName) {
             getExistingFunctionNode();
         } else {
-            getFunctionNode();
+            getFunctionNode(nodeKind);
         }
-    }, [fileName]);
+    }, [isDataMapper, isNpFunction, isAutomation, functionName]);
 
     useEffect(() => {
         let fields = functionNode ? convertConfig(functionNode.properties) : [];
-        if (functionNode?.properties.functionName.value === "main") {
+        
+        // TODO: Remove this once the hidden flag is implemented 
+        if (isAutomation || functionName === "main") {
             formType.current = "Automation";
             const automationFields = fields.filter(field => field.key !== "functionName" && field.key !== "type");
             fields = automationFields;
-        }
-        if (isDataMapper && fields.length > 0) {
-            fields.forEach((field) => {
-                field.optional = false;
-            });
         }
 
         setFunctionFields(fields);
     }, [functionNode]);
 
-    const getFunctionNode = async () => {
+    const getFunctionNode = async (kind: NodeKind) => {
         const res = await rpcClient
             .getBIDiagramRpcClient()
             .getNodeTemplate({
                 position: { line: 0, offset: 0 },
-                filePath: fileName,
-                id: { node: isDataMapper ? 'DATA_MAPPER_DEFINITION' : 'FUNCTION_DEFINITION' },
+                filePath: filePath,
+                id: { node: kind },
             });
         const flowNode = res.flowNode;
         setFunctionNode(flowNode);
         console.log("Function Node: ", flowNode);
+
+        if (isAutomation) {
+            handleMainFunction(res);
+        }
     }
 
     const getExistingFunctionNode = async () => {
@@ -94,7 +111,7 @@ export function FunctionForm(props: FunctionFormProps) {
             .getBIDiagramRpcClient()
             .getFunctionNode({
                 functionName,
-                fileName,
+                fileName: filePath,
                 projectPath
             });
         const flowNode = res.functionDefinition;
@@ -102,8 +119,23 @@ export function FunctionForm(props: FunctionFormProps) {
         console.log("Existing Function Node: ", flowNode);
     }
 
+    const handleMainFunction = async (flowNodeRes: BINodeTemplateResponse) => {
+        console.log("handling main function: ", flowNodeRes)
+        const properties = flowNodeRes.flowNode.properties
+        properties.functionName.value = "main";
+        await rpcClient.getBIDiagramRpcClient().getSourceCode({ filePath, flowNode: flowNodeRes.flowNode, isFunctionNodeUpdate: true });
+        rpcClient.getVisualizerRpcClient().openView({
+            type: EVENT_TYPE.OPEN_VIEW,
+                location: {
+                    view: MACHINE_VIEW.Overview,
+                },
+            });
+
+    }
+
     const handleSubmit = async (data: FormValues) => {
-        console.log("Function Form Data: ", data)
+        console.log("Function Form Data: ", data);
+    
         const functionNodeCopy = { ...functionNode };
         for (const [dataKey, dataValue] of Object.entries(data)) {
             const properties = functionNodeCopy.properties as NodeProperties;
@@ -133,11 +165,13 @@ export function FunctionForm(props: FunctionFormProps) {
     };
 
     useEffect(() => {
+        console.log("getting end fo file...")
         if (filePath && rpcClient) {
             rpcClient
                 .getBIDiagramRpcClient()
                 .getEndOfFile({ filePath })
                 .then((res) => {
+                    console.log("end of file: ", res)
                     setTargetLineRange({
                         startLine: res,
                         endLine: res,
@@ -149,15 +183,16 @@ export function FunctionForm(props: FunctionFormProps) {
     return (
         <View>
             <TopNavigationBar />
-            <TitleBar title={formType.current} subtitle={`Manage ${isDataMapper ? "data mappers" : "functions"} in your integration`} />
+            <TitleBar 
+                title={formType.current} 
+                subtitle={titleSubtitle} 
+            />
             <ViewContent padding>
                 <Container>
-                    {functionName && (
-                        <FormHeader title={`Edit ${formType.current}`} />
-                    )}
-                    {!functionName && (
-                        <FormHeader title={`Create New ${formType.current}`} subtitle={`Define a ${formType.current} that can be used within the integration.`} />
-                    )}
+                    <FormHeader 
+                        title={`${functionName ? 'Edit' : 'Create New'} ${formType.current}`}
+                        subtitle={formSubtitle} 
+                    />
                     <FormContainer>
                         {filePath && targetLineRange && functionFields.length > 0 &&
                             <FormGeneratorNew

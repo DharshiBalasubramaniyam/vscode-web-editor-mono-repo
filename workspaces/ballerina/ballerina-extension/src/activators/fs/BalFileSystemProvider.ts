@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { File } from "@dharshi/ballerina-core";
+import { SERVER_BASE_URL } from '../../utils/constants';
 
-const FS_BASE_URL = `http://localhost:9091/fs`;
+const FS_BASE_URL = `${SERVER_BASE_URL}/fs`;
 
 export class BalFileSystemProvider implements vscode.FileSystemProvider {
 
