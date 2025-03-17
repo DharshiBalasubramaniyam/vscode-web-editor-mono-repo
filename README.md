@@ -36,6 +36,10 @@ rush build
 npm start
 ```
 
+6. Open your browser and navigate to `http://localhost:3001`.  
+7. Press `Ctrl+Shift+P` to open the command palette.  
+8. Select the `Open GitHub Repository` command and provide the repository URL of a Ballerina project to get started.  
+
 ## Packages
 
 ### Vscode web server ([`workspaces/server/`](./workspaces/server/server.js))
@@ -48,24 +52,24 @@ This server serves `ballerina web extension` from `workspaces/ballerina/ballerin
 
 The current implementation of ballerina extension supports below features:
 
-1. Language features.
-        1.1. Completion
-        1.2. Hover
-        1.3. Publish diagnostics
-        1.4. Rename
-        1.5. Go to definition
-        1.6. Go to references
-        1.7. Document symbol
-        1.8. Folding ranges
-        1.9. Code action
-        1.10. Inlayhint
-3. Diagram features
-        2.1. Overview view
-        2.2. Function view - add/view
-        2.3. Type diagram view - add/view/edit/delete
-        2.4. Service designer - http
-        2.5. Triggers/Connectors - add/edit/view/delete
-        2.6. Configurables - add/edit/view/delete
+1. Language features:
+- Completion
+- Hover
+- Publish diagnostics
+- Rename
+- Go to definition
+- Go to references
+- Document symbol
+- Folding ranges
+- Code action
+- Inlayhint
+2. Diagram features:
+- Overview view
+- Function view - add/view
+- Type diagram view - add/view/edit/delete
+- Service designer - http
+- Triggers/Connectors - add/edit/view/delete
+- Configurables - add/edit/view/delete
 
 [`workspaces/ballerina/ballerina-extension/src/extension.ts`](./workspaces/ballerina/ballerina-extension/src/extension.ts), serves as the entry point for the Ballerina extension. When the extension is activated, it initializes the following components:
 

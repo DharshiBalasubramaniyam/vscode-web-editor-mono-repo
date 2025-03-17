@@ -95,7 +95,6 @@ async function getContext(): Promise<VisualizerLocation> {
             metadata: {
                 haveLS: StateMachine.langClient() !== null,
                 // recordFilePath: Uri.joinPath(context.projectUri, "types.bal").toString(),
-                enableSequenceDiagram: balExtInstance.enableSequenceDiagramView(),
             },
         });
     });
