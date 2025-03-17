@@ -1,10 +1,12 @@
 import * as vscode from "vscode";
-import { balExtInstance, BallerinaExtension, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
+import { balExtInstance, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
 import { BalFileSystemProvider } from "./BalFileSystemProvider";
 
 const fsProvider = new BalFileSystemProvider();
 
 export function activateFileSystemProvider() {
+
+    // Register fs provider
     balExtInstance.fsProvider = fsProvider;
     balExtInstance.context.subscriptions.push(
         vscode.workspace.registerFileSystemProvider(WEB_IDE_SCHEME, fsProvider, { isReadonly: false }),
@@ -13,11 +15,10 @@ export function activateFileSystemProvider() {
 
     // Register the command to open a github repository
     balExtInstance.context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
-        // const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
-        // if (!repoUrl) {
-        //     return;
-        // }
-        const repoUrl = "https://github.com/DharshiBalasubramaniyam/RESTful-API-with-Ballerina";
+        const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
+        if (!repoUrl) {
+            return;
+        }
         const repoInfo = extractGitHubRepoInfo(repoUrl);
         if (!repoInfo) {
             vscode.window.showErrorMessage('Invalid repository URL');
@@ -45,6 +46,7 @@ export function activateFileSystemProvider() {
         }
     });
 
+    // Track active ballerina text file
     vscode.window.onDidChangeActiveTextEditor(editor => {
         if (!editor && vscode.window.visibleTextEditors.length === 0) {
             balExtInstance.activeBalFileUri = undefined;
