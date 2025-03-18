@@ -9,6 +9,8 @@ This is a monorepo containing multiple packages for building a Ballerina-based w
 - Rush (version 5.141.2)
 - Run [ballerina server](https://github.com/DharshiBalasubramaniyam/bal-lang-server)
 
+> This project is using APIs of Ballerina Swan Lake Update 12.0 (2201.12.0).
+
 ## Installation
 
 1. Clone the repository
@@ -79,3 +81,10 @@ The current implementation of ballerina extension supports below features:
 - [File system](./workspaces/ballerina/ballerina-extension/src/activators/fs/activateFS.ts): Connects to the HTTP-based file system server to provide project file access and handle file system operations.
 
 - [Ballerina visualizer](./workspaces/ballerina/ballerina-extension/src/activators/visualizer/activateVisualizer.ts) - Activates features related to visualizing and editing Ballerina code.
+
+
+## References
+
+1. [Web extensions](https://code.visualstudio.com/api/extension-guides/web-extensions)
+2. [Language server protocol](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
+3. [Vscode file system provider](https://code.visualstudio.com/api/extension-guides/virtual-workspaces)
