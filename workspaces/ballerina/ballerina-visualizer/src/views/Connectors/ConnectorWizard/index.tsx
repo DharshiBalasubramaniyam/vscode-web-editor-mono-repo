@@ -130,58 +130,26 @@ export function ConnectorList(props: ConnectorListProps) {
 
     useEffect(() => {
         rpcClient
-            .getLangClientRpcClient()
-            .getSyntaxTree()
-            .then(async (model) => {
-                const parsedModel = sizingAndPositioningST(model.syntaxTree);
-                const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
-                const fullST = await rpcClient.getLangClientRpcClient().getST({
-                    documentIdentifier: { uri: URI.parse(filePath).toString() }
-                });
-                setActiveFileInfo({ fullST: fullST?.syntaxTree, filePath, activeSequence: parsedModel });
-                if (!statementPosition) {
+        .getLangClientRpcClient()
+        .getSyntaxTree()
+        .then(async (model) => {
+                console.log("model: ", model);
+                if (!STKindChecker.isFunctionDefinition(model.syntaxTree)) {
+                    const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
+                    const fullST = await rpcClient.getLangClientRpcClient().getST({
+                        documentIdentifier: { uri: URI.parse(filePath).toString() }
+                    });
+                    setActiveFileInfo({ ...activeFileInfo, fullST: fullST?.syntaxTree, filePath });
                     setStatementPosition({
-                        startLine: fullST.syntaxTree.position.endLine + 1,
-                        endLine: fullST.syntaxTree.position.endLine + 1,
-                        startColumn: fullST.syntaxTree.position.endColumn - 1,
-                        endColumn: fullST.syntaxTree.position.endColumn - 1,
+                            startLine: fullST.syntaxTree.position.endLine + 1,
+                            endLine: fullST.syntaxTree.position.endLine + 1,
+                            startColumn: fullST.syntaxTree.position.endColumn - 1,
+                            endColumn: fullST.syntaxTree.position.endColumn - 1,
                     });
                 }
+                console.log("activeFileInfo: ", activeFileInfo)
             });
     }, [])
-
-    function sizingAndPositioningST(
-        st: STNode,
-        experimentalEnabled?: boolean,
-        showMessage?: (
-            arg: string,
-            messageType: MESSAGE_TYPE,
-            ignorable: boolean,
-            filePath?: string,
-            fileContent?: string,
-            bypassChecks?: boolean
-        ) => void
-    ): STNode {
-        traversNode(st, initVisitor);
-        const sizingVisitor = new SizingVisitor(experimentalEnabled);
-        traversNode(st, sizingVisitor);
-        if (showMessage && sizingVisitor.getConflictResulutionFailureStatus()) {
-            showMessage(
-                "Something went wrong in the diagram rendering.",
-                MESSAGE_TYPE.ERROR,
-                false,
-                undefined,
-                undefined,
-                true
-            );
-        }
-        traversNode(st, new PositioningVisitor());
-        cleanLocalSymbols();
-        cleanModuleLevelSymbols();
-        traversNode(st, SymbolVisitor);
-        const clone = { ...st };
-        return clone;
-    }
 
     return (
         <>

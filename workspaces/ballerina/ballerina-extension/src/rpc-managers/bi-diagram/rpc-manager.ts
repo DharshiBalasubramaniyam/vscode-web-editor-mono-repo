@@ -109,6 +109,7 @@ import { notifyBreakpointChange } from "../../RPCLayer";
 // import { BreakpointManager } from "../../features/debugger/breakpoint-manager";
 import { StateMachine, openView, updateView } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
+import { getFunctionNodePosition } from "./utils";
 // import { getCompleteSuggestions } from '../../utils/ai/completions';
 // import { README_FILE, createBIAutomation, createBIFunction, createBIProjectPure } from "../../utils/bi";
 // import { writeBallerinaFileDidOpen } from "../../utils/modification";
@@ -365,17 +366,26 @@ export class BiDiagramRpcManager
     async getSourceCode(params: BISourceCodeRequest): Promise<BISourceCodeResponse> {
         console.log(">>> requesting bi source code from ls", params);
         const { flowNode, isFunctionNodeUpdate } = params;
+        // if (isFunctionNodeUpdate && !params.flowNode.codedata.lineRange) {
+            // await this.getEndOfFile({filePath: params.filePath})
+            // .then((endofFile) => {
+            //     params.flowNode.codedata.lineRange = {
+            //         endLine: {line: endofFile.line-3, offset: endofFile.offset},
+            //         startLine: {line: endofFile.line-3, offset: endofFile.offset},
+            //         fileName: params.filePath
+            //     };
+            // });
+        // }
         return new Promise((resolve) => {
             StateMachine.langClient()
                 .getSourceCode(params)
                 .then(async (model) => {
-                    console.log(">>> bi source code from ls", model);
                     if (params?.isConnector) {
                         await this.updateSource(model, flowNode, true, isFunctionNodeUpdate);
                         resolve(model);
                         commands.executeCommand("BI.project-explorer.refresh");
                     } else {
-                        this.updateSource(model, flowNode, false, isFunctionNodeUpdate);
+                        this.updateSource(model, flowNode, false, isFunctionNodeUpdate, !!!params.flowNode.codedata.lineRange);
                         resolve(model);
                     }
                 })
@@ -389,7 +399,6 @@ export class BiDiagramRpcManager
     }
 
     async getNodeTemplate(params: BINodeTemplateRequest): Promise<BINodeTemplateResponse> {
-        console.log(">>> requesting bi node template from ls", params);
 
         return new Promise((resolve) => {
             StateMachine.langClient()
@@ -409,7 +418,8 @@ export class BiDiagramRpcManager
         params: BISourceCodeResponse,
         flowNode?: FlowNode | FunctionNode,
         isConnector?: boolean,
-        isFunctionNodeUpdate?: boolean
+        isFunctionNodeUpdate?: boolean,
+        isNewFunction?: boolean
     ): Promise<void> {
         const modificationRequests: Record<string, { filePath: string; modifications: STModification[] }> = {};
         for (const [key, value] of Object.entries(params.textEdits)) {
@@ -432,6 +442,16 @@ export class BiDiagramRpcManager
 
             if (edits && edits.length > 0) {
                 const modificationList: STModification[] = [];
+
+                if (isNewFunction) {
+                    await this.getEndOfFile({filePath: fileUri})
+                        .then((endofFile) => {
+                            edits[0].range = {
+                                start: {line: endofFile.line, character: endofFile.offset},
+                                end: {line: endofFile.line, character: endofFile.offset}
+                            };
+                        });
+                }
 
                 for (const edit of edits) {
                     const stModification: STModification = {
@@ -477,17 +497,12 @@ export class BiDiagramRpcManager
                     );
                     await workspace.applyEdit(workspaceEdit);
 
-                    if (isConnector) {
-                        // Temp fix: ResolveMissingDependencies does not work unless we call didOpen, This needs to be fixed in the LS
-                        await StateMachine.langClient().didOpen({
-                            textDocument: { uri: fileUriString, languageId: "ballerina", version: 1, text: source },
+                    if (isFunctionNodeUpdate) {
+                        const functionPosition = getFunctionNodePosition(flowNode.properties, syntaxTree);
+                        openView(EVENT_TYPE.OPEN_VIEW, {
+                            documentUri: request.filePath,
+                            position: functionPosition,
                         });
-                    } else if (isFunctionNodeUpdate) {
-                        // const functionPosition = getFunctionNodePosition(flowNode.properties, syntaxTree);
-                        // openView(EVENT_TYPE.OPEN_VIEW, {
-                        //     documentUri: request.filePath,
-                        //     position: functionPosition,
-                        // });
                     }
                 }
             }

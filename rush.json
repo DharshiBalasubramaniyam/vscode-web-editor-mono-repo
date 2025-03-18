@@ -360,11 +360,6 @@
       "reviewCategory": "library"
     },
     {
-      "packageName": "@dharshi/persist-layer-diagram",
-      "projectFolder": "workspaces/ballerina/persist-layer-diagram",
-      "reviewCategory": "library"
-    },
-    {
       "packageName": "@dharshi/type-diagram",
       "projectFolder": "workspaces/ballerina/type-diagram",
       "reviewCategory": "library"
@@ -390,16 +385,6 @@
       "reviewCategory": "library"
     },
     {
-      "packageName": "@dharshi/component-diagram",
-      "projectFolder": "workspaces/ballerina/component-diagram",
-      "reviewCategory": "library"
-    },
-    {
-      "packageName": "@dharshi/data-mapper-view",
-      "projectFolder": "workspaces/ballerina/data-mapper-view",
-      "reviewCategory": "library"
-    },
-    {
       "packageName": "@dharshi/ballerina-low-code-diagram",
       "projectFolder": "workspaces/ballerina/ballerina-low-code-diagram",
       "reviewCategory": "library"
@@ -407,11 +392,6 @@
     {
       "packageName": "@dharshi/bi-diagram",
       "projectFolder": "workspaces/ballerina/bi-diagram",
-      "reviewCategory": "library"
-    },
-    {
-      "packageName": "@dharshi/ballerina-inline-data-mapper",
-      "projectFolder": "workspaces/ballerina/inline-data-mapper",
       "reviewCategory": "library"
     }
   ]

@@ -18,22 +18,6 @@ export class BallerinaExtension {
 	public balServerUrl: string;
 	public activeBalFileUri?: string | undefined;
 	public statusBar: vscode.StatusBarItem;
-
-	init() {
-		this.balServerUrl = "http://localhost:9091";
-	}
-
-	// public enabledExperimentalFeatures(): boolean {
-    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_EXPERIMENTAL_FEATURES);
-    // }
-
-	// public enableSequenceDiagramView(): boolean {
-    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_SEQUENCE_DIAGRAM_VIEW);
-    // }
-
-    // public enableAiSuggestions(): boolean {
-    //     return <boolean>vscode.workspace.getConfiguration().get(ENABLE_AI_SUGGESTIONS);
-    // }
 }
 
 export const balExtInstance: BallerinaExtension = new BallerinaExtension();

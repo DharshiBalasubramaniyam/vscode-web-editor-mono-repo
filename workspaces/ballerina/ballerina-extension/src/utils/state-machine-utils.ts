@@ -89,6 +89,9 @@ export async function getView(documentUri: string, position: NodePosition, proje
                     location: {
                         view: MACHINE_VIEW.EditConnectionWizard,
                         identifier: connectionName,
+                        documentUri: documentUri,
+                        position: position,
+                        projectUri: projectUri
                     },
                 };
             }

@@ -5,7 +5,7 @@ import { View, ViewContent, Button } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { getFunctionParametersList } from "../../../utils/utils";
-import { FormField, FormValues, Parameter } from "@wso2-enterprise/ballerina-side-panel";
+import { FormField, FormValues, Parameter } from "@dharshi/ballerina-side-panel";
 import { TopNavigationBar } from "../../../components/TopNavigationBar";
 import { URI, Utils } from "vscode-uri";
 import { TitleBar } from "../../../components/TitleBar";
