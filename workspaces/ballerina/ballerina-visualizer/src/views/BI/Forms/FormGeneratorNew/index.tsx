@@ -1,4 +1,3 @@
-
 import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     EVENT_TYPE,
@@ -418,7 +417,7 @@ export function FormGeneratorNew(props: FormProps) {
                     rpcClient={rpcClient}
                 />
             )}
-            {isGraphqlEditor && openTypeEditor &&
+            {/* {isGraphqlEditor && openTypeEditor &&
                 <PanelContainer title={"New Type"} show={true} onClose={onCloseTypeEditor}>
                     <TypeEditor
                         type={defaultType()}
@@ -428,7 +427,7 @@ export function FormGeneratorNew(props: FormProps) {
                         onTypeChange={handleTypeChange}
                     />
                 </PanelContainer>
-            }
+            } */}
 
         </>
     );

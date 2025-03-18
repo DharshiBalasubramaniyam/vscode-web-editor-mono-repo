@@ -38,7 +38,6 @@ import {
     HelperPaneFunctionCategory,
     HelperPaneCompletionItem
 } from "@dharshi/ballerina-side-panel";
-import { SidePanelView } from "../views/BI/FlowDiagram";
 import React from "react";
 import { cloneDeep } from "lodash";
 import { COMPLETION_ITEM_KIND, CompletionItem, CompletionItemKind, convertCompletionItemKind } from "@dharshi/ui-toolkit";
@@ -239,26 +238,6 @@ export function updateNodeProperties(values: FormValues, nodeProperties: NodePro
     }
 
     return updatedNodeProperties;
-}
-
-export function getContainerTitle(view: SidePanelView, activeNode: FlowNode, clientName?: string): string {
-    switch (view) {
-        case SidePanelView.NODE_LIST:
-            return ""; // Show switch instead of title
-        case SidePanelView.FORM:
-            if (
-                activeNode.codedata?.node === "REMOTE_ACTION_CALL" ||
-                activeNode.codedata?.node === "RESOURCE_ACTION_CALL"
-            ) {
-                return `${clientName || activeNode.properties.connection.value} → ${activeNode.metadata.label}`;
-            } else if (activeNode.codedata?.node === "DATA_MAPPER_CALL") {
-                return `${activeNode.codedata?.module ? activeNode.codedata?.module + " :" : ""} ${activeNode.codedata.symbol}`;
-            }
-            return `${activeNode.codedata?.module ? activeNode.codedata?.module + " :" : ""} ${activeNode.metadata.label
-                }`;
-        default:
-            return "";
-    }
 }
 
 export function addDraftNodeToDiagram(flowModel: Flow, parent: FlowNode | Branch, target: LineRange) {

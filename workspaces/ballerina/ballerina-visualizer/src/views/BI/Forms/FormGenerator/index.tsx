@@ -412,7 +412,8 @@ export function FormGenerator(props: FormProps) {
         const response = await rpcClient.getBIDiagramRpcClient().addFunction({
             filePath: fileName,
             codedata: item.codedata,
-            kind: item.kind as FunctionKind
+            kind: item.kind as FunctionKind,
+            searchKind: "FUNCTION"
         })
 
         if (response.template) {

@@ -5,6 +5,7 @@ import { ConfigVariable } from '@dharshi/ballerina-core';
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { PanelContainer, FormValues } from '@dharshi/ballerina-side-panel';
 import FormGenerator from '../../Forms/FormGenerator';
+import { useEffect, useState } from 'react';
 
 
 namespace S {
@@ -25,82 +26,89 @@ export interface ConfigFormProps {
 
 export function AddForm(props: ConfigFormProps) {
     const { isOpen, onClose, title, filename } = props;
+    const [variableNode, setVariableNode] = useState<ConfigVariable>(null);
 
     const { rpcClient } = useRpcContext();
 
-    const variable: ConfigVariable = {
-        "id": "",
-        "metadata": {
-            "label": "Config",
-            "description": "Create a configurable variable"
-        },
-        "codedata": {
-            "node": "CONFIG_VARIABLE",
-            "lineRange": {
-                "fileName": "config.bal",
-                "startLine": {
-                    "line": 0,
-                    "offset": 0
-                },
-                "endLine": {
-                    "line": 0,
-                    "offset": 0
-                }
-            }
-        },
-        "returning": false,
-        "properties": {
-            "type": {
-                "metadata": {
-                    "label": "Type",
-                    "description": "Type of the variable"
-                },
-                "valueType": "TYPE",
-                "value": "",
-                "optional": false,
-                "advanced": false,
-                "editable": true
-            },
-            "variable": {
-                "metadata": {
-                    "label": "Variable",
-                    "description": "Name of the variable"
-                },
-                "valueType": "IDENTIFIER",
-                "value": "",
-                "optional": false,
-                "advanced": false,
-                "editable": true,
-            },
-            "defaultable": {
-                "metadata": {
-                    "label": "Default value",
-                    "description": "Default value for the config, if empty your need to provide a value at runtime"
-                },
-                "valueType": "EXPRESSION",
-                "value": "",
-                "optional": true,
-                "advanced": true,
-                "editable": true
-            }
-        },
-        branches: []
-    };
+    useEffect(() => {
+        rpcClient.getBIDiagramRpcClient()
+            .getEndOfFile({ filePath: filename })
+            .then((end) => {
+                setVariableNode({
+                    "id": "",
+                    "metadata": {
+                        "label": "Config",
+                        "description": "Create a configurable variable"
+                    },
+                    "codedata": {
+                        "node": "CONFIG_VARIABLE",
+                        "lineRange": {
+                            "fileName": filename,
+                            "startLine": {
+                                "line": end.line,
+                                "offset": 0
+                            },
+                            "endLine": {
+                                "line": end.line,
+                                "offset": 0
+                            }
+                        }
+                    },
+                    "returning": false,
+                    "properties": {
+                        "type": {
+                            "metadata": {
+                                "label": "Type",
+                                "description": "Type of the variable"
+                            },
+                            "valueType": "TYPE",
+                            "value": "",
+                            "optional": false,
+                            "advanced": false,
+                            "editable": true
+                        },
+                        "variable": {
+                            "metadata": {
+                                "label": "Variable",
+                                "description": "Name of the variable"
+                            },
+                            "valueType": "IDENTIFIER",
+                            "value": "",
+                            "optional": false,
+                            "advanced": false,
+                            "editable": true,
+                        },
+                        "defaultable": {
+                            "metadata": {
+                                "label": "Default value",
+                                "description": "Default value for the config, if empty your need to provide a value at runtime"
+                            },
+                            "valueType": "EXPRESSION",
+                            "value": "",
+                            "optional": true,
+                            "advanced": true,
+                            "editable": true
+                        }
+                    },
+                    branches: []
+                })
+            })
+    }, [])
 
     const handleSave = async (data: FormValues) => {
-        variable.properties.defaultable.value =
+        variableNode.properties.defaultable.value =
             data.properties.defaultable.value === "" || data.properties.defaultable.value === null ?
                 "?"
                 : data.properties.defaultable.value;
-        variable.properties.defaultable.optional = true;
+        variableNode.properties.defaultable.optional = true;
 
-        variable.properties.type.value = data.properties.type.value;
-        variable.properties.variable.value = data.properties.variable.value;
-        
+        variableNode.properties.type.value = data.properties.type.value;
+        variableNode.properties.variable.value = data.properties.variable.value;
+
         rpcClient
             .getBIDiagramRpcClient()
             .updateConfigVariables({
-                configVariable: variable,
+                configVariable: variableNode,
                 configFilePath: filename
             })
             .then((response: any) => {
@@ -118,15 +126,19 @@ export function AddForm(props: ConfigFormProps) {
                 show={isOpen}
                 onClose={onClose}
             >
-                <FormGenerator
-                    fileName={filename}
-                    node={variable}
-                    targetLineRange={{
-                        startLine: variable.codedata.lineRange.startLine,
-                        endLine: variable.codedata.lineRange.endLine
-                    }}
-                    onSubmit={handleSave}
-                />
+                {
+                    variableNode && (
+                        <FormGenerator
+                            fileName={filename}
+                            node={variableNode}
+                            targetLineRange={{
+                                startLine: variableNode.codedata.lineRange.startLine,
+                                endLine: variableNode.codedata.lineRange.endLine
+                            }}
+                            onSubmit={handleSave}
+                        />
+                    )
+                }
 
             </PanelContainer>
         </>
