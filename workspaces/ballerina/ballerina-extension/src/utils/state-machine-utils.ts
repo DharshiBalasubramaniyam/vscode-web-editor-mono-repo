@@ -154,20 +154,6 @@ export async function getView(documentUri: string, position: NodePosition, proje
             || STKindChecker.isResourceAccessorDefinition(node.syntaxTree)
             || STKindChecker.isObjectMethodDefinition(node.syntaxTree)
         ) {
-            if (StateMachine.context().isBI) {
-                return {
-                    location: {
-                        view: MACHINE_VIEW.BIDiagram,
-                        documentUri: documentUri,
-                        position: node.syntaxTree.position,
-                        metadata: {
-                            // enableSequenceDiagram: ballerinaExtInstance.enableSequenceDiagramView(),
-                            enableSequenceDiagram: false
-                        }
-                    },
-                    dataMapperDepth: 0
-                };
-            }
             console.log("the view is a sequence diagram...");
             return {
                 location: {

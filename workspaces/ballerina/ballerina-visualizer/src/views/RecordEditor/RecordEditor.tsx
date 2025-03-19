@@ -55,7 +55,7 @@ export function RecordEditor(props: RecordEditorProps) {
 
     const applyRecordModifications = async (modifications: STModification[]) => {
         const langServerRPCClient = rpcClient.getLangClientRpcClient();
-        const filePath = (await rpcClient.getVisualizerLocation()).metadata?.recordFilePath;
+        const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
         let updatedModifications = modifications;
         if (modifications.length === 1) {
             // Change the start position of the modification to the beginning of the file

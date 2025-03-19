@@ -138,7 +138,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(updateClassField, (args: ClassFieldModifierRequest) => rpcManger.updateClassField(args));
     // messenger.onRequest(addClassField, (args: AddFieldRequest) => rpcManger.addClassField(args));
     // messenger.onRequest(updateServiceClass, (args: ServiceClassSourceRequest) => rpcManger.updateServiceClass(args));
-    // messenger.onRequest(createGraphqlClassType, (args: UpdateTypeRequest) => rpcManger.createGraphqlClassType(args));
+    messenger.onRequest(createGraphqlClassType, (args: UpdateTypeRequest) => rpcManger.createGraphqlClassType(args));
     // messenger.onRequest(updateImports, (args: UpdateImportsRequest) => rpcManger.updateImports(args));
     // messenger.onRequest(addFunction, (args: AddFunctionRequest) => rpcManger.addFunction(args));
     messenger.onRequest(getFunctionNode, (args: FunctionNodeRequest) => rpcManger.getFunctionNode(args));

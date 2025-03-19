@@ -38,9 +38,8 @@ import {
     HelperPaneFunctionCategory,
     HelperPaneCompletionItem
 } from "@dharshi/ballerina-side-panel";
-import React from "react";
 import { cloneDeep } from "lodash";
-import { COMPLETION_ITEM_KIND, CompletionItem, CompletionItemKind, convertCompletionItemKind } from "@dharshi/ui-toolkit";
+import { CompletionItem, CompletionItemKind, convertCompletionItemKind } from "@dharshi/ui-toolkit";
 
 function convertAvailableNodeToPanelNode(node: AvailableNode, functionType?: FUNCTION_TYPE): PanelNode {
     // Check if node should be filtered based on function type

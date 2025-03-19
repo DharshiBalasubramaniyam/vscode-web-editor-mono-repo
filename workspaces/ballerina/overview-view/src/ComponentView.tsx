@@ -19,7 +19,6 @@ export function ComponentView(props: ComponentViewProps) {
 
     const isComponentAllowed = () => {
         switch (type) {
-            case 'classes':
             case 'objects':
             case 'listeners':
                 return false;
