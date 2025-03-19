@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { TextField, Dropdown, Button, SidePanelBody, ProgressRing, Icon, Typography } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
@@ -10,9 +9,9 @@ import { RecordEditor } from "./RecordEditor";
 import { EnumEditor } from "./EnumEditor";
 import { UnionEditor } from "./UnionEditor";
 import { ClassEditor } from "./ClassEditor";
-import { AdvancedOptions } from "./AdvancedOptions";
 import { TypeHelperContext } from "../Context";
 import { TypeHelperCategory, TypeHelperItem, TypeHelperOperator } from "../TypeHelper";
+import { includes } from "lodash";
 
 namespace S {
     export const Container = styled(SidePanelBody)`
@@ -182,6 +181,7 @@ export function TypeEditor(props: TypeEditorProps) {
             members: [] as Member[],
             editable: true,
             filePath: filePath,
+            includes: [] as string[],
             metadata: {
                 description: "",
                 deprecated: false,
@@ -292,13 +292,13 @@ export function TypeEditor(props: TypeEditorProps) {
         if (type.codedata.node === "CLASS") {
             const response = await props.rpcClient
                 .getBIDiagramRpcClient()
-                .createGraphqlClassType({ filePath: filePath || 'types.bal', type, description: "" });
+                .createGraphqlClassType({ filePath: filePath, type, description: "" });
 
         } else {
             console.log(">>> type editor type: ", type)
             const response = await props.rpcClient
                 .getBIDiagramRpcClient()
-                .updateType({ filePath: filePath || 'types.bal', type, description: "" });
+                .updateType({ filePath: filePath, type, description: "" });
         }
         props.onTypeChange(type);
     }

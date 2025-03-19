@@ -150,6 +150,22 @@ export class BiDiagramRpcManager
         });
     }
 
+    async createGraphqlClassType(params: UpdateTypeRequest): Promise<UpdateTypeResponse> {
+        const filePath = StateMachine.context().documentUri;
+        return new Promise((resolve, reject) => {
+            StateMachine.langClient()
+                .createGraphqlClassType({ filePath, type: params.type, description: "" })
+                .then((updateTypeResponse: UpdateTypeResponse) => {
+                    console.log(">>> create graphql class type response", updateTypeResponse);
+                    this.updateSource(updateTypeResponse);
+                    resolve(updateTypeResponse);
+                }).catch((error) => {
+                    console.log(">>> error fetching class type from ls", error);
+                    reject(error);
+                });
+        });
+    }
+
     async getVisibleVariableTypes(params: BIGetVisibleVariableTypesRequest): Promise<BIGetVisibleVariableTypesResponse> {
         return new Promise((resolve, reject) => {
             StateMachine.langClient()

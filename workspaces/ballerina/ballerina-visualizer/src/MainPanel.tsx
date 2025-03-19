@@ -12,10 +12,8 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { NavigationBar } from "./components/NavigationBar";
 import { LoadingRing } from "./components/Loader";
-import { ServiceDesigner } from "./views/BI/ServiceDesigner";
-import {
-    FunctionForm,
-} from "./views/BI";
+import { ServiceDesigner } from "./views/ServiceDesigner";
+import { FunctionForm } from "./views/FunctionForm";
 import { handleRedo, handleUndo } from "./utils/utils";
 import { URI } from "vscode-uri";
 import { PanelType, useVisualizerContext } from "./Context";
@@ -24,13 +22,13 @@ import PopupPanel from "./PopupPanel";
 import { ConnectorList } from "./views/Connectors/ConnectorWizard";
 import { EndpointList } from "./views/Connectors/EndpointList";
 import { getSymbolInfo } from "@dharshi/ballerina-low-code-diagram";
-import ViewConfigurableVariables from "./views/BI/Configurables/ViewConfigurableVariables";
-import { ServiceWizard } from "./views/BI/ServiceDesigner/ServiceWizard";
-import { ServiceEditView } from "./views/BI/ServiceDesigner/ServiceEditView";
-import { ListenerEditView } from "./views/BI/ServiceDesigner/ListenerEditView";
+import ViewConfigurableVariables from "./views/Configurables/ViewConfigurableVariables";
+import { ServiceWizard } from "./views/ServiceDesigner/ServiceWizard";
+import { ServiceEditView } from "./views/ServiceDesigner/ServiceEditView";
+import { ListenerEditView } from "./views/ServiceDesigner/ListenerEditView";
 import { TypeDiagram } from "./views/TypeDiagram";
 import { EditPanel } from "./views/EditPanel";
-import { RecordEditor } from "./views/RecordEditor/RecordEditor";
+// import { RecordEditor } from "./views/RecordEditor/RecordEditor";
 import { SequenceDiagram } from "./views/SequenceDiagram";
 import { Overview } from "./views/Overview";
 import TriggerPanel from "./views/Connectors/TriggerWizard";
@@ -140,15 +138,14 @@ const MainPanel = () => {
                     case MACHINE_VIEW.ServiceDesigner:
                         setNavActive(false);
                         setViewComponent(
-                            <ServiceDesigner
-                                filePath={value.documentUri}
-                                position={value?.position}
-                            />
+                            <ServiceDesigner filePath={value.documentUri} position={value?.position} />
                         );
                         break;
                     case MACHINE_VIEW.TypeDiagram:
                         setNavActive(false);
-                        setViewComponent(<TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />);
+                        setViewComponent(
+                            <TypeDiagram selectedTypeId={value?.identifier} projectUri={value?.projectUri} />
+                        );
                         break;
                     case MACHINE_VIEW.SequenceDiagram:
                         setNavActive(true);
@@ -166,29 +163,18 @@ const MainPanel = () => {
                         setViewComponent(<ListenerEditView filePath={value.documentUri} position={value?.position} />);
                         break;
                     case MACHINE_VIEW.AddConnectionWizard:
-                        rpcClient.getVisualizerLocation().then((location) => {
-                            if (value.serviceType && value.serviceType === "connector") {
-                                setActivePanel({ isActive: false });
-                                setSidePanel("ADD_CONNECTION");
-                            } else if (value.serviceType && value.serviceType === "trigger") {
-                                setActivePanel({ isActive: false });
-                                setSidePanel("ADD_TRIGGER");
-                            }
-                        });
+                        if (value.serviceType && value.serviceType === "connector") {
+                            setActivePanel({ isActive: false });
+                            setSidePanel("ADD_CONNECTION");
+                        } else if (value.serviceType && value.serviceType === "trigger") {
+                            setActivePanel({ isActive: false });
+                            setSidePanel("ADD_TRIGGER");
+                        }
                         break;
                     case MACHINE_VIEW.EditConnectionWizard:
                         setActivePanel({ isActive: false });
                         setSidePanel("EDIT_CONNECTION");
                         break;
-                    //     rpcClient.getVisualizerLocation().then((location) => {
-                    //         setViewComponent(
-                    //             <EditConnectionWizard
-                    //                 fileName={value.documentUri}
-                    //                 connectionName={value?.identifier}
-                    //             />
-                    //         );
-                    //     });
-                    //     break;
                     case MACHINE_VIEW.BIMainFunctionForm:
                         setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} isAutomation={true} />);
                         break;
@@ -196,36 +182,32 @@ const MainPanel = () => {
                         setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} />);
                         break;
                     case MACHINE_VIEW.ViewConfigVariables:
-                        rpcClient.getVisualizerLocation().then((location) => {
-                            setViewComponent(
-                                <ViewConfigurableVariables
-                                    fileName={value.documentUri}
-                                />
-                            );
-                        });
+                        setViewComponent(
+                            <ViewConfigurableVariables
+                                fileName={value.documentUri}
+                            />
+                        );
                         break;
                     case MACHINE_VIEW.EditConfigVariables:
-                        rpcClient.getVisualizerLocation().then((location) => {
-                            rpcClient.getBIDiagramRpcClient().getConfigVariables().then((variables) => {
-                                if (variables.configVariables.length > 0) {
-                                    const variableIndex = variables.configVariables.findIndex(
-                                        (v) => {
-                                            const bindingPattern = value.syntaxTree.typedBindingPattern.bindingPattern;
-                                            if (bindingPattern.kind === "CaptureBindingPattern") {
-                                                return v.properties.variable.value === (bindingPattern as any).variableName.value;
-                                            }
-                                            return false;
+                        rpcClient.getBIDiagramRpcClient().getConfigVariables().then((variables) => {
+                            if (variables.configVariables.length > 0) {
+                                const variableIndex = variables.configVariables.findIndex(
+                                    (v) => {
+                                        const bindingPattern = value.syntaxTree.typedBindingPattern.bindingPattern;
+                                        if (bindingPattern.kind === "CaptureBindingPattern") {
+                                            return v.properties.variable.value === (bindingPattern as any).variableName.value;
                                         }
-                                    );
+                                        return false;
+                                    }
+                                );
 
-                                    setViewComponent(
-                                        <ViewConfigurableVariables
-                                            variableIndex={variableIndex}
-                                            isExternallauncher={true}
-                                            fileName={location.documentUri} />
-                                    );
-                                }
-                            });
+                                setViewComponent(
+                                    <ViewConfigurableVariables
+                                        variableIndex={variableIndex}
+                                        isExternallauncher={true}
+                                        fileName={value.documentUri} />
+                                );
+                            }
                         });
                         break;
                     default:
@@ -282,13 +264,13 @@ const MainPanel = () => {
                         <Typography variant="h3">This feature is coming soon!</Typography>
                     </PopupMessage>
                 )} */}
-                {sidePanel === "RECORD_EDITOR" && (
+                {/* {sidePanel === "RECORD_EDITOR" && (
                     <RecordEditor
                         isRecordEditorOpen={sidePanel === "RECORD_EDITOR"}
                         onClose={() => setSidePanel("EMPTY")}
                         rpcClient={rpcClient}
                     />
-                )}
+                )} */}
                 {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
                     <ConstructPanel applyModifications={applyModifications} />
                 )}

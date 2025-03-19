@@ -34,6 +34,7 @@ export function PanelContainer(props: PanelContainerProps) {
                 fontFamily: "GilmerRegular",
                 backgroundColor: ThemeColors.SURFACE_DIM,
                 boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+                zIndex: "1000"
             }}
             subPanel={subPanel}
             subPanelWidth={subPanelWidth}

@@ -3,14 +3,12 @@ import React, { useEffect } from "react";
 import { VisualizerLocation, NodePosition, Type, EVENT_TYPE, MACHINE_VIEW } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { TypeDiagram as TypeDesignDiagram } from "@dharshi/type-diagram";
-import { RecordEditor } from "../RecordEditor/RecordEditor";
 import { Button, Codicon, ProgressRing, ThemeColors, View, ViewContent } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
 import { PanelContainer } from "@dharshi/ballerina-side-panel";
-import { TypeEditor } from "@dharshi/type-editor";
 import { TopNavigationBar } from "../../components/TopNavigationBar";
 import { TitleBar } from "../../components/TitleBar";
-import { FormTypeEditor } from "../BI/TypeEditor";
+import { FormTypeEditor } from "./TypeEditor";
 
 const HeaderContainer = styled.div`
     align-items: center;
@@ -227,14 +225,6 @@ export function TypeDiagram(props: TypeDiagramProps) {
                     show={true}
                     onClose={onTypeEditorClosed}
                 >
-                    {/* <TypeEditor
-                        type={findSelectedType(editingTypeId)}
-                        filePath={visualizerLocation?.documentUri}
-                        newType={editingTypeId ? false : true}
-                        rpcClient={rpcClient}
-                        onTypeChange={onTypeChange}
-                    /> */}
-
                     <FormTypeEditor
                         type={findSelectedType(editingTypeId)}
                         filePath={visualizerLocation?.documentUri}
