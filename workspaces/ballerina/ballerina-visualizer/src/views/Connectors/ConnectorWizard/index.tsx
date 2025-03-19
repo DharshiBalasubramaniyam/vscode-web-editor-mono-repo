@@ -1,25 +1,17 @@
 // tslint:disable: jsx-no-multiline-js
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-    LowCodeDiagram,
-    initVisitor,
-    PositioningVisitor,
-    SizingVisitor,
-    SymbolVisitor,
-    cleanLocalSymbols,
-    cleanModuleLevelSymbols,
     getSymbolInfo,
 } from "@dharshi/ballerina-low-code-diagram";
 
-import { NodePosition, STKindChecker, STNode, traversNode } from "@dharshi/syntax-tree";
+import { STKindChecker } from "@dharshi/syntax-tree";
 import { BallerinaConnectorInfo, BallerinaModuleResponse, BallerinaConnectorsRequest, BallerinaConstruct, STModification } from "@dharshi/ballerina-core";
 
 
-import { BallerinaModuleType, Marketplace, SearchQueryParams } from "../Marketplace";
+import {  Marketplace, SearchQueryParams } from "../Marketplace";
 import { BallerinaRpcClient, useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { fetchConnectorInfo, getConnectorImports, getInitialSourceForConnectors } from "./utils";
-import { set } from "lodash";
-import { useVisualizerContext } from "../../../Context";
+import { PanelType, useVisualizerContext } from "../../../Context";
 import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { StatementEditorComponent } from "../../StatementEditorComponent";
 import { URI } from "vscode-uri";
@@ -27,6 +19,7 @@ import { PackageLoader } from "../PackageLoader";
 
 
 export interface ConnectorListProps {
+    edit?: boolean
     applyModifications: (modifications: STModification[]) => Promise<void>;
 }
 
@@ -37,12 +30,12 @@ enum MESSAGE_TYPE {
 }
 
 export function ConnectorList(props: ConnectorListProps) {
-    const { applyModifications } = props;
+    const { applyModifications, edit } = props;
     const [pullingPackage, setPullingPackage] = useState(false);
     const [selectedConnector, setSelectedConnector] = useState<BallerinaConnectorInfo>();
     const [showStatementEditor, setShowStatementEditor] = useState<boolean>(false);
     const [initialSource, setInitialSource] = useState<string>();
-    const { activeFileInfo, statementPosition, setActivePanel, setSidePanel, setActiveFileInfo, setStatementPosition } = useVisualizerContext();
+    const { activeFileInfo, statementPosition, setComponentInfo, setActivePanel, setSidePanel, setActiveFileInfo, setStatementPosition, componentInfo } = useVisualizerContext();
 
     const { rpcClient } = useRpcContext();
 
@@ -115,8 +108,11 @@ export function ConnectorList(props: ConnectorListProps) {
     }
 
     const closeStatementEditor = () => {
+        console.log("closing statement editor...")
         setShowStatementEditor(false);
+        setSelectedConnector(undefined);
         setSidePanel("EMPTY");
+        rpcClient.getVisualizerRpcClient().goBack()
     }
 
     const cancelStatementEditor = () => {
@@ -129,10 +125,47 @@ export function ConnectorList(props: ConnectorListProps) {
     }
 
     useEffect(() => {
+        if (activeFileInfo && edit) {
+            console.log("getting connector info for editing: ", {
+                "filepath": activeFileInfo.filePath
+            })
+            rpcClient.getVisualizerLocation()
+                .then((location) => {
+                    console.log("location: ", location)
+                    const [module, name] = location.identifier.split(":"); 
+                    console.log(module, name)
+;                    fetchConnectorsList(
+                        { query: module }, activeFileInfo.filePath, rpcClient 
+                    ).then((res) => {
+                        const allConnectors = [...res.central, ...res.local]
+                        console.log("allConnectors: ", allConnectors)
+                        const connector = allConnectors.find((c) => {
+                            return c.moduleName.toLowerCase() === module && c.name.toLowerCase() === name;
+                        })
+                        console.log("connector: ", connector)
+                        rpcClient.getLangClientRpcClient().getSTByRange({
+                            documentIdentifier: { uri: activeFileInfo.filePath },
+                            lineRange: {
+                                start: { line: location.position.startLine, character: location.position.startColumn },
+                                end: { line: location.position.endLine, character: location.position.endColumn },
+                            }
+                        }).then(async (res) => {
+                            setShowStatementEditor(true);
+                            const connectorMetadata = await fetchConnectorInfo(connector, rpcClient, activeFileInfo?.filePath);
+                            setSelectedConnector(connectorMetadata);
+                            setInitialSource(res.syntaxTree.source);
+                            setStatementPosition(location.position);
+                        })
+                    })
+                })
+        }
+    }, [edit, activeFileInfo]);
+
+    useEffect(() => {
         rpcClient
-        .getLangClientRpcClient()
-        .getSyntaxTree()
-        .then(async (model) => {
+            .getLangClientRpcClient()
+            .getSyntaxTree()
+            .then(async (model) => {
                 console.log("model: ", model);
                 if (!STKindChecker.isFunctionDefinition(model.syntaxTree)) {
                     const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
@@ -141,15 +174,17 @@ export function ConnectorList(props: ConnectorListProps) {
                     });
                     setActiveFileInfo({ ...activeFileInfo, fullST: fullST?.syntaxTree, filePath });
                     setStatementPosition({
-                            startLine: fullST.syntaxTree.position.endLine + 1,
-                            endLine: fullST.syntaxTree.position.endLine + 1,
-                            startColumn: fullST.syntaxTree.position.endColumn - 1,
-                            endColumn: fullST.syntaxTree.position.endColumn - 1,
+                        startLine: fullST.syntaxTree.position.endLine + 1,
+                        endLine: fullST.syntaxTree.position.endLine + 1,
+                        startColumn: fullST.syntaxTree.position.endColumn - 1,
+                        endColumn: fullST.syntaxTree.position.endColumn - 1,
                     });
                 }
                 console.log("activeFileInfo: ", activeFileInfo)
             });
     }, [])
+
+    console.log(!!selectedConnector, !pullingPackage, !!activeFileInfo?.filePath, edit, showStatementEditor)
 
     return (
         <>
@@ -159,7 +194,7 @@ export function ConnectorList(props: ConnectorListProps) {
                         <PackageLoader />
                     </PanelContainer>
                 )}
-            {activeFileInfo?.filePath && !selectedConnector && !pullingPackage &&
+            {activeFileInfo?.filePath && !selectedConnector && !pullingPackage && !edit &&
                 <Marketplace
                     currentFilePath={activeFileInfo?.filePath}
                     onSelect={onSelect}
@@ -169,12 +204,12 @@ export function ConnectorList(props: ConnectorListProps) {
                     shortName="connectors"
                 />
             }
-            {selectedConnector && !pullingPackage && activeFileInfo?.filePath && showStatementEditor &&
+            {selectedConnector && !pullingPackage && activeFileInfo?.filePath && showStatementEditor && edit &&
                 <PanelContainer title="Add Connector" show={true} onClose={cancelStatementEditor}>
                     (
                     <StatementEditorComponent
                         label={"Connector"}
-                        config={{ type: "Connector", model: null }}
+                        config={{ type: "Connector", model: edit ? activeFileInfo?.fullST : null }}
                         initialSource={initialSource}
                         applyModifications={applyModifications}
                         currentFile={{
@@ -192,7 +227,6 @@ export function ConnectorList(props: ConnectorListProps) {
                         targetPosition={statementPosition}
                         skipSemicolon={false}
                         extraModules={getConnectorImports(activeFileInfo?.fullST, selectedConnector?.package?.organization, selectedConnector?.moduleName)}
-
                     />
                     )
                 </PanelContainer>

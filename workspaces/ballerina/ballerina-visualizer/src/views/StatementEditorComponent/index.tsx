@@ -3,7 +3,7 @@ import React from "react";
 import { STModification } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { StatementEditorWrapper } from "@dharshi/ballerina-statement-editor";
-import { NodePosition, STNode } from "@dharshi/syntax-tree";
+import { NodePosition, STNode, STKindChecker } from "@dharshi/syntax-tree";
 
 export interface StatementEditorComponentProps {
     label: string;
@@ -73,7 +73,8 @@ function StatementEditorC(props: StatementEditorComponentProps) {
             onCancel,
             skipSemicolon: skipSemicolon ? skipSemicolon : false,
             extraModules: extraModules,
-            openExternalUrl: openExternalUrl
+            openExternalUrl: openExternalUrl,
+            isModuleVar: STKindChecker.isModuleVarDecl(syntaxTree)
         }
     );
 

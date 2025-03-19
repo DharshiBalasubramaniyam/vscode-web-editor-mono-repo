@@ -1,2 +1,0 @@
-
-export { PersistDiagram } from "./Diagram";

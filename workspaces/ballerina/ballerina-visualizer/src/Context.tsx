@@ -40,7 +40,7 @@ interface ActiveFileInfo {
     activeSequence: STNode;
 }
 
-export type SidePanel = "EMPTY" | "RECORD_EDITOR" | "ADD_CONNECTION" | "ADD_ACTION" | "ADD_TRIGGER";
+export type SidePanel = "EMPTY" | "RECORD_EDITOR" | "ADD_CONNECTION" | "ADD_ACTION" | "ADD_TRIGGER" | "EDIT_CONNECTION";
 
 interface VisualizerContext {
     popupMessage: boolean;
