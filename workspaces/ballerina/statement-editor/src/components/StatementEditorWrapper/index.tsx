@@ -108,6 +108,8 @@ export function StatementEditorWrapper(props: StatementEditorWrapperProps) {
         }
     } = formArgs;
 
+    console.log("statement editor props: ", props);
+
     const [editors, setEditors] = useState<EditorModel[]>([]);
     const [editor, setEditor] = useState<EditorModel>();
     const [activeEditorId, setActiveEditorId] = useState<number>(0);
@@ -213,6 +215,8 @@ export function StatementEditorWrapper(props: StatementEditorWrapperProps) {
             client.resetMouseTrapInstance();
         }
     }, []);
+
+    console.log("editor: ", editor)
 
     return (
         <QueryClientProvider client={queryClient}>

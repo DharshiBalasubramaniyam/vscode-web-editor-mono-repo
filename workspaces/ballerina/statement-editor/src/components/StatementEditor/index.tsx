@@ -270,13 +270,6 @@ export function StatementEditor(props: StatementEditorProps) {
 
     const handleChange = async (newValue: string) => {
         console.log("handdling changae: ", newValue);
-        // const stmtIndex = getStatementIndex(model.source, newValue, targetPosition);
-        // const newTargetPosition = getStatementPosition(model.source, newValue, stmtIndex);
-        // setCurrentModel((prevModel) => ({
-        //     ...prevModel,
-        //     position: newTargetPosition,
-        // }));
-        // console.log(newTargetPosition)
         const updatedStatement = addToTargetPosition(model.source, currentModel.model.position, newValue);
         await updateDraftFileContent(updatedStatement, currentFile.content);
 
@@ -299,13 +292,6 @@ export function StatementEditor(props: StatementEditorProps) {
 
         setDraftSource(updatedContent);
         setDraftPosition(newTargetPosition);
-
-        // setModel((prevModel) => ({
-        //     ...prevModel,
-        //     source: statement,
-        // }));
-
-        // updateStatementModel(updatedContent, fileContent, targetPosition);
 
         return {
             updatedContent,

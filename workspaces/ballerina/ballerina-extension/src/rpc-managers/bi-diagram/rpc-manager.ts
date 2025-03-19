@@ -566,56 +566,35 @@ export class BiDiagramRpcManager
         });
     }
 
-    // async formDidOpen(params: FormDidOpenParams): Promise<void> {
-    //     return new Promise(async (resolve, reject) => {
-    //         const { filePath } = params;
-    //         const fileUri = Uri.file(filePath);
-    //         const exprFileSchema = fileUri.with({ scheme: 'expr' });
-    
-    //         let languageId: string;
-    //         let version: number;
-    //         let text: string;
-            
-    //         try {
-    //             const textDocument = await workspace.openTextDocument(fileUri);
-    //             languageId = textDocument.languageId;
-    //             version = textDocument.version;
-    //             text = textDocument.getText();
-    //         } catch (error) {
-    //             languageId = "ballerina";
-    //             version = 1;
-    //             text = "";
-    //         }
+    async getModuleNodes(): Promise<BIModuleNodesResponse> {
+        console.log(">>> requesting bi module nodes from ls");
+        return new Promise((resolve) => {
+            const context = StateMachine.context();
+            if (!context.projectUri) {
+                console.log(">>> projectUri not found in the context");
+                return new Promise((resolve) => {
+                    resolve(undefined);
+                });
+            }
 
-    //         StateMachine.langClient().didOpen({
-    //             textDocument: {
-    //                 uri: exprFileSchema.toString(),
-    //                 languageId,
-    //                 version,
-    //                 text
-    //             }
-    //         });
-    //     });
-    // }
+            const params: BIModuleNodesRequest = {
+                filePath: context.projectUri,
+            };
 
-    // async formDidClose(params: FormDidCloseParams): Promise<void> {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             const { filePath } = params;
-    //             const fileUri = Uri.file(filePath);
-    //             const exprFileSchema = fileUri.with({ scheme: 'expr' });
-    //             StateMachine.langClient().didClose({
-    //                 textDocument: {
-    //                     uri: exprFileSchema.toString()
-    //                 }
-    //             });
-    //             resolve();
-    //         } catch (error) {
-    //             console.error("Error closing file in didClose", error);
-    //             reject(error);
-    //         }
-    //     });
-    // }
+            StateMachine.langClient()
+                .getModuleNodes(params)
+                .then((model) => {
+                    console.log(">>> bi module nodes from ls", model);
+                    resolve(model);
+                })
+                .catch((error) => {
+                    console.log(">>> error fetching bi module nodes from ls", error);
+                    return new Promise((resolve) => {
+                        resolve(undefined);
+                    });
+                });
+        });
+    }
 
 
 

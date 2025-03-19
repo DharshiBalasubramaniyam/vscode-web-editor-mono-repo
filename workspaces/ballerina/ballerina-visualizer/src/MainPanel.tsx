@@ -64,7 +64,7 @@ const PopUpContainer = styled.div`
 
 const MainPanel = () => {
     const { rpcClient } = useRpcContext();
-    const { sidePanel, setSidePanel, popupMessage, setPopupMessage, activePanel, setActivePanel, setActiveFileInfo } = useVisualizerContext();
+    const { sidePanel, setSidePanel, popupMessage, setPopupMessage, activePanel, setActivePanel, setStatementPosition, setComponentInfo } = useVisualizerContext();
     const [viewComponent, setViewComponent] = useState<React.ReactNode>();
     const [navActive, setNavActive] = useState<boolean>(true);
     const [showHome, setShowHome] = useState<boolean>(true);
@@ -176,7 +176,10 @@ const MainPanel = () => {
                             }
                         });
                         break;
-                    // case MACHINE_VIEW.EditConnectionWizard:
+                    case MACHINE_VIEW.EditConnectionWizard:
+                        setActivePanel({ isActive: false });
+                        setSidePanel("EDIT_CONNECTION");
+                        break;
                     //     rpcClient.getVisualizerLocation().then((location) => {
                     //         setViewComponent(
                     //             <EditConnectionWizard
@@ -266,6 +269,9 @@ const MainPanel = () => {
                 {viewComponent && <ComponentViewWrapper>{viewComponent}</ComponentViewWrapper>}
                 {sidePanel !== "EMPTY" && sidePanel === "ADD_CONNECTION" && (
                     <ConnectorList applyModifications={applyModifications} />
+                )}
+                {sidePanel !== "EMPTY" && sidePanel === "EDIT_CONNECTION" && (
+                    <ConnectorList applyModifications={applyModifications} edit={true} />
                 )}
                 {sidePanel !== "EMPTY" && sidePanel === "ADD_TRIGGER" && (
                     <TriggerPanel />

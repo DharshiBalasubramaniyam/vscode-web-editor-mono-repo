@@ -105,6 +105,11 @@ export function SequenceDiagram(props: SequenceDiagramProps) {
     }
 
     const handleEditComponent = async (model: STNode, targetPosition: NodePosition, componentType: string, connectorInfo?: ConnectorInfo) => {
+        console.log("edit component: ", {
+            "model": model, "position": targetPosition,
+            "compoenentTypes": componentType, 
+            "connectorInfo": connectorInfo
+        })
         setStatementPosition(targetPosition);
         setComponentInfo({ model, position: targetPosition, componentType, connectorInfo });
         setActivePanel({ isActive: true, name: PanelType.STATEMENTEDITOR });

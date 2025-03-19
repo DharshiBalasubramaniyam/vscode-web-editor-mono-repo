@@ -14,16 +14,20 @@ interface EditPanelProps {
 }
 
 export function EditPanel(props: EditPanelProps) {
+
+    console.log('edit panel props: ', props);
     const { applyModifications } = props;
     const { activePanel, setActivePanel, statementPosition, componentInfo, activeFileInfo } = useVisualizerContext();
     const [isFetching, setIsFetching] = useState(true);
     const { rpcClient } = useRpcContext();
 
     const closeStatementEditor = () => {
+        console.log("close")
         setActivePanel({ isActive: false });
     }
 
     const cancelStatementEditor = () => {
+        console.log("cancel")
         setActivePanel({ isActive: false });
     }
 
@@ -35,9 +39,11 @@ export function EditPanel(props: EditPanelProps) {
     }, [componentInfo]);
 
     const getComponentInfo = async () => {
+        console.log("get component info");
         if ((componentInfo.componentType === "Connector" || componentInfo.componentType === "Action" || componentInfo.componentType === "HttpAction") && componentInfo.connectorInfo?.connector) {
             const connectorMetadata = await fetchConnectorInfo(componentInfo.connectorInfo.connector, rpcClient, activeFileInfo?.filePath);
             componentInfo.connectorInfo.connector = connectorMetadata;
+            console.log("connector meta data");
             if (componentInfo.componentType === "Action" || componentInfo.componentType === "HttpAction") {
                 const action = retrieveUsedAction(componentInfo.model, connectorMetadata);
                 componentInfo.connectorInfo.action = action;
@@ -47,7 +53,6 @@ export function EditPanel(props: EditPanelProps) {
             setIsFetching(false);
         }
     };
-
 
     return (
         <>
@@ -78,6 +83,7 @@ export function EditPanel(props: EditPanelProps) {
                             syntaxTree={activeFileInfo?.fullST}
                             targetPosition={componentInfo?.position || statementPosition}
                             skipSemicolon={shouldSkipSemicolon(componentInfo?.componentType)}
+                            
                         />
                     }
 
