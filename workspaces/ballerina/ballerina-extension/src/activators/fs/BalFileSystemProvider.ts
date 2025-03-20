@@ -3,6 +3,9 @@ import { File } from "@dharshi/ballerina-core";
 import { SERVER_BASE_URL } from '../../utils/constants';
 
 const FS_BASE_URL = `${SERVER_BASE_URL}/fs`;
+const header = {
+	"Content-Type": "application/json"
+};
 
 export class BalFileSystemProvider implements vscode.FileSystemProvider {
 
@@ -88,9 +91,7 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 
 		const response = await fetch(`${FS_BASE_URL}/write?url=${uri.path}`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
+			headers: header,
 			body: JSON.stringify({
 				content: new TextDecoder().decode(content)   
 			})
@@ -110,9 +111,7 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 
 		const response = await fetch(`${FS_BASE_URL}/remove?url=${uri.path}`, {
 			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json"
-			}
+			headers: header
 		});
 		console.log("sending request to: ", `${FS_BASE_URL}/remove?url=${uri.path}`);
 		if (!response.ok) {
@@ -128,9 +127,7 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 		console.log("creating directory: ", uri.path);
 		const response = await fetch(`${FS_BASE_URL}/mkdir?url=${uri.path}`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
+			headers: header
 		});
 		console.log("sending request to: ", `${FS_BASE_URL}/mkdir?url=${uri.path}`);
 		if (!response.ok) {
@@ -146,9 +143,7 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 		console.log("creating directory: ", oldUri.path);
 		const response = await fetch(`${FS_BASE_URL}/rename?oldUrl=${oldUri.path}&newUrl=${newUri.path}`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
+			headers: header
 		});
 		console.log("sending request to: ", `${FS_BASE_URL}/rename?oldUrl=${oldUri.path}&newUrl=${newUri.path}`);
 		if (!response.ok) {
@@ -171,9 +166,7 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 
 		const response = await fetch(`${FS_BASE_URL}/copy`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
+			headers: header,
 			body: JSON.stringify({
 				source: source.path,
 				destination: destination.path,

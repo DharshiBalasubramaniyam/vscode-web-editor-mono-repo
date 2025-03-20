@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ExtendedLanguageClient } from "../../extended-language-client";
 import { LanguageClientOptions } from "vscode-languageclient";
-import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
+import { balExtInstance, LANGUAGE, WEB_IDE_SCHEME } from "../../extension";
 import { SERVER_BASE_URL } from "../../utils/constants";
 
 export function activateLanguageServer(): ExtendedLanguageClient {
@@ -46,12 +46,12 @@ function createExtendedLanguageClient(context: vscode.ExtensionContext): Extende
 function getClientOptions(): LanguageClientOptions {
     return {
         documentSelector: [
-            { scheme: 'file', language: "ballerina" },
-            { scheme: 'file', language: "toml" },
-            { scheme: WEB_IDE_SCHEME, language: "ballerina" },
-            { scheme: WEB_IDE_SCHEME, language: "toml" }
+            { scheme: 'file', language: LANGUAGE.BALLERINA },
+            { scheme: 'file', language: LANGUAGE.TOML },
+            { scheme: WEB_IDE_SCHEME, language: LANGUAGE.BALLERINA },
+            { scheme: WEB_IDE_SCHEME, language: LANGUAGE.TOML }
         ],
-        synchronize: { configurationSection: "ballerina" },
+        synchronize: { configurationSection: LANGUAGE.BALLERINA },
         initializationOptions: {
             "enableSemanticHighlighting": <string>vscode.workspace.getConfiguration().get("kolab.enableSemanticHighlighting"),
             "enableInlayHints": <string>vscode.workspace.getConfiguration().get("kolab.enableInlayHints"),
