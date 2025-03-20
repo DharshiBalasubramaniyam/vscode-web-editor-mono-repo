@@ -33,6 +33,8 @@ import { SequenceDiagram } from "./views/SequenceDiagram";
 import { Overview } from "./views/Overview";
 import TriggerPanel from "./views/Connectors/TriggerWizard";
 import { GraphQLDiagram } from "./views/GraphQLDiagram";
+import { DataMapper } from "./views/DataMapper";
+import { FunctionDefinition } from "@dharshi/syntax-tree";
 
 const globalStyles = css`
     *,
@@ -180,13 +182,31 @@ const MainPanel = () => {
                         setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} isAutomation={true} />);
                         break;
                     case MACHINE_VIEW.BIFunctionForm:
-                        setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} />);
+                        setViewComponent(
+                            <FunctionForm
+                                projectPath={value.projectUri}
+                                filePath={value.documentUri}
+                                functionName={value?.identifier}
+                                isDataMapper={value.serviceType === "data_mapper"}
+                                isAutomation={value.serviceType === "automation"}
+                            />
+                        );
                         break;
                     case MACHINE_VIEW.GraphQLDiagram:
-                            setViewComponent(
-                                <GraphQLDiagram projectUri={value.projectUri} filePath={value.documentUri} position={value.position}/>
-                            );
-                            break;
+                        setViewComponent(
+                            <GraphQLDiagram projectUri={value.projectUri} filePath={value.documentUri} position={value.position} />
+                        );
+                        break;
+                    case MACHINE_VIEW.DataMapper:
+                        setViewComponent(
+                            <DataMapper
+                                filePath={value.documentUri}
+                                isBI={value.isBI}
+                                model={value?.syntaxTree as FunctionDefinition}
+                                applyModifications={applyModifications}
+                            />
+                        );
+                        break;
                     case MACHINE_VIEW.ViewConfigVariables:
                         setViewComponent(
                             <ViewConfigurableVariables

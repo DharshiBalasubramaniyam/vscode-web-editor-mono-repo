@@ -72,4 +72,6 @@ async function getBallerinaVersion(statusBar: vscode.StatusBarItem) {
     }
     const data = await balInfo.json();
     statusBar.text = `Ballerina ${data.ballerinaVersionText}`;
+    balExtInstance.ballerinaVersion = data.ballerinaVersion;
+    balExtInstance.ballerinaVersionText = data.ballerinaVersionText;
 }

@@ -15,6 +15,8 @@ export class BallerinaExtension {
 	public fsProvider?: BalFileSystemProvider;
 	public activeBalFileUri?: string | undefined;
 	public statusBar: vscode.StatusBarItem;
+	public ballerinaVersion: string;
+	public ballerinaVersionText: string;
 }
 
 export const balExtInstance: BallerinaExtension = new BallerinaExtension();

@@ -98,14 +98,14 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
     }
 
     const moduleLevelEntries: Entry[] = [
-        { name: 'Main', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIMainFunctionForm, serviceType: undefined },
+        { name: 'Main', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIMainFunctionForm, serviceType: "automation" },
         { name: 'HTTP service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "http" },
         { name: 'GraphQL service', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "graphql" },
         { name: 'Trigger', category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "trigger" },
 
         { name: 'Type', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.TypeDiagram, serviceType: undefined },
-        { name: 'Function', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: undefined },
-        { name: 'Data Mapper', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.DataMapper, serviceType: undefined },
+        { name: 'Function', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: "function" },
+        { name: 'Data Mapper', category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: "data_mapper" },
 
         { name: 'Connector', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "connector" },
         { name: 'Configurable', category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.ViewConfigVariables, serviceType: undefined }

@@ -40,6 +40,7 @@ import {
 import { workspace, Uri } from "vscode";
 import { StateMachine } from "../../state-machine";
 import { modifyFileContent } from "../../utils/modification";
+import { balExtInstance } from "../../extension";
 export class LangClientRpcManager implements LangClientAPI {
     
     async getSyntaxTree(): Promise<SyntaxTree> {
@@ -255,8 +256,9 @@ export class LangClientRpcManager implements LangClientAPI {
     }
 
     async getBallerinaVersion(): Promise<BallerinaVersionResponse> {
+        console.log("balExtInstance version: ", balExtInstance.ballerinaVersion);
         return new Promise(async (resolve) => {
-            resolve({ version: "11.0.0" });
+            resolve({ version: balExtInstance.ballerinaVersion || "" });
         });
     }
 

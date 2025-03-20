@@ -393,6 +393,11 @@
       "packageName": "@dharshi/bi-diagram",
       "projectFolder": "workspaces/ballerina/bi-diagram",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/data-mapper-view",
+      "projectFolder": "workspaces/ballerina/data-mapper-view",
+      "reviewCategory": "library"
     }
   ]
 }

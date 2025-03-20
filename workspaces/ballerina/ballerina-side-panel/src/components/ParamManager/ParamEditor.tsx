@@ -11,13 +11,14 @@ import { useFormContext } from '../../context';
 export interface ParamProps {
     parameter: Parameter;
     paramFields: FormField[];
+    filePath?: string;
     onSave: (param: Parameter) => void;
     onCancelEdit: (param?: Parameter) => void;
     openRecordEditor?: (open: boolean) => void;
 }
 
 export function ParamEditor(props: ParamProps) {
-    const { parameter, paramFields, onSave, onCancelEdit, openRecordEditor } = props;
+    const { parameter, paramFields, onSave, onCancelEdit, openRecordEditor, filePath } = props;
     const { expressionEditor } = useFormContext();
 
     const [fields, setFields] = useState<FormField[]>(paramFields);
@@ -38,6 +39,7 @@ export function ParamEditor(props: ParamProps) {
                 formFields={fields}
                 openRecordEditor={openRecordEditor}
                 onSubmit={handleOnSave}
+                fileName={filePath}
                 onCancelForm={() => onCancelEdit(parameter)}
                 expressionEditor={expressionEditor}
                 submitText={parameter.key ? 'Save' : 'Add'}

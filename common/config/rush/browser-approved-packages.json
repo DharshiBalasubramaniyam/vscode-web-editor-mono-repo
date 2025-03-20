@@ -207,6 +207,10 @@
       "allowedCategories": [ "library" ]
     },
     {
+      "name": "@types/js-yaml",
+      "allowedCategories": [ "library" ]
+    },
+    {
       "name": "@types/lodash",
       "allowedCategories": [ "library" ]
     },

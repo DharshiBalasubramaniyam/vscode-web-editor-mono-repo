@@ -32,6 +32,7 @@ export interface ParamManagerProps {
     paramConfigs: ParamConfig;
     onChange?: (parameters: ParamConfig) => void,
     openRecordEditor?: (open: boolean) => void;
+    filePath?: string;
     readonly?: boolean;
     selectedNode?: NodeKind;
 }
@@ -69,10 +70,11 @@ export interface ParamManagerEditorProps {
     handleOnFieldFocus?: (key: string) => void;
     openRecordEditor?: (open: boolean) => void;
     selectedNode?: NodeKind;
+    filePath?: string;
 }
 
 export function ParamManagerEditor(props: ParamManagerEditorProps) {
-    const { field, openRecordEditor, selectedNode } = props;
+    const { field, openRecordEditor, selectedNode, filePath } = props;
     const { form } = useFormContext();
     const { control, setValue } = form;
     return (
@@ -101,6 +103,7 @@ export function ParamManagerEditor(props: ParamManagerEditorProps) {
                             onChange={async (config: ParamConfig) => {
                                 onChange(config.paramValues);
                             }}
+                            filePath={filePath}
                             selectedNode={selectedNode}
                         />
                         {error && <ErrorBanner errorMsg={error.message.toString()} />}
@@ -113,7 +116,7 @@ export function ParamManagerEditor(props: ParamManagerEditorProps) {
 }
 
 export function ParamManager(props: ParamManagerProps) {
-    const { paramConfigs, readonly, onChange, openRecordEditor, selectedNode } = props;
+    const { paramConfigs, readonly, onChange, openRecordEditor, selectedNode, filePath } = props;
     const { rpcClient } = useRpcContext();
 
     const [editingSegmentId, setEditingSegmentId] = useState<number>(-1);
@@ -221,6 +224,7 @@ export function ParamManager(props: ParamManagerProps) {
                             parameter={param}
                             paramFields={newParamConfig.formFields}
                             onSave={onSaveParam}
+                            filePath={filePath}
                             onCancelEdit={onParamEditCancel}
                             openRecordEditor={openRecordEditor}
                         />
