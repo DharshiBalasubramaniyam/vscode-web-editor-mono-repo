@@ -8,7 +8,7 @@ import { StateMachine, updateView } from "../../state-machine";
 export class VisualizerWebview {
     public static currentPanel: VisualizerWebview | undefined;
     public static readonly viewType = "ballerina.visualizer";
-    public static readonly panelTitle = "Ballerina";
+    public static readonly panelTitle = "Ballerina Visualizer";
     private _panel: vscode.WebviewPanel | undefined;
     private _disposables: vscode.Disposable[] = [];
 

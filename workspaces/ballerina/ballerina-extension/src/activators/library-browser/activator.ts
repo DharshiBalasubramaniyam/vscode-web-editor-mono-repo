@@ -12,7 +12,6 @@ export const DIST_LIB_LIST_CACHE = "DISTRIBUTION_LIB_LIST_CACHE";
 export const LANG_LIB_LIST_CACHE = "LANG_LIB_LIST_CACHE";
 export const STD_LIB_LIST_CACHE = "STD_LIB_LIST_CACHE";
 export const LIBRARY_SEARCH_CACHE = "LIBRARY_SEARCH_CACHE";
-const BAL_VERSION_CAPTURING_REGEXP = /\/ballerina-(\d{4}.\d+.\d+)/g;
 const options = {
     method: 'GET',
     headers: {

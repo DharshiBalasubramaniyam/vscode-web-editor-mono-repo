@@ -4,31 +4,34 @@ import { BalFileSystemProvider } from './activators/fs/BalFileSystemProvider';
 import { activateVisualizer } from './activators/visualizer/activateVisualizer';
 import { RPCLayer } from './RPCLayer';
 import { StateMachine } from './state-machine';
+import { activateEditorSupport } from './activators/editer-support/activator';
 
 export const WEB_IDE_SCHEME = 'web-bala';
 export const STD_LIB_SCHEME = 'bala';
-export const ENABLE_EXPERIMENTAL_FEATURES = "kolab.experimental";
-export const ENABLE_SEQUENCE_DIAGRAM_VIEW = "kolab.enableSequenceDiagramView";
-export const ENABLE_AI_SUGGESTIONS = "kolab.enableAiSuggestions";
 
 export class BallerinaExtension {
 	public context!: vscode.ExtensionContext;
 	public langClient?: ExtendedLanguageClient;
 	public fsProvider?: BalFileSystemProvider;
-	public balServerUrl: string;
 	public activeBalFileUri?: string | undefined;
 	public statusBar: vscode.StatusBarItem;
 }
 
 export const balExtInstance: BallerinaExtension = new BallerinaExtension();
 
+export enum LANGUAGE {
+	BALLERINA = 'ballerina',
+	BAL_TOML = 'Ballerina.toml',
+	TOML = 'toml'
+}
+
 export async function activate(context: vscode.ExtensionContext) {
 	balExtInstance.context = context;
 
     RPCLayer.init();
     await StateMachine.initialize();
-
 	activateVisualizer(balExtInstance);
+	activateEditorSupport(balExtInstance);
 
 }
 

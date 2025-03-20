@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { VisualizerLocation, NodePosition, Type, EVENT_TYPE, MACHINE_VIEW } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
@@ -8,7 +7,7 @@ import styled from "@emotion/styled";
 import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { TopNavigationBar } from "../../components/TopNavigationBar";
 import { TitleBar } from "../../components/TitleBar";
-import { FormTypeEditor } from "./TypeEditor";
+import { FormTypeEditor } from "./typeEditor";
 
 const HeaderContainer = styled.div`
     align-items: center;

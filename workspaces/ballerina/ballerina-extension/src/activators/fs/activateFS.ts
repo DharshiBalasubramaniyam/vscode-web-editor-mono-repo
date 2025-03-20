@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { balExtInstance, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
+import { balExtInstance, LANGUAGE, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
 import { BalFileSystemProvider } from "./BalFileSystemProvider";
 
 const fsProvider = new BalFileSystemProvider();
@@ -16,6 +16,7 @@ export function activateFileSystemProvider() {
     // Register the command to open a github repository
     balExtInstance.context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
         const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
+        // const repoUrl = "https://github.com/DharshiBalasubramaniyam/RESTful-API-with-Ballerina";
         if (!repoUrl) {
             return;
         }
@@ -51,10 +52,10 @@ export function activateFileSystemProvider() {
         if (!editor && vscode.window.visibleTextEditors.length === 0) {
             balExtInstance.activeBalFileUri = undefined;
         }
-        if (editor && editor.document.languageId === 'ballerina') {
+        if (editor && editor.document.languageId === LANGUAGE.BALLERINA) {
             balExtInstance.activeBalFileUri = editor.document.uri.toString();
         }
-        if (editor && editor.document.languageId !== 'ballerina') {
+        if (editor && editor.document.languageId !== LANGUAGE.BALLERINA) {
             balExtInstance.activeBalFileUri = undefined;
         }
         console.log("active file changed: ", {editor: editor, uri: balExtInstance.activeBalFileUri});

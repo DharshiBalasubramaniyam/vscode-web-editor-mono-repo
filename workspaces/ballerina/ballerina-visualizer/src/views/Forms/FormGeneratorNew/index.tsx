@@ -38,6 +38,7 @@ interface FormProps {
     resetUpdatedExpressionField?: () => void;
     selectedNode?: NodeKind;
     nestedForm?: boolean;
+    helperPaneSide?: "left" | "right";
 }
 
 interface TypeEditorState {
