@@ -259,6 +259,7 @@ const stateMachine = createMachine<MachineContext>(
                             documentUri: context.documentUri,
                             position: context.position,
                             identifier: context.identifier,
+                            serviceType: context?.serviceType,
                             type: context?.type,
                             isGraphql: context?.isGraphql
                         }
@@ -269,12 +270,13 @@ const stateMachine = createMachine<MachineContext>(
         },
         showView(context, event): Promise<VisualizerLocation> {
             console.log("showing view.");
+            console.log("identifier: ", context.identifier);
             StateMachinePopup.resetState();
             return new Promise(async (resolve, reject) => {
                 StateMachinePopup.resetState();
                 const historyStack = history.get();
                 const selectedEntry = historyStack[historyStack.length - 1];
-
+                console.log("history stack: ", historyStack);
                 if (!context.langClient) {
                     console.log("No lang client.....");
                     if (!selectedEntry) {

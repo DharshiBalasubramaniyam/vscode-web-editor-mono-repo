@@ -30,6 +30,7 @@
     "@dharshi/overview-view": "workspace:*",
     "@dharshi/syntax-tree": "workspace:*",
     "@dharshi/ui-toolkit": "workspace:*",
+    "@dharshi/data-mapper-view": "workspace:*",
     "@dharshi/ballerina-low-code-diagram": "workspace:*",
     "@dharshi/type-diagram": "workspace:*",
     "@dharshi/sequence-diagram": "workspace:*",

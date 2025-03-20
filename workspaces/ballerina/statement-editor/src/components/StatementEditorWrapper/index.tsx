@@ -223,7 +223,7 @@ export function StatementEditorWrapper(props: StatementEditorWrapperProps) {
             <SidePanel
                 isOpen={true}
                 alignment="right"
-                sx={{transition: "all 0.3s ease-in-out", width: 600}}
+                sx={{transition: "all 0.3s ease-in-out", width: 600 }}
                 data-testid="property-form"
             >
                 {!editor && (

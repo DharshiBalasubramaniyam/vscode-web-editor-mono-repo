@@ -89,9 +89,6 @@ import {
     RenameRequest,
     RenameIdentifierRequest,
 } from "@dharshi/ballerina-core";
-// import * as fs from "fs";
-// import { writeFileSync } from "fs";
-// import * as path from 'path';
 import * as vscode from "vscode";
 
 import {
@@ -102,19 +99,9 @@ import {
     tasks,
     window, workspace
 } from "vscode";
-// import { DebugProtocol } from "vscode-debugprotocol";
-// import { extension } from "../../BalExtensionContext";
-import { notifyBreakpointChange } from "../../RPCLayer";
-// import { ballerinaExtInstance } from "../../core";
-// import { BreakpointManager } from "../../features/debugger/breakpoint-manager";
 import { StateMachine, openView, updateView } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 import { getFunctionNodePosition } from "./utils";
-// import { getCompleteSuggestions } from '../../utils/ai/completions';
-// import { README_FILE, createBIAutomation, createBIFunction, createBIProjectPure } from "../../utils/bi";
-// import { writeBallerinaFileDidOpen } from "../../utils/modification";
-// import { BACKEND_API_URL_V2, refreshAccessToken } from "../ai-panel/utils";
-// import { DATA_MAPPING_FILE_NAME, getFunctionNodePosition } from "./utils";
 
 export class BiDiagramRpcManager 
 // implements BIDiagramAPI 

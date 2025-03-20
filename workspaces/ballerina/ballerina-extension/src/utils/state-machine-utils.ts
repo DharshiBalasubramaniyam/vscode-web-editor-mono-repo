@@ -145,7 +145,8 @@ export async function getView(documentUri: string, position: NodePosition, proje
                     view: MACHINE_VIEW.DataMapper,
                     identifier: node.syntaxTree.functionName.value,
                     documentUri: documentUri,
-                    position: position
+                    position: position,
+                    serviceType: "data_mapper"
                 },
                 dataMapperDepth: 0
             };
