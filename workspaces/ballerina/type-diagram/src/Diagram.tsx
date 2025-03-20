@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DiagramEngine, DiagramModel } from '@projectstorm/react-diagrams';
 import { NavigationWrapperCanvasWidget, ProgressRing, ThemeColors } from '@dharshi/ui-toolkit';
@@ -23,8 +22,8 @@ interface TypeDiagramProps {
     selectedNodeId?: string;
     focusedNodeId?: string;
     updateFocusedNodeId?: (nodeId: string) => void;
-    refreshDiagram: boolean;
-    setRefreshDiagram: (r: boolean) => void
+    refreshDiagram?: boolean;
+    setRefreshDiagram?: (r: boolean) => void
     showProblemPanel?: () => void;
     goToSource: (node: Type) => void
     onTypeEdit: (typeId: string, isGraphqlRoot?: boolean) => void;

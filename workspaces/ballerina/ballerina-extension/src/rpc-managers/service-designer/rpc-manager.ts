@@ -34,32 +34,28 @@ import {
     buildProjectStructure
 } from "@dharshi/ballerina-core";
 import { ModulePart, NodePosition, STKindChecker, TypeDefinition } from "@dharshi/syntax-tree";
-// import * as fs from 'fs';
-// import { existsSync, writeFileSync } from "fs";
 import * as yaml from 'js-yaml';
-// import * as path from 'path';
 import { Uri, commands, window, workspace, FileSystemError } from "vscode";
 import { StateMachine } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 
 const textEncoder = new TextEncoder();
 
-export class ServiceDesignerRpcManager 
-// implements ServiceDesignerAPI 
+export class ServiceDesignerRpcManager implements ServiceDesignerAPI 
 {
 
-    // async getRecordST(params: RecordSTRequest): Promise<RecordSTResponse> {
-    //     return new Promise(async (resolve) => {
-    //         const context = StateMachine.context();
-    //         const res: ProjectStructureResponse = await buildProjectStructure(context.projectUri, context.langClient);
-    //         res.directoryMap[DIRECTORY_MAP.TYPES].forEach(type => {
-    //             if (type.name === params.recordName) {
-    //                 resolve({ recordST: type.st as TypeDefinition });
-    //             }
-    //         });
-    //         resolve(null);
-    //     });
-    // }
+    async getRecordST(params: RecordSTRequest): Promise<RecordSTResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            const res: ProjectStructureResponse = await buildProjectStructure(context.projectUri, context.langClient);
+            res.directoryMap[DIRECTORY_MAP.TYPES].forEach(type => {
+                if (type.name === params.recordName) {
+                    resolve({ recordST: type.st as TypeDefinition });
+                }
+            });
+            resolve(null);
+        });
+    }
 
     async exportOASFile(params: ExportOASRequest): Promise<ExportOASResponse> {
         return new Promise(async (resolve) => {
@@ -68,25 +64,6 @@ export class ServiceDesignerRpcManager
             const spec = await StateMachine.langClient().convertToOpenAPI({ documentFilePath }) as OpenAPISpec;
             if (spec.content && spec.content.length > 0) {
                 const yamlStr = yaml.dump(spec.content[0].spec);
-                // Convert the OpenAPI spec to a YAML string
-                // const yamlStr = yaml.dump(spec.content[0].spec);
-                // window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, openLabel: 'Select OAS Save Location' })
-                //     .then(uri => {
-                //         if (uri && uri[0]) {
-                //             const projectLocation = uri[0].fsPath;
-                //             // Construct the correct path for the output file
-                //             const filePath = path.join(projectLocation, `${spec.content[0]?.serviceName}_openapi.yaml`);
-
-                //             // Save the YAML string to the file
-                //             fs.writeFileSync(filePath, yamlStr, 'utf8');
-                //             // Set the response
-                //             res.openSpecFile = filePath;
-                //             // Open the file in a new VSCode document
-                //             workspace.openTextDocument(filePath).then(document => {
-                //                 window.showTextDocument(document);
-                //             });
-                //         }
-                //     });
                 const specFilePathUri = Uri.joinPath(Uri.parse(StateMachine.context().projectUri), `${spec.content[0]?.serviceName}_openapi.yaml`);
                 await balExtInstance.fsProvider
                     .writeFile(
@@ -476,26 +453,26 @@ export class ServiceDesignerRpcManager
         });
     }
 
-//     async addFunctionSourceCode(params: FunctionSourceCodeRequest): Promise<SourceUpdateResponse> {
-//         return new Promise(async (resolve) => {
-//             const context = StateMachine.context();
-//             try {
-//                 const targetPosition: NodePosition = {
-//                     startLine: params.codedata.lineRange.startLine.line,
-//                     startColumn: params.codedata.lineRange.startLine.offset
-//                 };
-//                 const res: ResourceSourceCodeResponse = await context.langClient.addFunctionSourceCode(params);
-//                 const position = await this.updateSource(res, undefined, targetPosition);
-//                 const result: SourceUpdateResponse = {
-//                     filePath: params.filePath,
-//                     position: position
-//                 };
-//                 resolve(result);
-//             } catch (error) {
-//                 console.log(error);
-//             }
-//         });
-//     }
+    async addFunctionSourceCode(params: FunctionSourceCodeRequest): Promise<SourceUpdateResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                const targetPosition: NodePosition = {
+                    startLine: params.codedata.lineRange.startLine.line,
+                    startColumn: params.codedata.lineRange.startLine.offset
+                };
+                const res: ResourceSourceCodeResponse = await context.langClient.addFunctionSourceCode(params);
+                const position = await this.updateSource(res, undefined, targetPosition);
+                const result: SourceUpdateResponse = {
+                    filePath: params.filePath,
+                    position: position
+                };
+                resolve(result);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
     async getTriggerModels(params: TriggerModelsRequest): Promise<TriggerModelsResponse> {
         return new Promise(async (resolve) => {
@@ -509,15 +486,15 @@ export class ServiceDesignerRpcManager
         });
     }
 
-//     async getFunctionModel(params: FunctionModelRequest): Promise<FunctionModelResponse> {
-//         return new Promise(async (resolve) => {
-//             const context = StateMachine.context();
-//             try {
-//                 const res: FunctionModelResponse = await context.langClient.getFunctionModel(params);
-//                 resolve(res);
-//             } catch (error) {
-//                 console.log(">>> error fetching function model", error);
-//             }
-//         });
-//     }
+    async getFunctionModel(params: FunctionModelRequest): Promise<FunctionModelResponse> {
+        return new Promise(async (resolve) => {
+            const context = StateMachine.context();
+            try {
+                const res: FunctionModelResponse = await context.langClient.getFunctionModel(params);
+                resolve(res);
+            } catch (error) {
+                console.log(">>> error fetching function model", error);
+            }
+        });
+    }
 }

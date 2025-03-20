@@ -1,13 +1,3 @@
-/**
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
- *
- * This software is the property of WSO2 LLC. and its suppliers, if any.
- * Dissemination of any information or reproduction of any material contained
- * herein in any form is strictly forbidden, unless permitted by WSO2 expressly.
- * You may not alter or remove any copyright or other notice from copies of this content.
- * 
- * THIS FILE INCLUDES AUTO GENERATED CODE
- */
 import {
     BallerinaDiagnosticsRequest,
     BallerinaDiagnosticsResponse,
@@ -31,12 +21,8 @@ import {
     WorkspaceRootResponse,
     WorkspacesFileResponse,
 } from "@dharshi/ballerina-core";
-// import child_process from 'child_process';
 import { FileType, Uri, commands, env, window, workspace, ViewColumn, Range, Selection } from "vscode";
-// import { URI } from "vscode-uri";
-// import { ballerinaExtInstance } from "../../core";
 import { StateMachine } from "../../state-machine";
-// import { goToSource } from "../../utils";
 import { askFilePath, askProjectPath, getUpdatedSource } from "./utils";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 

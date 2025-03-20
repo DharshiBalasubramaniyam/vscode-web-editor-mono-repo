@@ -379,6 +379,17 @@ export class BiDiagramRpcManager
         });
     }
 
+    async getServiceClassModel(params: ModelFromCodeRequest): Promise<ServiceClassModelResponse> {
+        return new Promise(async (resolve) => {
+            try {
+                const res: ServiceClassModelResponse = await StateMachine.langClient().getServiceClassModel(params);
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
+
     async getSourceCode(params: BISourceCodeRequest): Promise<BISourceCodeResponse> {
         console.log(">>> requesting bi source code from ls", params);
         const { flowNode, isFunctionNodeUpdate } = params;

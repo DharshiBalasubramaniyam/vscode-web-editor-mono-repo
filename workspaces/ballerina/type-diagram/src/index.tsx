@@ -1,2 +1,1 @@
-
 export { TypeDiagram } from "./Diagram";
