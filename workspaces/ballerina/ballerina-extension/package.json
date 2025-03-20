@@ -23,7 +23,7 @@
                 "title": "Open GitHub Repository"
             },
             {
-                "command": "ballerina.showVisualizer",
+                "command": "ballerina.show.visualizer",
                 "title": "Show Visualizer",
                 "icon": "$(eye)"
             }
