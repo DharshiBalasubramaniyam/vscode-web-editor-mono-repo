@@ -100,17 +100,18 @@ export function ConstructorPanel(props: ConstructorPanelProps) {
                 isNew: true
             },
         });
+        closePanel();
     }
 
     const moduleLevelEntries: Entry[] = [
-        { name: 'Main', type: "functions", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIMainFunctionForm, serviceType: "automation" },
-        { name: 'HTTP service', type: "services", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "http" },
-        { name: 'GraphQL service', type: "services", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.BIServiceWizard, serviceType: "graphql" },
+        { name: 'Main', type: "functions", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.MainFunctionForm, serviceType: "automation" },
+        { name: 'HTTP service', type: "services", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.ServiceWizard, serviceType: "http" },
+        { name: 'GraphQL service', type: "services", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.ServiceWizard, serviceType: "graphql" },
         { name: 'Trigger', type: "services", category: PlusMenuCategories.ENTRY_POINT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "trigger" },
 
         { name: 'Type', type: "record-icon", category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.TypeDiagram, serviceType: undefined },
-        { name: 'Function', type: "functions", category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: "function" },
-        { name: 'Data Mapper', type: "functions", category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.BIFunctionForm, serviceType: "data_mapper" },
+        { name: 'Function', type: "functions", category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.FunctionForm, serviceType: "function" },
+        { name: 'Data Mapper', type: "functions", category: PlusMenuCategories.CONSTRUCT, view: MACHINE_VIEW.FunctionForm, serviceType: "data_mapper" },
 
         { name: 'Connector', type: "variable-icon", category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.AddConnectionWizard, serviceType: "connector" },
         { name: 'Configurable', type: "variable-icon", category: PlusMenuCategories.MODULE_INIT, view: MACHINE_VIEW.ViewConfigVariables, serviceType: undefined }

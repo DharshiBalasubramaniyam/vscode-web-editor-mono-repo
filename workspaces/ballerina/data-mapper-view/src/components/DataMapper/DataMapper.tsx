@@ -283,7 +283,7 @@ export function DataMapperC(props: DataMapperViewProps) {
 
     const onEdit = () => {
         const context: VisualizerLocation = {
-            view: MACHINE_VIEW.BIFunctionForm,
+            view: MACHINE_VIEW.FunctionForm,
             identifier: fnST.functionName.value,
             serviceType: "data_mapper"
         };
