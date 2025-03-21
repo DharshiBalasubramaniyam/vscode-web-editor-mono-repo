@@ -122,3 +122,7 @@ dist-storybook/
 .heft/
 
 .vscode-test-web
+
+
+**/Visualizer.js
+build/
