@@ -9,6 +9,7 @@ export interface PanelContainerProps {
     title?: string;
     width?: number;
     show: boolean;
+    sx?: React.CSSProperties;
     subPanel?: React.ReactNode;
     subPanelWidth?: number;
     onClose: () => void;
@@ -22,7 +23,7 @@ namespace S {
 }
 
 export function PanelContainer(props: PanelContainerProps) {
-    const { children, title, show, onClose, onBack, width, subPanel, subPanelWidth } = props;
+    const { children, title, show, onClose, onBack, width, subPanel, subPanelWidth, sx } = props;
 
     return (
         <SidePanel
@@ -31,10 +32,10 @@ export function PanelContainer(props: PanelContainerProps) {
             overlay={false}
             width={width || 400}
             sx={{
+                ...sx,
                 fontFamily: "GilmerRegular",
                 backgroundColor: ThemeColors.SURFACE_DIM,
                 boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-                zIndex: "1000"
             }}
             subPanel={subPanel}
             subPanelWidth={subPanelWidth}

@@ -28,13 +28,13 @@ import { ServiceEditView } from "./views/ServiceDesigner/ServiceEditView";
 import { ListenerEditView } from "./views/ServiceDesigner/ListenerEditView";
 import { TypeDiagram } from "./views/TypeDiagram";
 import { EditPanel } from "./views/EditPanel";
-// import { RecordEditor } from "./views/RecordEditor/RecordEditor";
 import { SequenceDiagram } from "./views/SequenceDiagram";
 import { Overview } from "./views/Overview";
 import TriggerPanel from "./views/Connectors/TriggerWizard";
 import { GraphQLDiagram } from "./views/GraphQLDiagram";
 import { DataMapper } from "./views/DataMapper";
 import { FunctionDefinition } from "@dharshi/syntax-tree";
+import { MainForm } from "./views/MainFunctionForm";
 
 const globalStyles = css`
     *,
@@ -156,13 +156,13 @@ const MainPanel = () => {
                             <SequenceDiagram syntaxTree={value?.syntaxTree} applyModifications={applyModifications} />
                         );
                         break;
-                    case MACHINE_VIEW.BIServiceWizard:
+                    case MACHINE_VIEW.ServiceWizard:
                         setViewComponent(<ServiceWizard type={value.serviceType} />);
                         break;
-                    case MACHINE_VIEW.BIServiceConfigView:
+                    case MACHINE_VIEW.ServiceConfigView:
                         setViewComponent(<ServiceEditView filePath={value.documentUri} position={value?.position} />);
                         break;
-                    case MACHINE_VIEW.BIListenerConfigView:
+                    case MACHINE_VIEW.ListenerConfigView:
                         setViewComponent(<ListenerEditView filePath={value.documentUri} position={value?.position} />);
                         break;
                     case MACHINE_VIEW.AddConnectionWizard:
@@ -178,10 +178,10 @@ const MainPanel = () => {
                         setActivePanel({ isActive: false });
                         setSidePanel("EDIT_CONNECTION");
                         break;
-                    case MACHINE_VIEW.BIMainFunctionForm:
-                        setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} isAutomation={true} />);
+                    case MACHINE_VIEW.MainFunctionForm:
+                        setViewComponent(<MainForm projectUri={value.projectUri} />);
                         break;
-                    case MACHINE_VIEW.BIFunctionForm:
+                    case MACHINE_VIEW.FunctionForm:
                         setViewComponent(
                             <FunctionForm
                                 projectPath={value.projectUri}

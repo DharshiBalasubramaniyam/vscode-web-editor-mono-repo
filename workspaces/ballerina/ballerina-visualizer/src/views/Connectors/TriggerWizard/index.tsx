@@ -1,29 +1,30 @@
 import { TriggerModelsResponse, BallerinaConstruct, ServiceModel, EVENT_TYPE, MACHINE_VIEW, DIRECTORY_MAP } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { ProgressRing, Typography } from "@dharshi/ui-toolkit";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModuleCard from "../Marketplace/ModuleCard";
-import { ModuleIcon } from "@dharshi/ballerina-low-code-diagram";
-import { Tooltip } from "@dharshi/ui-toolkit";
-import useStyles from "./style";
 import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { useVisualizerContext } from "../../../Context";
 import styled from "@emotion/styled";
+import SearchBar from "../Marketplace/SearchBar";
 
 const GridContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
     width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    width: calc(100% - 40px);
+    margin-top: 20px;
 `;
 
 function TriggerPanel() {
-    const classes = useStyles();
     const { rpcClient } = useRpcContext();
     const [triggers, setTriggers] = useState<TriggerModelsResponse>({ local: [] });
     const [loading, setLoading] = useState<boolean>(true);
     const { setSidePanel } = useVisualizerContext();
-
+    const [searchQuery, setSearchQuery] = useState("");
 
     const fetchTriggers = async () => {
         console.log("fetching triggers....")
@@ -45,7 +46,7 @@ function TriggerPanel() {
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIServiceWizard,
+                view: MACHINE_VIEW.ServiceWizard,
                 serviceType: serviceType,
             },
         });
@@ -72,16 +73,19 @@ function TriggerPanel() {
         </div>
     );
 
+    const onSearchButtonClick = (query: string) => {
+        setSearchQuery(query);
+    };
+
+    const searchBar = <SearchBar searchQuery={searchQuery} onSearch={onSearchButtonClick} type={"triggers"} />;
+
     const triggersList = (
-        <div style={{
-            height: '80vh',
-            overflowY: 'scroll',
-            scrollbarWidth: 'none'
-        }}>
+        <>
 
             {
                 triggers.local
                     .filter((t) => t.type === "event")
+                    .filter((t) => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
                     .map((item, index) => {
                         return (
                             <ModuleCard
@@ -93,22 +97,27 @@ function TriggerPanel() {
                         )
                     })
             }
-        </div>
+        </>
     );
 
     return (
         <PanelContainer title="Triggers" show={true} width={600} onClose={() => setSidePanel("EMPTY")}>
             <div
                 id="module-list-container"
-                style={{ width: '100%', flexDirection: "row", padding: '15px 20px' }}
+                style={{ width: '100%', padding: '15px 20px', display: 'flex', flex: 1 }}
             >
                 {loading && loadingScreen}
-                {triggers.local.length === 0 && notFoundComponent}
+                {!loading && triggers.local.length === 0 && notFoundComponent}
 
                 {triggers.local.length > 0 && (
-                    <GridContainer>
-                        {triggersList}
-                    </GridContainer>
+                    (
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                            {searchBar}
+                            <GridContainer>
+                                {triggersList}
+                            </GridContainer>
+                        </div>
+                    )
                 )}
             </div>
         </PanelContainer>

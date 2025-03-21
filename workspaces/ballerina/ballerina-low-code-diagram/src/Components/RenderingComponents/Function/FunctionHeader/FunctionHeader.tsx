@@ -3,26 +3,20 @@ import React from "react";
 
 import { EVENT_TYPE, MACHINE_VIEW, SettingsIcon, VisualizerLocation } from "@dharshi/ballerina-core";
 import {
-    RequiredParam,
     STKindChecker,
 } from "@dharshi/syntax-tree";
 import classNames from "classnames";
 
 import { useDiagramContext } from "../../../../Context/diagram";
 import { useFunctionContext } from "../../../../Context/Function";
-import { isQueryParam } from "../util";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
 
 import "./style.scss";
-
 
 export function FunctionHeader() {
     const { functionNode } = useFunctionContext();
     const diagramContext = useDiagramContext();
     const contextProps = diagramContext?.props;
-    const diagramApi = diagramContext?.api;
-    const editApi = diagramApi?.edit;
-    const renderEditForm = editApi?.renderEditForm;
     const { rpcClient } = useRpcContext();
 
     const titleComponents: React.ReactElement[] = [];
@@ -34,7 +28,7 @@ export function FunctionHeader() {
         if (STKindChecker.isFunctionDefinition(functionNode)) {
             const context: VisualizerLocation = {
                 position: functionNode.position,
-                view: MACHINE_VIEW.BIFunctionForm,
+                view: MACHINE_VIEW.FunctionForm,
                 identifier: functionNode.functionName.value
             }
             await rpcClient.getVisualizerRpcClient().openView(
@@ -42,31 +36,6 @@ export function FunctionHeader() {
             );
         }
 
-        // const signature = diagramContext?.props?.getListenerSignature 
-        //                 ? await diagramContext.props.getListenerSignature(functionNode) 
-        //                 : null;
-        // if (signature && signature.includes('graphql')) {
-        //     if (STKindChecker.isObjectMethodDefinition(functionNode)) {
-        //         renderEditForm(functionNode, functionNode.position, {
-        //             formType: "GraphqlConfigForm",
-        //             formName: "GraphqlMutation", isLoading: false
-        //         });
-        //     } else if (STKindChecker.isResourceAccessorDefinition(functionNode)) {
-        //         if (functionNode.functionName.value === 'subscribe') {
-        //             renderEditForm(functionNode, functionNode.position, {
-        //                 formType: "GraphqlConfigForm",
-        //                 formName: "GraphqlSubscription", isLoading: false
-        //             });
-        //         } else {
-        //             renderEditForm(functionNode, functionNode.position, {
-        //                 formType: "GraphqlConfigForm",
-        //                 formName: "GraphqlResource", isLoading: false
-        //             });
-        //         }
-        //     }
-        // } else {
-        //     renderEditForm(functionNode, functionNode.position, { formType: functionNode.kind, isLoading: false });
-        // }
     }
 
     if (STKindChecker.isFunctionDefinition(functionNode)) {
