@@ -655,8 +655,41 @@ export class BiDiagramRpcManager
         });
     }
 
+    async updateServiceClass(params: ServiceClassSourceRequest): Promise<SourceEditResponse> {
+        return new Promise(async (resolve) => {
+            try {
+                const res: SourceEditResponse = await StateMachine.langClient().updateServiceClass(params);
+                this.updateSource({ textEdits: res.textEdits });
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
+    async addClassField(params: AddFieldRequest): Promise<SourceEditResponse> {
+        return new Promise(async (resolve) => {
+            try {
+                const res: SourceEditResponse = await StateMachine.langClient().addClassField(params);
+                this.updateSource({ textEdits: res.textEdits });
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
+    async updateClassField(params: ClassFieldModifierRequest): Promise<SourceEditResponse> {
+        return new Promise(async (resolve) => {
+            try {
+                const res: SourceEditResponse = await StateMachine.langClient().updateClassField(params);
+                this.updateSource({ textEdits: res.textEdits });
+                resolve(res);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
 
 }
 

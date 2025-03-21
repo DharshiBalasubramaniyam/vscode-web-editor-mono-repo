@@ -34,22 +34,7 @@ const stateMachine = createMachine<MachineContext>(
             }
         },
         states: {
-            initialize: {
-                invoke: {
-                    src: checkForProjects,
-                    onDone: {
-                        target: "activateLS",
-                        actions: assign({
-                            isBI: (context, event) => event.data.isBI,
-                            projectUri: (context, event) => event.data.projectUri
-                        })
-                    },
-                    onError: {
-                        target: "activateLS"
-                    }
-                }
-            },
-            activateLS: {
+            initialize : {
                 invoke: {
                     src: 'activateLanguageServer',
                     onDone: {
@@ -192,7 +177,6 @@ const stateMachine = createMachine<MachineContext>(
         activateLanguageServer: (context, event) => {
             return new Promise(async (resolve, reject) => {
                 try {
-                    commands.executeCommand('setContext', 'BI.status', 'loading');
                     const langClient = await activateLanguageServer();
                     // StateMachineAI.initialize();
                     StateMachinePopup.initialize();

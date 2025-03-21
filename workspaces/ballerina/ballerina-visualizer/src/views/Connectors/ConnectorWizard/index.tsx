@@ -5,10 +5,10 @@ import {
 } from "@dharshi/ballerina-low-code-diagram";
 
 import { STKindChecker } from "@dharshi/syntax-tree";
-import { BallerinaConnectorInfo, BallerinaModuleResponse, BallerinaConnectorsRequest, BallerinaConstruct, STModification } from "@dharshi/ballerina-core";
+import { BallerinaConnectorInfo, BallerinaModuleResponse, BallerinaConnectorsRequest, BallerinaConstruct, STModification, EVENT_TYPE, MACHINE_VIEW } from "@dharshi/ballerina-core";
 
 
-import {  Marketplace, SearchQueryParams } from "../Marketplace";
+import { Marketplace, SearchQueryParams } from "../Marketplace";
 import { BallerinaRpcClient, useRpcContext } from "@dharshi/ballerina-rpc-client";
 import { fetchConnectorInfo, getConnectorImports, getInitialSourceForConnectors } from "./utils";
 import { PanelType, useVisualizerContext } from "../../../Context";
@@ -16,6 +16,7 @@ import { PanelContainer } from "@dharshi/ballerina-side-panel";
 import { StatementEditorComponent } from "../../StatementEditorComponent";
 import { URI } from "vscode-uri";
 import { PackageLoader } from "../PackageLoader";
+import { ProgressRing, Typography } from "@dharshi/ui-toolkit";
 
 
 export interface ConnectorListProps {
@@ -35,9 +36,9 @@ export function ConnectorList(props: ConnectorListProps) {
     const [selectedConnector, setSelectedConnector] = useState<BallerinaConnectorInfo>();
     const [showStatementEditor, setShowStatementEditor] = useState<boolean>(false);
     const [initialSource, setInitialSource] = useState<string>();
-    const { activeFileInfo, statementPosition, setComponentInfo, setActivePanel, setSidePanel, setActiveFileInfo, setStatementPosition, componentInfo } = useVisualizerContext();
-
+    const { activeFileInfo, statementPosition, setActivePanel, setSidePanel, setActiveFileInfo, setStatementPosition, componentInfo } = useVisualizerContext();
     const { rpcClient } = useRpcContext();
+    const [isFetchingEditConnector, setIsFetchingEditConnector] = useState<boolean>(false);
 
     useEffect(() => {
         console.log(activeFileInfo);
@@ -61,17 +62,14 @@ export function ConnectorList(props: ConnectorListProps) {
                 rpcClient.getCommonRpcClient().runBackgroundTerminalCommand({ command: pullCommand })
                     .then((res) => {
                         if (res.error && !res.message.includes("already exists")) {
-                            // TODO: Handle error properly
                             console.error('Something wrong when pulling package: ', res.message);
                         }
                     })
                     .catch((err) => {
-                        // TODO: Handle error properly
                         console.error('Something wrong when pulling package: ', err);
                     })
                     .finally(async () => {
                         setPullingPackage(false);
-                        // get the initial source
                         const stSymbolInfo = getSymbolInfo();
                         const initialSource = await getInitialSourceForConnectors(selectedConnector, statementPosition, stSymbolInfo, activeFileInfo.activeSequence);
                         setInitialSource(initialSource);
@@ -112,12 +110,27 @@ export function ConnectorList(props: ConnectorListProps) {
         setShowStatementEditor(false);
         setSelectedConnector(undefined);
         setSidePanel("EMPTY");
-        rpcClient.getVisualizerRpcClient().goBack()
+        if (edit) {
+            rpcClient.getVisualizerRpcClient().openView({
+                location: {documentUri: activeFileInfo.filePath, view: MACHINE_VIEW.Overview},
+                type: EVENT_TYPE.OPEN_VIEW
+            })
+        } else {
+            rpcClient.getVisualizerRpcClient().goBack()
+        }
     }
 
     const cancelStatementEditor = () => {
+        console.log("cancelling statement editor...")
         setShowStatementEditor(false);
         setSelectedConnector(undefined);
+        if (edit) {
+            setSidePanel("EMPTY");
+            rpcClient.getVisualizerRpcClient().openView({
+                location: {documentUri: activeFileInfo.filePath, view: MACHINE_VIEW.Overview},
+                type: EVENT_TYPE.OPEN_VIEW
+            })
+        }
     }
 
     const onMarketplaceClose = () => {
@@ -125,50 +138,13 @@ export function ConnectorList(props: ConnectorListProps) {
     }
 
     useEffect(() => {
-        if (activeFileInfo && edit) {
-            console.log("getting connector info for editing: ", {
-                "filepath": activeFileInfo.filePath
-            })
-            rpcClient.getVisualizerLocation()
-                .then((location) => {
-                    console.log("location: ", location)
-                    const [module, name] = location.identifier.split(":"); 
-                    console.log(module, name)
-;                    fetchConnectorsList(
-                        { query: module }, activeFileInfo.filePath, rpcClient 
-                    ).then((res) => {
-                        const allConnectors = [...res.central, ...res.local]
-                        console.log("allConnectors: ", allConnectors)
-                        const connector = allConnectors.find((c) => {
-                            return c.moduleName.toLowerCase() === module && c.name.toLowerCase() === name;
-                        })
-                        console.log("connector: ", connector)
-                        rpcClient.getLangClientRpcClient().getSTByRange({
-                            documentIdentifier: { uri: activeFileInfo.filePath },
-                            lineRange: {
-                                start: { line: location.position.startLine, character: location.position.startColumn },
-                                end: { line: location.position.endLine, character: location.position.endColumn },
-                            }
-                        }).then(async (res) => {
-                            setShowStatementEditor(true);
-                            const connectorMetadata = await fetchConnectorInfo(connector, rpcClient, activeFileInfo?.filePath);
-                            setSelectedConnector(connectorMetadata);
-                            setInitialSource(res.syntaxTree.source);
-                            setStatementPosition(location.position);
-                        })
-                    })
-                })
-        }
-    }, [edit, activeFileInfo]);
-
-    useEffect(() => {
         rpcClient
             .getLangClientRpcClient()
             .getSyntaxTree()
             .then(async (model) => {
                 console.log("model: ", model);
+                const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
                 if (!STKindChecker.isFunctionDefinition(model.syntaxTree)) {
-                    const filePath = (await rpcClient.getVisualizerLocation()).documentUri;
                     const fullST = await rpcClient.getLangClientRpcClient().getST({
                         documentIdentifier: { uri: URI.parse(filePath).toString() }
                     });
@@ -180,11 +156,50 @@ export function ConnectorList(props: ConnectorListProps) {
                         endColumn: fullST.syntaxTree.position.endColumn - 1,
                     });
                 }
+                if (edit) {
+                    setIsFetchingEditConnector(true);
+                    console.log("getting connector info for editing: ", {
+                        "filepath": filePath
+                    })
+                    rpcClient.getVisualizerLocation()
+                        .then((location) => {
+                            console.log("location: ", location)
+                            const [module, name] = location.identifier.split(":");
+                            console.log(module, name)
+                                ; fetchConnectorsList(
+                                    { query: module }, filePath, rpcClient
+                                ).then((res) => {
+                                    const allConnectors = [...res.central, ...res.local]
+                                    console.log("allConnectors: ", allConnectors)
+                                    const connector = allConnectors.find((c) => {
+                                        return c.moduleName.toLowerCase() === module && c.name.toLowerCase() === name;
+                                    })
+                                    console.log("connector: ", connector)
+                                    rpcClient.getLangClientRpcClient().getSTByRange({
+                                        documentIdentifier: { uri: filePath },
+                                        lineRange: {
+                                            start: { line: location.position.startLine, character: location.position.startColumn },
+                                            end: { line: location.position.endLine, character: location.position.endColumn },
+                                        }
+                                    }).then(async (res) => {
+                                        setShowStatementEditor(true);
+                                        const connectorMetadata = await fetchConnectorInfo(connector, rpcClient, filePath);
+                                        setSelectedConnector(connectorMetadata);
+                                        setInitialSource(res.syntaxTree.source);
+                                        setStatementPosition(location.position);
+                                    }).finally(() => {
+                                        setIsFetchingEditConnector(false);
+                                    })
+                                })
+                        });
+                }
                 console.log("activeFileInfo: ", activeFileInfo)
+            }).finally(() => {
             });
-    }, [])
+        
+    }, []);
 
-    console.log(!!selectedConnector, !pullingPackage, !!activeFileInfo?.filePath, edit, showStatementEditor)
+    console.log(!!selectedConnector, pullingPackage, !!activeFileInfo?.filePath, edit, showStatementEditor, isFetchingEditConnector)
 
     return (
         <>
@@ -204,8 +219,16 @@ export function ConnectorList(props: ConnectorListProps) {
                     shortName="connectors"
                 />
             }
+            {/* {
+                edit && !selectedConnector && isFetchingEditConnector && (
+                    <PanelContainer title="Connector" show={true} onClose={cancelStatementEditor}>
+                        <ProgressRing />
+                        <Typography variant="h3" sx={{ marginTop: '16px' }}>Fetching Connector...</Typography>
+                    </PanelContainer>
+                )
+            } */}
             {selectedConnector && !pullingPackage && activeFileInfo?.filePath && showStatementEditor && edit &&
-                <PanelContainer title="Add Connector" show={true} onClose={cancelStatementEditor}>
+                <PanelContainer title={ edit ? "Edit Connector" : "Add Connector"} show={true} onClose={cancelStatementEditor}>
                     (
                     <StatementEditorComponent
                         label={"Connector"}

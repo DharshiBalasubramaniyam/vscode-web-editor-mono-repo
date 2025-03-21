@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FieldType, LineRange, Type } from '@dharshi/ballerina-core';
-import { FormGeneratorNew } from '../../Forms/FormGeneratorNew';
+import { FormGeneratorNew } from '../Forms/FormGeneratorNew';
 import { FormField, FormValues } from '@dharshi/ballerina-side-panel';
 
 interface VariableFormProps {

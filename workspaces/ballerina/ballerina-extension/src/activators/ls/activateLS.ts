@@ -10,6 +10,7 @@ export function activateLanguageServer(): ExtendedLanguageClient {
     const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     balExtInstance.statusBar = statusBar;
     statusBar.text = "Ballerina detecting";
+    statusBar.command = "ballerina.showLogs";
     statusBar.show();
     vscode.window.onDidChangeActiveTextEditor((editor) => {
         if (editor.document.uri.scheme === WEB_IDE_SCHEME && editor.document.languageId === 'ballerina') {
@@ -37,9 +38,7 @@ export function activateLanguageServer(): ExtendedLanguageClient {
 
 function createExtendedLanguageClient(context: vscode.ExtensionContext): ExtendedLanguageClient {
     const serverMain = vscode.Uri.joinPath(context.extensionUri, '/dist/browserServerMain.js');
-    console.log(context.extensionUri, '/dist/browserServerMain.js');
     const worker = new Worker(serverMain.toString(true));
-    console.log('Worker created with script:', serverMain.toString(true));
     return new ExtendedLanguageClient('ballerinalangClient', 'Ballerina Language Client', getClientOptions(), worker, context);
 }
 

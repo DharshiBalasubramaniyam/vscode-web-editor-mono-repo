@@ -20,9 +20,11 @@ export class BalFileSystemProvider implements vscode.FileSystemProvider {
 			console.log("Starting to clone repository...");
 			const cloneResponse = await fetch(`${FS_BASE_URL}/clone${uri.path}`);
 			if (!cloneResponse.ok) {
+				vscode.window.showErrorMessage(`Failed to clone repository: ${uri.path}`);
 				console.log(`Failed to clone repository: ${cloneResponse.statusText}`);
 				throw new Error('Failed to fetch clone repository');
 			}
+			// vscode.window.showInformationMessage(`Repository cloned successfully: ${uri.path}`);
 			console.log("Clone success:", cloneResponse.status);
 		}
 
