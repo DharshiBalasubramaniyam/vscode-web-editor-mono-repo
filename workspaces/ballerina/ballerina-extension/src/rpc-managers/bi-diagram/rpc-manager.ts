@@ -88,6 +88,8 @@ import {
     AddFieldRequest,
     RenameRequest,
     RenameIdentifierRequest,
+    BallerinaProjectComponents,
+    NodePosition,
 } from "@dharshi/ballerina-core";
 import * as vscode from "vscode";
 
@@ -103,7 +105,7 @@ import { StateMachine, openView, updateView } from "../../state-machine";
 import { balExtInstance, WEB_IDE_SCHEME } from "../../extension";
 import { getFunctionNodePosition } from "./utils";
 
-export class BiDiagramRpcManager 
+export class BiDiagramRpcManager
 // implements BIDiagramAPI 
 {
 
@@ -278,7 +280,7 @@ export class BiDiagramRpcManager
                                 ),
                                 source
                             );
-                            
+
                             await workspace.applyEdit(workspaceEdit);
                         }
                     }
@@ -377,19 +379,62 @@ export class BiDiagramRpcManager
         });
     }
 
+    async createMainFunctionComponent(params: ComponentRequest): Promise<CreateComponentResponse> {
+        if (params.type !== DIRECTORY_MAP.AUTOMATION) {
+            return;
+        }
+        return new Promise(async (resolve) => {
+            const paramLength = params.functionType?.parameters.length;
+            let paramList = '';
+            if (paramLength > 0) {
+                params.functionType.parameters.forEach((param, index) => {
+                    let paramValue = param.defaultValue ? `${param.type} ${param.name} = ${param.defaultValue}, ` : `${param.type} ${param.name}, `;
+                    if (paramLength === index + 1) {
+                        paramValue = param.defaultValue ? `${param.type} ${param.name} = ${param.defaultValue}` : `${param.type} ${param.name}`;
+                    }
+                    paramList += paramValue;
+                });
+            }
+            let funcSignature = `public function main(${paramList}) returns error? {`;
+            const balContent = `${funcSignature}\n\tdo {\n\n\t} on fail error e {\n\t\treturn e;\n\t}\n}`;
+            const mainFile = Uri.joinPath(Uri.parse(StateMachine.context().projectUri), "main.bal").toString();
+            console.log(balContent);
+            this.getEndOfFile({ filePath: mainFile })
+                .then(async (endofFile) => {
+                    console.log(endofFile);
+                    const workspaceEdit = new vscode.WorkspaceEdit();
+                    workspaceEdit.replace(
+                        Uri.parse(mainFile),
+                        new vscode.Range(
+                            new vscode.Position(endofFile.line, endofFile.offset),
+                            new vscode.Position(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+                        ),
+                        endofFile.line === 0 ? balContent : `\n\n${balContent}`
+                    );
+                    await workspace.applyEdit(workspaceEdit);
+                    const components = await StateMachine.langClient().getBallerinaProjectComponents({
+                        documentIdentifiers: [{ uri: StateMachine.context().projectUri }]
+                    }) as BallerinaProjectComponents;
+                    const position: NodePosition = {};
+                    for (const pkg of components.packages) {
+                        for (const module of pkg.modules) {
+                            module.automations.forEach(func => {
+                                position.startColumn = func.startColumn;
+                                position.startLine = func.startLine;
+                                position.endLine = func.endLine;
+                                position.endColumn = func.endColumn;
+                            });
+                        }
+                    }
+                    openView(EVENT_TYPE.OPEN_VIEW, { documentUri: mainFile, position });
+                });
+            resolve({ response: true, error: "" });
+        });
+    }
+
     async getSourceCode(params: BISourceCodeRequest): Promise<BISourceCodeResponse> {
         console.log(">>> requesting bi source code from ls", params);
         const { flowNode, isFunctionNodeUpdate } = params;
-        // if (isFunctionNodeUpdate && !params.flowNode.codedata.lineRange) {
-            // await this.getEndOfFile({filePath: params.filePath})
-            // .then((endofFile) => {
-            //     params.flowNode.codedata.lineRange = {
-            //         endLine: {line: endofFile.line-3, offset: endofFile.offset},
-            //         startLine: {line: endofFile.line-3, offset: endofFile.offset},
-            //         fileName: params.filePath
-            //     };
-            // });
-        // }
         return new Promise((resolve) => {
             StateMachine.langClient()
                 .getSourceCode(params)
@@ -442,7 +487,7 @@ export class BiDiagramRpcManager
                 const projectRootPath = Uri.parse(StateMachine.context().projectUri).path;
                 const startIndex = fileUri.indexOf(projectRootPath);
                 if (startIndex !== -1) {
-                    fileUri = Uri.file(fileUri.substring(startIndex)).with({scheme: WEB_IDE_SCHEME}).toString();
+                    fileUri = Uri.file(fileUri.substring(startIndex)).with({ scheme: WEB_IDE_SCHEME }).toString();
                 }
                 console.log({
                     "actual key": key,
@@ -458,11 +503,11 @@ export class BiDiagramRpcManager
                 const modificationList: STModification[] = [];
 
                 if (isNewFunction) {
-                    await this.getEndOfFile({filePath: fileUri})
+                    await this.getEndOfFile({ filePath: fileUri })
                         .then((endofFile) => {
                             edits[0].range = {
-                                start: {line: endofFile.line, character: endofFile.offset},
-                                end: {line: endofFile.line, character: endofFile.offset}
+                                start: { line: endofFile.line, character: endofFile.offset },
+                                end: { line: endofFile.line, character: endofFile.offset }
                             };
                         });
                 }

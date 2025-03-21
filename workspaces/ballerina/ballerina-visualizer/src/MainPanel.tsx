@@ -35,6 +35,7 @@ import TriggerPanel from "./views/Connectors/TriggerWizard";
 import { GraphQLDiagram } from "./views/GraphQLDiagram";
 import { DataMapper } from "./views/DataMapper";
 import { FunctionDefinition } from "@dharshi/syntax-tree";
+import { MainForm } from "./views/AutomationForm";
 
 const globalStyles = css`
     *,
@@ -179,7 +180,7 @@ const MainPanel = () => {
                         setSidePanel("EDIT_CONNECTION");
                         break;
                     case MACHINE_VIEW.BIMainFunctionForm:
-                        setViewComponent(<FunctionForm projectPath={value.projectUri} filePath={value.documentUri} functionName={value?.identifier} isAutomation={true} />);
+                        setViewComponent(<MainForm projectUri={value.projectUri} />);
                         break;
                     case MACHINE_VIEW.BIFunctionForm:
                         setViewComponent(

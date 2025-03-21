@@ -105,7 +105,7 @@ export function registerBiDiagramRpcHandlers(messenger: Messenger) {
     // messenger.onRequest(getWorkspaces, () => rpcManger.getWorkspaces());
     messenger.onRequest(getProjectStructure, () => rpcManger.getProjectStructure());
     // messenger.onRequest(getProjectComponents, () => rpcManger.getProjectComponents());
-    // messenger.onRequest(createComponent, (args: ComponentRequest) => rpcManger.createComponent(args));
+    messenger.onRequest(createComponent, (args: ComponentRequest) => rpcManger.createMainFunctionComponent(args));
     // messenger.onRequest(getBIConnectors, (args: BIConnectorsRequest) => rpcManger.getBIConnectors(args));
     // messenger.onRequest(handleReadmeContent, (args: ReadmeContentRequest) => rpcManger.handleReadmeContent(args));
     messenger.onRequest(getVisibleVariableTypes, (args: BIGetVisibleVariableTypesRequest) => rpcManger.getVisibleVariableTypes(args));

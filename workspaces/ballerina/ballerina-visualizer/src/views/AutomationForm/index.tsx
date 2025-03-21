@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { DIRECTORY_MAP, EVENT_TYPE, LineRange, ProjectStructureArtifactResponse } from "@dharshi/ballerina-core";
+import { DIRECTORY_MAP, EVENT_TYPE, LineRange, ProjectStructureArtifactResponse, NodeProperties } from "@dharshi/ballerina-core";
 import { View, ViewContent, Button } from "@dharshi/ui-toolkit";
 import styled from "@emotion/styled";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
@@ -14,6 +14,7 @@ import { Banner } from "../../components/Banner";
 import FormGeneratorNew from "../Forms/FormGeneratorNew";
 import { LoadingContainer } from "../styles";
 import { LoadingRing } from "../../components/Loader";
+import { convertConfig } from "../../utils/bi";
 
 const FormContainer = styled.div`
     display: flex;
@@ -50,7 +51,7 @@ const CardGrid = styled.div`
     width: 100%;
 `;
 
-export function MainForm() {
+export function MainForm(props: { projectUri: string }) {
     const { rpcClient } = useRpcContext();
     const [isLoading, setIsLoading] = useState(true);
     const [automation, setAutomation] = useState<ProjectStructureArtifactResponse>(null);
@@ -74,8 +75,8 @@ export function MainForm() {
 
     const handleFunctionCreate = async (data: FormValues) => {
         setIsLoading(true);
-        const params = data["params"];
-        const paramList = params ? getFunctionParametersList(params) : [];
+        console.log("form data", data);
+        const paramList = data.params ? getFunctionParametersList(data.params) : [];
         const res = await rpcClient
             .getBIDiagramRpcClient()
             .createComponent({ type: DIRECTORY_MAP.AUTOMATION, functionType: { parameters: paramList } });
@@ -99,10 +100,8 @@ export function MainForm() {
                 }
                 setIsLoading(false);
             });
-        rpcClient.getVisualizerLocation().then(context => {
-            let functionFilePath = Utils.joinPath(URI.file(context.projectUri), "main.bal").fsPath;
-            setFilePath(functionFilePath)
-        });
+        let functionFilePath = Utils.joinPath(URI.parse(props.projectUri), "main.bal").toString();
+        setFilePath(functionFilePath)
     }, []);
 
     const paramFiels: FormField[] = [
@@ -169,7 +168,7 @@ export function MainForm() {
     return (
         <View>
             <TopNavigationBar />
-            <TitleBar title="Automation" subtitle="Create a new automation for your integration" />
+            <TitleBar title="Main function" subtitle="" />
             <ViewContent padding>
                 <Container>
                     {isLoading && (
@@ -180,10 +179,10 @@ export function MainForm() {
                     {!isLoading && automation && (
                         <Banner
                             variant="info"
-                            message="An integration can only have one automation. You have already created an automation."
+                            message="A project can only have one main function. You have already created an main function."
                             actions={
                                 <>
-                                    <Button onClick={openAutomation}>View Automation</Button>
+                                    <Button onClick={openAutomation}>View function</Button>
                                 </>
                             }
                         />
@@ -191,7 +190,7 @@ export function MainForm() {
                     {!isLoading && !automation && (
                         <>
                             <FormHeader
-                                title="Create an Automation"
+                                title="Create main function"
                                 subtitle="Implement an automation for either scheduled or manual jobs."
                             />
                             <FormContainer>

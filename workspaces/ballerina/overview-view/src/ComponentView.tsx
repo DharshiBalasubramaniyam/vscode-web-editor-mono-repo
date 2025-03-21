@@ -1,6 +1,7 @@
 import React from "react";
 import { ComponentViewInfo } from "./ComponentListView";
 import { ComponentCard, Icon, Typography } from "@dharshi/ui-toolkit";
+import { iconNameTranslator } from "./util/icon";
 // import styled from "@emotion/styled";
 
 interface ComponentViewProps {
@@ -27,27 +28,7 @@ export function ComponentView(props: ComponentViewProps) {
         }
     }
 
-    // const ComponentContainer = styled.div`
-    //     width: 120px;
-    //     display: flex;
-    //     flex-direction: row;
-    //     border: 1px solid #ccc; /* Add a border with a color of your choice */
-    //     border-radius: 5px; /* Adjust the border-radius to your preferred value */
-    //     padding: 10px; /* Add padding for better visual appearance, adjust as needed */
-    // `;
-
     return (
-        // <ComponentContainer
-        //     onClick={isComponentAllowed(props.type) ? handleComponentClick : undefined}
-        //     title={info.name.length ? info.name : '/'}
-        // >
-        //     <div className="icon">
-        //        Icon XX
-        //     </div>
-        //     <h2>
-        //         {info.name.length ? info.name : '/'}
-        //     </h2>
-        // </ComponentContainer>
 
         <ComponentCard
             id="Test"
@@ -79,32 +60,4 @@ export function ComponentView(props: ComponentViewProps) {
             </Typography>
         </ComponentCard>
     )
-}
-
-
-function iconNameTranslator(type: string) {
-    switch (type) {
-        case 'functions':
-            return 'function-icon';
-        case 'services':
-            return 'service-icon';
-        case 'records':
-            return 'record-icon';
-        case 'objects':
-            return 'record-icon';
-        case 'classes':
-            return 'class-icon';
-        case 'types':
-            return 'record-icon';
-        case 'constants':
-            return 'constant-icon';
-        case 'enums':
-            return 'enum-icon';
-        case 'listeners':
-            return 'listener-icon';
-        case 'moduleVariables':
-            return 'variable-icon';
-        default:
-            return 'record-icon';
-    }
 }

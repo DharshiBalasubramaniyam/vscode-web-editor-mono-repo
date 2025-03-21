@@ -98,10 +98,6 @@ export function FunctionForm(props: FunctionFormProps) {
                 id: { node: kind },
             });
         const flowNode = res.flowNode;
-        if (isAutomation || functionName === "main") {
-            setFunctionFields([])
-            handleSubmit([])
-        }
         setFunctionNode(flowNode);
         console.log("Function Node: ", flowNode);
 

@@ -20,6 +20,7 @@ interface Package {
 }
 // Create a interface for the module
 interface Module {
+    automations: any[];
     functions: any[];
     services: any[];
     records: any[];
@@ -153,7 +154,7 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
                 }
             });
             return {
-                ...module,
+                // ...module,
                 services,
                 types,
                 functions,
