@@ -35,6 +35,8 @@ import { GraphQLDiagram } from "./views/GraphQLDiagram";
 import { DataMapper } from "./views/DataMapper";
 import { FunctionDefinition } from "@dharshi/syntax-tree";
 import { MainForm } from "./views/MainFunctionForm";
+import { ServiceClassDesigner } from "./views/ServiceClassEditor/ServiceClassDesigner";
+import { ServiceClassConfig } from "./views/ServiceClassEditor/ServiceClassConfig";
 
 const globalStyles = css`
     *,
@@ -132,7 +134,6 @@ const MainPanel = () => {
             if (!value?.view) {
                 setViewComponent(<LoadingRing />);
             } else {
-                const projectUri = value.projectUri
                 switch (value?.view) {
                     case MACHINE_VIEW.Overview:
                         setNavActive(false);
@@ -154,6 +155,16 @@ const MainPanel = () => {
                         setNavActive(true);
                         setViewComponent(
                             <SequenceDiagram syntaxTree={value?.syntaxTree} applyModifications={applyModifications} />
+                        );
+                        break;
+                    case MACHINE_VIEW.ServiceClassDesigner:
+                        setViewComponent(
+                            <ServiceClassDesigner type={value?.type} isGraphql={value?.isGraphql} projectUri={value?.projectUri} documentUri={value?.documentUri} />
+                        );
+                        break;
+                    case MACHINE_VIEW.ServiceClassConfigView:
+                        setViewComponent(
+                            <ServiceClassConfig filePath={value.documentUri} position={value?.position} projectUri={value?.projectUri} />
                         );
                         break;
                     case MACHINE_VIEW.ServiceWizard:
@@ -284,19 +295,6 @@ const MainPanel = () => {
                 {sidePanel !== "EMPTY" && sidePanel === "ADD_TRIGGER" && (
                     <TriggerPanel />
                 )}
-
-                {/* {popupMessage && (
-                    <PopupMessage onClose={handleOnCloseMessage}>
-                        <Typography variant="h3">This feature is coming soon!</Typography>
-                    </PopupMessage>
-                )} */}
-                {/* {sidePanel === "RECORD_EDITOR" && (
-                    <RecordEditor
-                        isRecordEditorOpen={sidePanel === "RECORD_EDITOR"}
-                        onClose={() => setSidePanel("EMPTY")}
-                        rpcClient={rpcClient}
-                    />
-                )} */}
                 {activePanel?.isActive && activePanel.name === PanelType.CONSTRUCTPANEL && (
                     <ConstructPanel applyModifications={applyModifications} />
                 )}

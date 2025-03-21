@@ -1,15 +1,13 @@
-
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { ProgressRing, Typography, View, ViewContent } from "@dharshi/ui-toolkit";
 import { FormField, FormValues } from "@dharshi/ballerina-side-panel";
 import { ModelFromCodeRequest, NodePosition, PropertyModel, ServiceClassModel } from "@dharshi/ballerina-core";
 import { useRpcContext } from "@dharshi/ballerina-rpc-client";
-import { URI, Utils } from "vscode-uri";
-import { FormGeneratorNew } from "../../Forms/FormGeneratorNew";
-import { FormHeader } from "../../../components/FormHeader";
-import { TopNavigationBar } from "../../../components/TopNavigationBar";
-import { TitleBar } from "../../../components/TitleBar";
+import { FormGeneratorNew } from "../Forms/FormGeneratorNew";
+import { FormHeader } from "../../components/FormHeader";
+import { TopNavigationBar } from "../../components/TopNavigationBar";
+import { TitleBar } from "../../components/TitleBar";
 
 const Container = styled.div`
     max-width: 600px;
@@ -34,14 +32,13 @@ const LoadingContainer = styled.div`
 `;
 
 interface ServiceClassConfigProps {
-    fileName: string;
+    filePath: string;
     position: NodePosition;
     projectUri: string;
 }
 
-// TODO: Need to support inclusion type configurable option
 export function ServiceClassConfig(props: ServiceClassConfigProps) {
-    const { fileName, position, projectUri } = props;
+    const { filePath, position } = props;
     const { rpcClient } = useRpcContext();
     const [serviceClassModel, setServiceClassModel] = useState<ServiceClassModel | null>(null);
     const [serviceClassFields, setServiceClassFields] = useState<FormField[]>([]);
@@ -50,13 +47,13 @@ export function ServiceClassConfig(props: ServiceClassConfigProps) {
 
     useEffect(() => {
         getServiceClassModel();
-    }, [fileName, position]);
+    }, [filePath, position]);
 
 
     const getServiceClassModel = async () => {
-        if (!fileName || !position) return;
+        if (!filePath || !position) return;
 
-        const currentFilePath = Utils.joinPath(URI.file(projectUri), fileName).fsPath;
+        const currentFilePath = filePath;
         const serviceClassModelRequest: ModelFromCodeRequest = {
             filePath: currentFilePath,
             codedata: {
@@ -113,9 +110,9 @@ export function ServiceClassConfig(props: ServiceClassConfigProps) {
                                 {serviceClassFields?.length > 0 && (
                                     <FormContainer>
                                         <FormHeader title={`Service Class Configuration`} subtitle={editTitle} />
-                                        {fileName &&
+                                        {filePath &&
                                             <FormGeneratorNew
-                                                fileName={Utils.joinPath(URI.file(projectUri), fileName).fsPath}
+                                                fileName={filePath}
                                                 targetLineRange={{ startLine: { line: 0, offset: 0 }, endLine: { line: 0, offset: 0 } }}
                                                 fields={serviceClassFields}
                                                 onSubmit={handleOnSubmit}

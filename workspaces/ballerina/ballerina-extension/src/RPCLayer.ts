@@ -11,17 +11,10 @@ import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
 import { registerGraphqlDesignerRpcHandlers } from './rpc-managers/graphql-designer/rpc-handler';
 import { registerRecordCreatorRpcHandlers } from './rpc-managers/record-creator/rpc-handler';
 import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-handler';
-// import { registerAiPanelRpcHandlers } from './rpc-managers/ai-panel/rpc-handler';
-// import { AiPanelWebview } from './views/ai-panel/webview';
-// import { StateMachineAI } from './views/ai-panel/aiMachine';
 import { StateMachinePopup } from './state-machine-popup';
 import { VisualizerWebview } from './activators/visualizer/webview';
-import { balExtInstance } from './extension';
 import { registerConnectorWizardRpcHandlers } from './rpc-managers/connector-wizard/rpc-handler';
 import { registerSequenceDiagramRpcHandlers } from './rpc-managers/sequence-diagram/rpc-handler';
-// import { registerInlineDataMapperRpcHandlers } from './rpc-managers/inline-data-mapper/rpc-handler';
-// import { registerTestManagerRpcHandlers } from './rpc-managers/test-manager/rpc-handler';
-// import { registerIcpServiceRpcHandlers } from './rpc-managers/icp-service/rpc-handler';
 
 export class RPCLayer {
     static _messenger: Messenger = new Messenger();
@@ -49,7 +42,6 @@ export class RPCLayer {
     }
 
     static init() {
-        // ----- Main Webview RPC Methods
         RPCLayer._messenger.onRequest(getVisualizerLocation, () => getContext());
         registerVisualizerRpcHandlers(RPCLayer._messenger);
         registerLangClientRpcHandlers(RPCLayer._messenger);
@@ -62,18 +54,6 @@ export class RPCLayer {
         registerBiDiagramRpcHandlers(RPCLayer._messenger);
         registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
         registerConnectorWizardRpcHandlers(RPCLayer._messenger);
-        // registerTestManagerRpcHandlers(RPCLayer._messenger);
-        // registerIcpServiceRpcHandlers(RPCLayer._messenger);
-
-        // ----- AI Webview RPC Methods
-        // registerAiPanelRpcHandlers(RPCLayer._messenger);
-        // RPCLayer._messenger.onRequest(sendAIStateEvent, (event: AI_EVENT_TYPE) => StateMachineAI.sendEvent(event));
-
-        // ----- Inline Data Mapper Webview RPC Methods
-        // registerInlineDataMapperRpcHandlers(RPCLayer._messenger);
-
-        // ----- Popup Views RPC Methods
-        // RPCLayer._messenger.onRequest(getPopupVisualizerState, () => getPopupContext());
     }
 
 }
@@ -94,7 +74,6 @@ async function getContext(): Promise<VisualizerLocation> {
             isGraphql: context.isGraphql,
             metadata: {
                 haveLS: StateMachine.langClient() !== null,
-                // recordFilePath: Uri.joinPath(context.projectUri, "types.bal").toString(),
             },
         });
     });

@@ -34,7 +34,6 @@ export async function activate(context: vscode.ExtensionContext) {
     await StateMachine.initialize();
 	activateVisualizer(balExtInstance);
 	activateEditorSupport(balExtInstance);
-
 }
 
 export async function deactivate(): Promise<void> {
