@@ -247,7 +247,7 @@ export function GraphqlServiceEditor(props: GraphqlServiceEditorProps) {
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIServiceConfigView,
+                view: MACHINE_VIEW.ServiceConfigView,
                 position: {
                     startLine: lineRange?.startLine?.line,
                     startColumn: lineRange?.startLine?.offset,
@@ -277,7 +277,7 @@ export function GraphqlServiceEditor(props: GraphqlServiceEditorProps) {
             rpcClient.getVisualizerRpcClient().openView({
                 type: EVENT_TYPE.OPEN_VIEW,
                 location: {
-                    view: MACHINE_VIEW.BIListenerConfigView,
+                    view: MACHINE_VIEW.ListenerConfigView,
                     position: listenerValue.position,
                     documentUri: listenerValue.path,
                 },
@@ -320,6 +320,7 @@ export function GraphqlServiceEditor(props: GraphqlServiceEditorProps) {
 
     const onEditOperation = (currentFun: FunctionModel) => {
         // Create a copy of the resource to avoid modifying the original
+        console.log("edit operation: ", currentFun);
         const currentFuncModel = {
             ...currentFun,
             parameters: currentFun.parameters.map((param) => ({

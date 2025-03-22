@@ -116,7 +116,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
         rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIListenerConfigView,
+                view: MACHINE_VIEW.ListenerConfigView,
                 position: listenerValue.position,
                 documentUri: listenerValue.path,
             },
@@ -140,7 +140,7 @@ export function ServiceDesigner(props: ServiceDesignerProps) {
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIServiceConfigView,
+                view: MACHINE_VIEW.ServiceConfigView,
                 position: position,
                 documentUri: filePath,
             },

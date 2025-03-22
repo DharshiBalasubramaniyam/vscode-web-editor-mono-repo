@@ -9,8 +9,6 @@ import { LoadingContainer } from '../styles';
 import { TitleBar } from '../../components/TitleBar';
 import { TopNavigationBar } from '../../components/TopNavigationBar';
 
-const FORM_WIDTH = 600;
-
 const FormContainer = styled.div`
     padding-top: 15px;
     padding-bottom: 15px;

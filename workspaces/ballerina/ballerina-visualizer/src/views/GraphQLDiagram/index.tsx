@@ -148,7 +148,7 @@ export function GraphQLDiagram(props: GraphQLDiagramProps) {
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIServiceConfigView,
+                view: MACHINE_VIEW.ServiceConfigView,
                 position: {
                     startLine: position?.startLine,
                     startColumn: position?.startColumn,
@@ -164,7 +164,7 @@ export function GraphQLDiagram(props: GraphQLDiagramProps) {
         await rpcClient.getVisualizerRpcClient().openView({
             type: EVENT_TYPE.OPEN_VIEW,
             location: {
-                view: MACHINE_VIEW.BIServiceClassDesigner,
+                view: MACHINE_VIEW.ServiceClassDesigner,
                 type: type,
                 projectUri: projectUri,
                 isGraphql: true

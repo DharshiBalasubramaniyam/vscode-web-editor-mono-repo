@@ -355,9 +355,20 @@ export function addToTargetPosition(
     const splitContent: string[] = currentContent.split(/\n/g) || [];
     const splitCodeSnippet: string[] = codeSnippet.split(/\n/g) || [];
     const noOfLines: number = position.endLine - position.startLine + 1; // 10
-    const startLine = splitContent[position.startLine].slice(0, position.startColumn);
+    position.startColumn = position.startColumn > 0 ? position.startColumn : 0;
+    position.endColumn = position.endColumn > 0 ? position.endColumn : 0;
+    console.log("spilit content: ", splitContent)
+    const startLine = splitContent[position.startLine]?.slice(0, position.startColumn) || "";
+    // let endLine = "";
+    // if (isFinite(position?.endLine) && splitContent[position.endLine] && position.endColumn > 0) {
+    //     endLine = splitContent[position.endLine]?.slice(position.endColumn);
+    // }
+    // let startLine = "";
+    // if (isFinite(position?.startLine) && splitContent[position.startLine] && position.startLine > 0) {
+    //     startLine = splitContent[position.startLine]?.slice(position.startColumn);
+    // }
     const endLine = isFinite(position?.endLine)
-        ? splitContent[position.endLine].slice(position.endColumn || position.startColumn)
+        ? splitContent[position.endLine]?.slice(position.endColumn || position.startColumn) || ""
         : "";
 
     const replacements = splitCodeSnippet.map((line, index) => {

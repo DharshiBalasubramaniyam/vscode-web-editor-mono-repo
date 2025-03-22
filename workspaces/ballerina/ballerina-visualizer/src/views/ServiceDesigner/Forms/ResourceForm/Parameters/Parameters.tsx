@@ -94,7 +94,6 @@ export function Parameters(props: ParametersProps) {
     };
 
     const onSaveParam = (param: ParameterModel) => {
-        console.log("on save param: ", {"already:": p, "adding:": param})
         param.enabled = true;
         if (isNew) {
             onChange([...parameters, param]);

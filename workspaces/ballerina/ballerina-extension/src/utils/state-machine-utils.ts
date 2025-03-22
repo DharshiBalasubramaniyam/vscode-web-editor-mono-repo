@@ -80,8 +80,8 @@ export async function getView(documentUri: string, position: NodePosition, proje
             STKindChecker.isCaptureBindingPattern(node.syntaxTree.typedBindingPattern.bindingPattern)
         ) {
             // connection
-            const moduleName = node.syntaxTree.typedBindingPattern.bindingPattern.variableName.value.toLowerCase();
-            const connectionName =  node.syntaxTree.typedBindingPattern.bindingPattern.typeData.typeSymbol.name.toLowerCase();
+            const moduleName = node.syntaxTree.typedBindingPattern.typeDescriptor.source.trim().replace(/[\n\r]/g, "").toLowerCase();
+            // const connectionName =  node.syntaxTree.typedBindingPattern.bindingPattern.typeData.typeSymbol.name.toLowerCase();
             if (!moduleName) {
                 // tslint:disable-next-line
                 console.error("Couldn't capture connection from STNode", { STNode: node.syntaxTree });
@@ -89,7 +89,7 @@ export async function getView(documentUri: string, position: NodePosition, proje
                 return {
                     location: {
                         view: MACHINE_VIEW.EditConnectionWizard,
-                        identifier: `${moduleName}:${connectionName}`,
+                        identifier: `${moduleName}`,
                         documentUri: documentUri,
                         position: position,
                         projectUri: projectUri

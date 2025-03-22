@@ -227,7 +227,7 @@ export function ConnectorList(props: ConnectorListProps) {
                     </PanelContainer>
                 )
             } */}
-            {selectedConnector && !pullingPackage && activeFileInfo?.filePath && showStatementEditor && edit &&
+            {selectedConnector && !pullingPackage && activeFileInfo?.filePath && showStatementEditor && 
                 <PanelContainer title={ edit ? "Edit Connector" : "Add Connector"} show={true} onClose={cancelStatementEditor}>
                     (
                     <StatementEditorComponent
