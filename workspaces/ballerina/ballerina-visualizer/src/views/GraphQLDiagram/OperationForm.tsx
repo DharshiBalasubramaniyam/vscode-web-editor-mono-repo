@@ -112,7 +112,7 @@ export function OperationForm(props: OperationFormProps) {
                 editable: true,
                 enabled: true,
                 documentation: '',
-                value: '',
+                value: model.parameters || "",
                 paramManagerProps: {
                     paramValues: model.parameters.map((param, index) => convertParameterToParamValue(param, index)),
                     formFields: convertSchemaToFormFields(model.schema),

@@ -19,6 +19,8 @@ const GridContainer = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
     width: 100%;
+    background-color: yellow;
+    overfloe-y: scroll;
 `;
 
 const LoadingContainer = styled.div`

@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import { NodeKind, SubPanel, SubPanelView } from "@dharshi/ballerina-core";
