@@ -325,7 +325,7 @@
       "reviewCategory": "library"
     },
     {
-      "packageName": "ballerina",
+      "packageName": "ballerina-web",
       "projectFolder": "workspaces/ballerina/ballerina-extension",
       "reviewCategory": "library"
     },

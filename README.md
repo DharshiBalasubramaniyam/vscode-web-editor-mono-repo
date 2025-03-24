@@ -64,15 +64,16 @@ The current implementation of ballerina extension supports below features:
 - Document symbol
 - Folding ranges
 - Code action
-- Inlayhint
+- Inlay hint
   
 **Diagram features:**
 - Overview view
 - Function view - add/view
 - Type diagram view - add/view/edit/delete
-- Service designer - http
+- Service designer - http, graphql
 - Triggers/Connectors - add/edit/view/delete
 - Configurables - add/edit/view/delete
+- Data mapper view
 
 [`workspaces/ballerina/ballerina-extension/src/extension.ts`](./workspaces/ballerina/ballerina-extension/src/extension.ts), serves as the entry point for the Ballerina extension. When the extension is activated, it initializes the following components:
 
@@ -88,3 +89,4 @@ The current implementation of ballerina extension supports below features:
 1. [Web extensions](https://code.visualstudio.com/api/extension-guides/web-extensions)
 2. [Language server protocol](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
 3. [Vscode file system provider](https://code.visualstudio.com/api/extension-guides/virtual-workspaces)
+3. [Vscode test web](https://github.com/microsoft/vscode-test-web)
