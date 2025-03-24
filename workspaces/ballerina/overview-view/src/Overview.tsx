@@ -154,7 +154,7 @@ export function Overview(props: { visualizerLocation: VisualizerLocation }) {
                 }
             });
             return {
-                // ...module,
+                name: module?.name,
                 services,
                 types,
                 functions,
