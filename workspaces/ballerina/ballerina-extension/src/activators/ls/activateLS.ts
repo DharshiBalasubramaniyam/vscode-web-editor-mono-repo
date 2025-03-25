@@ -46,22 +46,11 @@ export async function activateLanguageServer(): Promise<ExtendedLanguageClient> 
         balExtInstance.ballerinaVersion = balInfo.ballerinaVersion;
         balExtInstance.ballerinaVersionText = balInfo.ballerinaVersionText;
         updateStatusBarText(statusBar, `Ballerina ${balInfo.ballerinaVersionText}`);
-        const extension = vscode.extensions.getExtension(EXTENSION_ID);
-        const pluginVersion = extension.packageJSON.version.split('-')[0];
+        const pluginVersion = balExtInstance.extension.packageJSON.version.split('-')[0];
         log(`Plugin version: ${pluginVersion}\nBallerina version: ${balInfo.ballerinaVersionText}`);
         balExtInstance.langClient = langClient;
         balExtInstance.context?.subscriptions.push(langClient);
     }
-
-    // langClient.start().then(async () => {
-    //     console.log('Language client started successfully. Registering extended capabilities...');
-    //     await langClient?.registerExtendedAPICapabilities();
-
-    // }).catch((error: any) => {
-    //     balExtInstance.context?.subscriptions.push(langClient);
-    //     statusBar.text = "Ballerina Not found";
-    //     console.error('Failed to start language client:', error);
-    // });
     
     return langClient;
 }

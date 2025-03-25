@@ -15,6 +15,9 @@ import { StateMachinePopup } from './state-machine-popup';
 import { VisualizerWebview } from './activators/visualizer/webview';
 import { registerConnectorWizardRpcHandlers } from './rpc-managers/connector-wizard/rpc-handler';
 import { registerSequenceDiagramRpcHandlers } from './rpc-managers/sequence-diagram/rpc-handler';
+import { StateMachineAI } from './state-machine-ai';
+import { AiPanelWebview } from './activators/ai/webview';
+import { registerAiPanelRpcHandlers } from './rpc-managers/ai-panel/rpc-handler';
 
 export class RPCLayer {
     static _messenger: Messenger = new Messenger();
@@ -25,15 +28,14 @@ export class RPCLayer {
             StateMachine.service().onTransition((state: any) => {
                 RPCLayer._messenger.sendNotification(stateChanged, { type: 'webview', webviewType: VisualizerWebview.viewType }, state.value);
             });
-            // Popup machine transition
             StateMachinePopup.service().onTransition((state: any) => {
                 RPCLayer._messenger.sendNotification(popupStateChanged, { type: 'webview', webviewType: VisualizerWebview.viewType }, state.value);
             });
         } else {
             RPCLayer._messenger.registerWebviewView(webViewPanel as WebviewView);
-            // StateMachineAI.service().onTransition((state) => {
-            //     RPCLayer._messenger.sendNotification(aiStateChanged, { type: 'webview', webviewType: AiPanelWebview.viewType }, state.value);
-            // });
+            StateMachineAI.service().onTransition((state) => {
+                RPCLayer._messenger.sendNotification(aiStateChanged, { type: 'webview', webviewType: AiPanelWebview.viewType }, state.value);
+            });
         }
     }
 
@@ -54,6 +56,9 @@ export class RPCLayer {
         registerBiDiagramRpcHandlers(RPCLayer._messenger);
         registerSequenceDiagramRpcHandlers(RPCLayer._messenger);
         registerConnectorWizardRpcHandlers(RPCLayer._messenger);
+
+        registerAiPanelRpcHandlers(RPCLayer._messenger);
+        RPCLayer._messenger.onRequest(sendAIStateEvent, (event: AI_EVENT_TYPE) => StateMachineAI.sendEvent(event));
     }
 
 }

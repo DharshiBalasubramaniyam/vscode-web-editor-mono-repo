@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { balExtInstance, LANGUAGE, STD_LIB_SCHEME, WEB_IDE_SCHEME } from "../../extension";
-import { BalFileSystemProvider } from "./BalFileSystemProvider";
+import { BalFileSystemProvider } from "./fs-provider";
 
 const fsProvider = new BalFileSystemProvider();
 
 export function activateFileSystemProvider() {
-
+    console.log("Activating file system provider...");
     // Register fs provider
     balExtInstance.fsProvider = fsProvider;
     balExtInstance.context.subscriptions.push(
@@ -15,8 +15,9 @@ export function activateFileSystemProvider() {
 
     // Register the command to open a github repository
     balExtInstance.context.subscriptions.push(vscode.commands.registerCommand('ballerina.openGithubRepository', async () => {
-        const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
-        // const repoUrl = "https://github.com/DharshiBalasubramaniyam/RESTful-API-with-Ballerina";
+        console.log("Opening github repository...");
+        // const repoUrl = await vscode.window.showInputBox({ placeHolder: 'Enter repository URL' });
+        const repoUrl = "https://github.com/DharshiBalasubramaniyam/RESTful-API-with-Ballerina";
         if (!repoUrl) {
             return;
         }

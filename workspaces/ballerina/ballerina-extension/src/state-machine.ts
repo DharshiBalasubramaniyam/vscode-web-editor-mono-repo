@@ -9,6 +9,7 @@ import { activateFileSystemProvider } from './activators/fs/activateFS';
 import { VisualizerWebview } from './activators/visualizer/webview';
 import { balExtInstance } from './extension';
 import { StateMachinePopup } from './state-machine-popup';
+import { StateMachineAI } from './state-machine-ai';
 
 interface MachineContext extends VisualizerLocation {
     langClient: ExtendedLanguageClient | null;
@@ -178,7 +179,7 @@ const stateMachine = createMachine<MachineContext>(
             return new Promise(async (resolve, reject) => {
                 try {
                     const langClient = await activateLanguageServer();
-                    // StateMachineAI.initialize();
+                    StateMachineAI.initialize();
                     StateMachinePopup.initialize();
                     resolve(langClient);
                 } catch (error) {
@@ -206,7 +207,6 @@ const stateMachine = createMachine<MachineContext>(
                         undoRedoManager = new UndoRedoManager();
                         const webview = VisualizerWebview.currentPanel?.getWebview();
                         if (webview && (context.isBI || context.view === MACHINE_VIEW.BIWelcome)) {
-                            webview.title = "Kola";
                             webview.iconPath = {
                                 light: Uri.file(Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'dark-icon.svg').toString()),
                                 dark: Uri.file(Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'light-icon.svg').toString())
