@@ -1,6 +1,6 @@
 # Ballerina vscode web editor 
 
-<img width="731" alt="image" src="https://github.com/user-attachments/assets/ffd82151-3cc5-4e76-afc2-c959b6563d92" />
+<img width="745" alt="image" src="https://github.com/user-attachments/assets/8aa3b8f4-15be-4997-b481-e81805eecc9d" />
 
 This is a monorepo containing multiple packages for building a Ballerina-based web editor. It uses Rush for managing dependencies, building, and maintaining the packages within the repository.
 
