@@ -88,7 +88,8 @@ The current implementation of ballerina extension supports below features:
 
 ## References
 
-1. [Web extensions](https://code.visualstudio.com/api/extension-guides/web-extensions)
-2. [Language server protocol](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
-3. [Vscode file system provider](https://code.visualstudio.com/api/extension-guides/virtual-workspaces)
-3. [Vscode test web](https://github.com/microsoft/vscode-test-web)
+1. [Vscode test web](https://github.com/microsoft/vscode-test-web)
+2. [Web extensions](https://code.visualstudio.com/api/extension-guides/web-extensions)
+3. [Language server protocol](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
+4. [Vscode file system provider](https://code.visualstudio.com/api/extension-guides/virtual-workspaces)
+5. [Vscode webview](https://code.visualstudio.com/api/extension-guides/webview)
