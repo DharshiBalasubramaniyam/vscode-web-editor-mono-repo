@@ -14,4 +14,5 @@ export function activateEditorSupport(ballerinaExtInstance: BallerinaExtension) 
         ],
         new ExecutorCodeLensProvider(ballerinaExtInstance)
     );
+
 }

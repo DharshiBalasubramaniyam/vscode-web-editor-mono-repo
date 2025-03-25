@@ -212,7 +212,6 @@ export class ExtendedLanguageClient extends LanguageClient implements ExtendedLa
 
     async getCompletion(params: CompletionParams): Promise<Completion[]> {
         const start = new Date().getTime();
-        console.log(">>> sending completion req insede elc")
         const response: Completion[] = await this.sendRequest(VSCODE_APIS.COMPLETION, params);
         this.timeConsumption.completion.push(new Date().getTime() - start);
         return response;

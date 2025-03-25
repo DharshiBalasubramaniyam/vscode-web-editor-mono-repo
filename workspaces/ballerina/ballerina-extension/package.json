@@ -1,8 +1,9 @@
 {
-    "name": "ballerina",
-    "displayName": "ballerina-extension",
+    "name": "ballerina-web",
+    "displayName": "ballerina-web-extension",
     "description": "Vs code web extension for ballerina",
     "version": "0.0.1",
+    "publisher": "wso2",
     "engines": {
         "vscode": "^1.97.0"
     },
@@ -26,6 +27,10 @@
                 "command": "ballerina.show.visualizer",
                 "title": "Show Visualizer",
                 "icon": "$(distro-design-view)"
+            },
+            {
+                "command": "ballerina.showLogs",
+                "title": "Show Logs"
             }
         ],
         "languages": [

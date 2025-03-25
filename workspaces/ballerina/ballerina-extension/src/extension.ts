@@ -32,8 +32,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     RPCLayer.init();
     await StateMachine.initialize();
-	activateVisualizer(balExtInstance);
 	activateEditorSupport(balExtInstance);
+	activateVisualizer(balExtInstance);
 }
 
 export async function deactivate(): Promise<void> {
