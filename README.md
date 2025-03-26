@@ -1,6 +1,6 @@
 # Ballerina vscode web editor 
 
-<img width="745" alt="image" src="https://github.com/user-attachments/assets/8aa3b8f4-15be-4997-b481-e81805eecc9d" />
+<img width="745" alt="architecture diagram" src="https://github.com/user-attachments/assets/8aa3b8f4-15be-4997-b481-e81805eecc9d" />
 
 This is a monorepo containing multiple packages for building a Ballerina-based web editor. It uses Rush for managing dependencies, building, and maintaining the packages within the repository.
 
@@ -42,7 +42,15 @@ npm start
 
 6. Open your browser and navigate to `http://localhost:3001`.  
 7. Press `Ctrl+Shift+P` to open the command palette.  
-8. Select the `Open GitHub Repository` command and provide the repository URL of a Ballerina project to get started.  
+8. Select the `Open GitHub Repository` command and provide the repository URL of a Ballerina project to get started.
+
+<img width="960" alt="hover provider" src="https://github.com/user-attachments/assets/15109ca7-1f8b-4860-9ad9-baf9c0d177ea" />
+
+<img width="960" alt="completion provider" src="https://github.com/user-attachments/assets/bc36b880-8431-4c48-a438-633599b22c57" />
+
+<img width="960" alt="overview view" src="https://github.com/user-attachments/assets/7b947cd4-c6f0-4376-9537-c526dce4d150" />
+
+<img width="960" alt="service designer view" src="https://github.com/user-attachments/assets/02c0ed98-2f6e-4073-bc2d-ecd989c02c3d" />
 
 ## Packages
 
