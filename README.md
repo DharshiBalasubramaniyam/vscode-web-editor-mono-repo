@@ -52,6 +52,8 @@ npm start
 
 <img width="960" alt="service designer view" src="https://github.com/user-attachments/assets/02c0ed98-2f6e-4073-bc2d-ecd989c02c3d" />
 
+<img width="960" alt="add new construct" src="https://github.com/user-attachments/assets/bb79c4c9-614d-48ff-8082-59ff7c5c5d39" />
+
 ## Packages
 
 ### Vscode web server ([`workspaces/server/`](./workspaces/server/server.js))
