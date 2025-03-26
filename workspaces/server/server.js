@@ -1,11 +1,12 @@
 const { open } = require('@vscode/test-web');
 
 open({
-    quality: "insiders",
+    quality: "insiders", // For production mode use, quality: "stable"
     browserType: "none",
     // Currently serving the web extension in development mode. 
-    // For production mode use, extensionPaths: ["workspaces/ballerina/ballerina-extension"]
     extensionDevelopmentPath: "workspaces/ballerina/ballerina-extension",
+    // For production mode use, extensionPaths: ["workspaces/ballerina/ballerina-extension"]
+    // extensionPaths: ["workspaces/ballerina/ballerina-extension"],
     port: 3001,
 }).then(() => {
     console.log("done!")
