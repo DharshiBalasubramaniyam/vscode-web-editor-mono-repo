@@ -9,6 +9,7 @@ import { activateFileSystemProvider } from './activators/fs/activateFS';
 import { VisualizerWebview } from './activators/visualizer/webview';
 import { balExtInstance } from './extension';
 import { StateMachinePopup } from './state-machine-popup';
+import { setGoToSourceContext } from './utils/config';
 
 interface MachineContext extends VisualizerLocation {
     langClient: ExtendedLanguageClient | null;
@@ -197,31 +198,30 @@ const stateMachine = createMachine<MachineContext>(
             });
         },
         openWebView: (context, event) => {
+            console.log("Opening webview...");
             // Get context values from the project storage so that we can restore the earlier state when user reopens vscode
             return new Promise((resolve, reject) => {
                 if (!VisualizerWebview.currentPanel) {
+                    console.log("Creating new webview...");
                     VisualizerWebview.currentPanel = new VisualizerWebview();
+                    console.log("Webview created...");
+                    history = new History();
+                    undoRedoManager = new UndoRedoManager();
                     RPCLayer._messenger.onNotification(webviewReady, () => {
-                        history = new History();
-                        undoRedoManager = new UndoRedoManager();
+                        console.log("Webview ready...");
                         const webview = VisualizerWebview.currentPanel?.getWebview();
-                        if (webview && (context.isBI || context.view === MACHINE_VIEW.BIWelcome)) {
-                            webview.title = "Kola";
-                            webview.iconPath = {
-                                light: Uri.file(Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'dark-icon.svg').toString()),
-                                dark: Uri.file(Uri.joinPath(balExtInstance.context.extensionUri, 'resources', 'icons', 'light-icon.svg').toString())
-                            };
-                        }
+                        console.log("Webview: ", webview.title);
                         resolve(true);
                     });
-
                 } else {
+                    console.log("Revealing existing webview...");
                     VisualizerWebview.currentPanel!.getWebview()?.reveal();
                     resolve(true);
                 }
             });
         },
         findView(context, event): Promise<void> {
+            console.log("finding view...");
             return new Promise(async (resolve, reject) => {
                 if (!context.view && context.langClient) {
                     if (!context.position || ("groupId" in context.position)) {
@@ -270,8 +270,11 @@ const stateMachine = createMachine<MachineContext>(
                 }
 
                 if (selectedEntry && selectedEntry.location.view === MACHINE_VIEW.ERDiagram) {
+                    setGoToSourceContext(MACHINE_VIEW.ERDiagram);
                     return resolve(selectedEntry.location);
                 }
+
+                setGoToSourceContext(selectedEntry.location.view);
 
                 const defaultLocation = {
                     documentUri: context.documentUri,
@@ -421,11 +424,9 @@ export function openView(type: EVENT_TYPE, viewLocation: VisualizerLocation, res
 }
 
 export function updateView() {
+    console.log("history stack: ", history);  
     const historyStack = history.get();
     stateService.send({ type: "VIEW_UPDATE", viewLocation: historyStack.length > 0 ? historyStack[historyStack.length - 1].location : { view: MACHINE_VIEW.Overview } });
-    if (StateMachine.context().isBI) {
-        commands.executeCommand("BI.project-explorer.refresh");
-    }
     // notifyCurrentWebview();
 }
 

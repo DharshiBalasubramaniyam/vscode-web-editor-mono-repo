@@ -52,16 +52,6 @@ export async function activateLanguageServer(): Promise<ExtendedLanguageClient> 
         balExtInstance.langClient = langClient;
         balExtInstance.context?.subscriptions.push(langClient);
     }
-
-    // langClient.start().then(async () => {
-    //     console.log('Language client started successfully. Registering extended capabilities...');
-    //     await langClient?.registerExtendedAPICapabilities();
-
-    // }).catch((error: any) => {
-    //     balExtInstance.context?.subscriptions.push(langClient);
-    //     statusBar.text = "Ballerina Not found";
-    //     console.error('Failed to start language client:', error);
-    // });
     
     return langClient;
 }

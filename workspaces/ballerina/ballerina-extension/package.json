@@ -26,7 +26,14 @@
             {
                 "command": "ballerina.show.visualizer",
                 "title": "Show Visualizer",
-                "icon": "$(distro-design-view)"
+                "icon": "$(distro-design-view)",
+                "group": "navigation@4"
+            },
+            {   
+                "command": "ballerina.show.source",
+                "title": "Show Source",
+                "icon": "$(code)",
+                "group": "navigation@4"
             },
             {
                 "command": "ballerina.showLogs",
@@ -72,6 +79,11 @@
                 {
                     "when": "resourceLangId == ballerina",
                     "command": "ballerina.show.visualizer",
+                    "group": "navigation"
+                },
+                {
+                    "when": "showGoToSource",
+                    "command": "ballerina.show.source",
                     "group": "navigation"
                 }
             ]

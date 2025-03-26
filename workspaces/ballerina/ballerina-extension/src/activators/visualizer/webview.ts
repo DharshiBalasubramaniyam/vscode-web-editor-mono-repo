@@ -21,6 +21,7 @@ export class VisualizerWebview {
         // Handle the text change and diagram update with rpc notification
         const sendUpdateNotificationToWebview = debounce(() => {
             if (this._panel) {
+                console.log("Sending update notification to webview");
                 updateView();
             }
         }, 500);
@@ -136,7 +137,7 @@ export class VisualizerWebview {
     public dispose() {
         VisualizerWebview.currentPanel = undefined;
         this._panel?.dispose();
-
+        vscode.commands.executeCommand('setContext', 'showGoToSource', false);
         while (this._disposables.length) {
             const disposable = this._disposables.pop();
             if (disposable) {
