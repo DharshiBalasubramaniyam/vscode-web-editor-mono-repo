@@ -1,4 +1,4 @@
-const { open } = require('@vscode/test-web');
+import { open } from '@vscode/test-web';
 
 open({
     quality: "insiders", // For production mode use, quality: "stable"

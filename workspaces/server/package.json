@@ -1,11 +1,11 @@
 {
   "name": "@dharshi/vscode-web-server",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "dist/index.js",
   "scripts": {
     "compile-test": "npm run --prefix=test compile-web",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": ""
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
