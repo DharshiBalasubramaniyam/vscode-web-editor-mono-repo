@@ -9,7 +9,7 @@ import { activateFileSystemProvider } from './activators/fs/activateFS';
 import { VisualizerWebview } from './activators/visualizer/webview';
 import { balExtInstance } from './extension';
 import { StateMachinePopup } from './state-machine-popup';
-import { setGoToSourceContext } from './utils/config';
+import { setGoToSourceContext } from './utils/commonUtils';
 
 interface MachineContext extends VisualizerLocation {
     langClient: ExtendedLanguageClient | null;
@@ -274,7 +274,7 @@ const stateMachine = createMachine<MachineContext>(
                     return resolve(selectedEntry.location);
                 }
 
-                setGoToSourceContext(selectedEntry.location.view);
+                setGoToSourceContext(selectedEntry?.location?.view);
 
                 const defaultLocation = {
                     documentUri: context.documentUri,

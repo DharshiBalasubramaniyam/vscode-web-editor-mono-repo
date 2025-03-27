@@ -7,7 +7,7 @@ import { registerLangClientRpcHandlers } from './rpc-managers/lang-client/rpc-ha
 import { registerLibraryBrowserRpcHandlers } from './rpc-managers/library-browser/rpc-handler';
 import { registerServiceDesignerRpcHandlers } from './rpc-managers/service-designer/rpc-handler';
 import { registerCommonRpcHandlers } from './rpc-managers/common/rpc-handler';
-// import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
+import { registerPersistDiagramRpcHandlers } from './rpc-managers/persist-diagram/rpc-handler';
 import { registerGraphqlDesignerRpcHandlers } from './rpc-managers/graphql-designer/rpc-handler';
 import { registerRecordCreatorRpcHandlers } from './rpc-managers/record-creator/rpc-handler';
 import { registerBiDiagramRpcHandlers } from './rpc-managers/bi-diagram/rpc-handler';
@@ -48,7 +48,7 @@ export class RPCLayer {
         registerLibraryBrowserRpcHandlers(RPCLayer._messenger);
         registerServiceDesignerRpcHandlers(RPCLayer._messenger);
         registerCommonRpcHandlers(RPCLayer._messenger);
-        // registerPersistDiagramRpcHandlers(RPCLayer._messenger);
+        registerPersistDiagramRpcHandlers(RPCLayer._messenger);
         registerGraphqlDesignerRpcHandlers(RPCLayer._messenger);
         registerRecordCreatorRpcHandlers(RPCLayer._messenger);
         registerBiDiagramRpcHandlers(RPCLayer._messenger);

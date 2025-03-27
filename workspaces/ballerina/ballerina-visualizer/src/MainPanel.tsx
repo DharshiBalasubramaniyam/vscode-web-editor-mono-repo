@@ -37,6 +37,7 @@ import { FunctionDefinition } from "@dharshi/syntax-tree";
 import { MainForm } from "./views/MainFunctionForm";
 import { ServiceClassDesigner } from "./views/ServiceClassEditor/ServiceClassDesigner";
 import { ServiceClassConfig } from "./views/ServiceClassEditor/ServiceClassConfig";
+import { ERDiagram } from "./views/ERDiagram";
 
 const globalStyles = css`
     *,
@@ -224,6 +225,10 @@ const MainPanel = () => {
                                 fileName={value.documentUri}
                             />
                         );
+                        break;
+                    case MACHINE_VIEW.ERDiagram:
+                        setNavActive(false);
+                        setViewComponent(<ERDiagram/>)
                         break;
                     case MACHINE_VIEW.EditConfigVariables:
                         rpcClient.getBIDiagramRpcClient().getConfigVariables().then((variables) => {

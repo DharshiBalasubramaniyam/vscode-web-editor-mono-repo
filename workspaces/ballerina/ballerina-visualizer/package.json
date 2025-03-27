@@ -37,6 +37,7 @@
     "@dharshi/ballerina-statement-editor": "workspace:*",
     "@dharshi/record-creator": "workspace:*",
     "@dharshi/type-editor": "workspace:*",
+    "@dharshi/persist-layer-diagram": "workspace:*",
     "react": "^18.2.0",
     "react-collapse": "~5.1.1",
     "react-dom": "^18.2.0",

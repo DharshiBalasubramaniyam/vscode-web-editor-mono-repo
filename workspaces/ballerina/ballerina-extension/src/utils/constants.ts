@@ -13,6 +13,7 @@ export const MESSAGES = {
 export const PALETTE_COMMANDS = {
     SHOW_VISUALIZER: "ballerina.show.visualizer",
     SHOW_SOURCE: "ballerina.show.source",
+    SHOW_ENTITY_DIAGRAM: 'ballerina.show.entityDiagram',
     RUN: 'ballerina.project.run',
     TRY_IT: 'ballerina.tryit',
     TEST: 'ballerina.project.test',

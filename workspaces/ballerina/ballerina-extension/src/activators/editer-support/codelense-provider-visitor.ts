@@ -10,6 +10,7 @@ import {
 } from "@dharshi/syntax-tree";
 import { CodeLens, Range, Uri } from "vscode";
 import { PALETTE_COMMANDS } from "../../utils/constants";
+import { checkIsPersistModelFile } from "../../utils/commonUtils";
 
 export class CodeLensProviderVisitor implements Visitor {
     activeEditorUri: Uri;
@@ -43,11 +44,11 @@ export class CodeLensProviderVisitor implements Visitor {
         }
     }
 
-    // public beginVisitTypeDefinition(node: TypeDefinition, parent?: STNode): void {
-    //     if (STKindChecker.isRecordTypeDesc(node.typeDescriptor) && checkIsPersistModelFile(this.activeEditorUri)) {
-    //         this.createVisualizeERCodeLens(node.position, node.typeName.value);
-    //     }
-    // }
+    public beginVisitTypeDefinition(node: TypeDefinition, parent?: STNode): void {
+        if (STKindChecker.isRecordTypeDesc(node.typeDescriptor) && checkIsPersistModelFile(this.activeEditorUri)) {
+            this.createVisualizeERCodeLens(node.position, node.typeName.value);
+        }
+    }
 
     public beginVisitObjectMethodDefinition(node: ObjectMethodDefinition, parent?: STNode): void {
         this.createVisulizeCodeLens(node.functionKeyword.position, node.position);
@@ -73,6 +74,22 @@ export class CodeLensProviderVisitor implements Visitor {
         this.codeLenses.push(codeLens);
     }
 
+    private createVisualizeERCodeLens(range: any, recordName: string) {
+        const codeLens = new CodeLens(new Range(
+            range.startLine,
+            range.startColumn,
+            range.endLine,
+            range.endColumn
+        ));
+        codeLens.command = {
+            title: "Visualize",
+            tooltip: "View this entity in the Entity Relationship diagram",
+            command: PALETTE_COMMANDS.SHOW_ENTITY_DIAGRAM,
+            arguments: [this.activeEditorUri.toString(), range, recordName]
+        };
+        this.codeLenses.push(codeLens);
+    }
+
     private createVisulizeGraphqlCodeLens(range: any, position: any) {
         const codeLens = new CodeLens(new Range(
             range.startLine,
@@ -84,26 +101,10 @@ export class CodeLensProviderVisitor implements Visitor {
             title: "Visualize",
             tooltip: "Visualize code block",
             command: PALETTE_COMMANDS.SHOW_VISUALIZER,
-            arguments: [this.activeEditorUri.fsPath, position]
+            arguments: [this.activeEditorUri.toString(), position]
         };
         this.codeLenses.push(codeLens);
     }
-
-    // private createVisualizeERCodeLens(range: any, recordName: string) {
-    //     const codeLens = new CodeLens(new Range(
-    //         range.startLine,
-    //         range.startColumn,
-    //         range.endLine,
-    //         range.endColumn
-    //     ));
-    //     codeLens.command = {
-    //         title: "Visualize",
-    //         tooltip: "View this entity in the Entity Relationship diagram",
-    //         command: SHARED_COMMANDS.SHOW_VISUALIZER,
-    //         arguments: [this.activeEditorUri.fsPath, recordName]
-    //     };
-    //     this.codeLenses.push(codeLens);
-    // }
 
     private createTryItCodeLens(range: any, position: any, basePath: string, listener: string) {
         const codeLens = new CodeLens(new Range(

@@ -398,6 +398,11 @@
       "packageName": "@dharshi/data-mapper-view",
       "projectFolder": "workspaces/ballerina/data-mapper-view",
       "reviewCategory": "library"
+    },
+    {
+      "packageName": "@dharshi/persist-layer-diagram",
+      "projectFolder": "workspaces/ballerina/persist-layer-diagram",
+      "reviewCategory": "library"
     }
   ]
 }

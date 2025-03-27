@@ -29,6 +29,12 @@
                 "icon": "$(distro-design-view)",
                 "group": "navigation@4"
             },
+            {
+                "command": "ballerina.show.entityDiagram",
+                "title": "Entity Relationship Diagram",
+                "icon": "$(distro-persist-diagram)",
+                "category": "Ballerina"
+            },
             {   
                 "command": "ballerina.show.source",
                 "title": "Show Source",
@@ -77,7 +83,7 @@
         "menus": {
             "editor/title": [
                 {
-                    "when": "resourceLangId == ballerina",
+                    "when": "resourceLangId == ballerina && !isPersistModelActive",
                     "command": "ballerina.show.visualizer",
                     "group": "navigation"
                 },
@@ -85,6 +91,19 @@
                     "when": "showGoToSource",
                     "command": "ballerina.show.source",
                     "group": "navigation"
+                },
+                {
+                    "when": "resourceLangId == ballerina && isPersistModelActive",
+                    "command": "ballerina.show.entityDiagram",
+                    "group": "navigation@3"
+                },
+                {
+                    "command": "ballerina.show.entityDiagram",
+                    "when": "isPersistModelActive"
+                },
+                {
+                    "command": "ballerina.show.source",
+                    "when": "showGoToSource"
                 }
             ]
         },
@@ -94,6 +113,13 @@
                 "default": {
                     "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
                     "fontCharacter": "\\f164"
+                }
+            },
+            "distro-persist-diagram": {
+                "description": "persist-diagram",
+                "default": {
+                    "fontPath": "./resources/font-wso2-vscode/dist/wso2-vscode.woff",
+                    "fontCharacter": "\\f1b9"
                 }
             }
         }
